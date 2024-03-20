@@ -1,0 +1,64 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "LaptopStore.Web/1.0.0": {
+        "dependencies": {
+          "LaptopStore.Core": "1.0.0",
+          "LaptopStore.Services": "1.0.0"
+        },
+        "runtime": {
+          "LaptopStore.Web.dll": {}
+        }
+      },
+      "LaptopStore.Core/1.0.0": {
+        "runtime": {
+          "LaptopStore.Core.dll": {}
+        }
+      },
+      "LaptopStore.Data/1.0.0": {
+        "dependencies": {
+          "LaptopStore.Core": "1.0.0"
+        },
+        "runtime": {
+          "LaptopStore.Data.dll": {}
+        }
+      },
+      "LaptopStore.Services/1.0.0": {
+        "dependencies": {
+          "LaptopStore.Core": "1.0.0",
+          "LaptopStore.Data": "1.0.0"
+        },
+        "runtime": {
+          "LaptopStore.Services.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "LaptopStore.Web/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LaptopStore.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LaptopStore.Data/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LaptopStore.Services/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

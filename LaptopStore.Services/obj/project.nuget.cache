@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "Q8AujeERanbzIctjFo69l9ZLuNAQSu1RkUqe+seG4oQU2xISUZ1VTV8XGT1+ZTKsGpYbD9UIEVlwnv5z6r6KfA==",
+  "success": true,
+  "projectFilePath": "D:\\freelance\\LaptopStore\\LaptopStore.Services\\LaptopStore.Services.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\MayTinhBachVuong\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.25\\microsoft.windowsdesktop.app.ref.6.0.25.nupkg.sha512",
+    "C:\\Users\\MayTinhBachVuong\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.25\\microsoft.netcore.app.ref.6.0.25.nupkg.sha512",
+    "C:\\Users\\MayTinhBachVuong\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.25\\microsoft.aspnetcore.app.ref.6.0.25.nupkg.sha512"
+  ],
+  "logs": []
+}

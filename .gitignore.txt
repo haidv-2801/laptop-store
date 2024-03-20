@@ -1,0 +1,70 @@
+# .NET Core
+/bin/
+/obj/
+*.nupkg
+*.snupkg
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE - VS Code
+.vscode/
+.history/
+
+# IDE - Visual Studio
+.vs/
+*.userprefs
+*.csproj.user
+*.[Cc]ache/
+*.[Rr]esharper
+*.[Ss]ln.docstates
+*.[Vv]s/
+*.[Vv]scode/
+
+# Rider
+.idea/
+
+# OS - Windows
+[Dd]ebugPublic/
+[Rr]eleases/
+[Aa]rtifacts/
+[Tt]est[Rr]esult*
+
+# Publish Web Output
+/wwwroot/
+*/wwwroot/
+*.[Pp]ublish.xml
+*.azurePubxml
+*.pubxml
+*.publishproj
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# MSTest
+[Tt]est[Rr]esults/
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+
+# Build Results of an MSBuild Project
+[Dd]ebugPS/
+[Dd]ebug/
+[Rr]eleasePS/
+[Rr]elease/
+x64/
+x86/
+build/
+bld/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
