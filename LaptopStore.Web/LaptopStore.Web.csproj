@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LaptopStore.Core\LaptopStore.Core.csproj" />
+    <ProjectReference Include="..\LaptopStore.Data\LaptopStore.Data.csproj" />
     <ProjectReference Include="..\LaptopStore.Services\LaptopStore.Services.csproj" />
   </ItemGroup>
 

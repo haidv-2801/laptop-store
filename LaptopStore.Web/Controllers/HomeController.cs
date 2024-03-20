@@ -1,4 +1,5 @@
-﻿using LaptopStore.Web.Models;
+﻿using LaptopStore.Services.Services.AccountService;
+using LaptopStore.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,14 +8,17 @@ namespace LaptopStore.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAccountService _accountService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IAccountService accountService)
         {
             _logger = logger;
+            _accountService = accountService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var data = await _accountService.GetAll();  
             return View();
         }
 

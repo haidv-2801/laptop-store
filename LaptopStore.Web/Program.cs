@@ -1,3 +1,8 @@
+using LaptopStore.Core.Constants;
+using LaptopStore.Data.Context;
+using LaptopStore.Services;
+using Microsoft.EntityFrameworkCore;
+
 namespace LaptopStore.Web
 {
     public class Program
@@ -9,6 +14,10 @@ namespace LaptopStore.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            // Register db context
+            var connectionString = builder.Configuration.GetConnectionString(Constant.ConnectionStringKey);
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            ServiceInjectionExtension.InjectService(builder.Services);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
