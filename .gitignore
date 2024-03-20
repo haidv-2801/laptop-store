@@ -35,8 +35,8 @@
 [Tt]est[Rr]esult*
 
 # Publish Web Output
-/wwwroot/
-*/wwwroot/
+# /wwwroot/
+# */wwwroot/
 *.[Pp]ublish.xml
 *.azurePubxml
 *.pubxml
