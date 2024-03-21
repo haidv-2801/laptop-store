@@ -1,0 +1,7 @@
+curl --location 'https://localhost:7018/Home/SaveAccount' \
+--header 'Content-Type: application/json' \
+--data '{
+    "FullName":"tdlong12345",
+    "Username":"tdlong12345",
+    "Password":"tdlong12345"
+}'
