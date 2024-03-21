@@ -10,5 +10,7 @@ namespace LaptopStore.Services.Services.AccountService
     public interface IAccountService
     {
         Task<List<Account>> GetAll();
+        Task<int> Create(Account account);
+        Task<int> Delete(string id);
     }
 }

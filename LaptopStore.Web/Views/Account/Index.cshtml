@@ -1,0 +1,90 @@
+﻿@model IEnumerable<LaptopStore.Data.Models.Account>
+@{
+    ViewBag.Title = "Danh sách tài khoản";
+}
+@section AccountListCSS{
+<style type="text/css">
+    tbody {
+        max-height: calc(100vh - 71px - 300px);
+    }
+</style>
+}
+@section AccountListJS{
+    <script>
+    function DeleteAccount(itemId) {
+        console.log(1)
+        $.ajax({
+            url: '/Account/Delete?id=' + itemId, // Thay 'TenController' bằng tên controller của bạn
+            type: 'DELETE', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
+            success: function(result) {
+                // Xử lý kết quả sau khi xóa, nếu cần
+                alert('Xóa thành công');
+                // Cập nhật lại giao diện nếu cần
+            },
+            error: function(xhr, status, error) {
+                // Xử lý lỗi nếu có
+                console.error(error);
+            }
+        });
+    }
+</script>
+}
+<div class="row">
+    <div class="col">
+        <h2 class="text-info">Danh sách tài khoản</h2>
+        <hr />
+        <div class="d-flex justify-content-end mb-2">
+            <a href="@Url.Action("Create", "Account")" class="btn btn btn-outline-primary">Thêm mới</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover table-bordered table-striped table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(e => e.Username)</th>
+                        <th>@Html.DisplayNameFor(e => e.Password)</th>
+                        <th>@Html.DisplayNameFor(e => e.FullName)</th>
+                        <th>@Html.DisplayNameFor(e => e.Gender)</th>
+                        <th>@Html.DisplayNameFor(e => e.Address)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count() > 0)
+                    {
+
+                        @foreach (var emp in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(e => emp.Username)</td>
+                                <td>@Html.DisplayFor(e => emp.Password)</td>
+                                <td>@Html.DisplayFor(e => emp.FullName)</td>
+                                <td>
+                                    @if (emp.Gender == 0)
+                                    {
+                                        @Html.Raw("Nam")
+                                    }
+                                    else
+                                    {
+
+                                        @Html.Raw("Nữ")
+                                    }
+                                </td>
+                                <td>@Html.DisplayFor(e => emp.Address)</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "Account", new {id = emp.Id })" class="btn btn-outline-warning btn-sm">Sửa</a>
+                                    <a href="@Url.Action("Detail", "Account", new {id = emp.Id })" class="btn btn-outline-info btn-sm">Chi tiết</a>
+                                    <div onclick="DeleteAccount('@emp.Id')" class="btn btn-outline-danger btn-sm">Xóa</div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <span>Không có dữ liệu</span>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

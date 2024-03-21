@@ -19,7 +19,25 @@ namespace LaptopStore.Services.Services.AccountService
 
         public async Task<List<Account>> GetAll()
         {
-            return await _dbContext.Set<Account>().ToListAsync();
+            return await _dbContext.Set<Account>().OrderByDescending(e=>e.Username).ToListAsync();
+        }
+        public async Task<int> Create(Account account)
+        {
+            account.Id = Guid.NewGuid().ToString();
+            _dbContext.Add<Account>(account);
+            int rowAffect =await _dbContext.SaveChangesAsync();
+            return rowAffect;
+        }
+        public async Task<int> Delete(string id)
+        {
+            int rowAffect = 0;
+            var entityToDelete = _dbContext.Find<Account>(id); // Tìm đối tượng cần xóa
+            if (entityToDelete != null)
+            {
+                _dbContext.Remove<Account>(entityToDelete); // Xóa đối tượng
+                rowAffect = await _dbContext.SaveChangesAsync(); // Lưu thay đổi vào cơ sở dữ liệu
+            }
+            return rowAffect;
         }
     }
 }

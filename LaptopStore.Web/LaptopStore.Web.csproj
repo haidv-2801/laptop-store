@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="bootstrap" Version="5.3.3" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LaptopStore.Core\LaptopStore.Core.csproj" />
     <ProjectReference Include="..\LaptopStore.Data\LaptopStore.Data.csproj" />
     <ProjectReference Include="..\LaptopStore.Services\LaptopStore.Services.csproj" />
