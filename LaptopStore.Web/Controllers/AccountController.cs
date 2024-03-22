@@ -1,10 +1,9 @@
-﻿using LaptopStore.Data.Models;
-using LaptopStore.Services.Services.AccountService;
+﻿using LaptopStore.Services.Services.AccountService;
 using LaptopStore.Web.Models;
-using LaptopStore.Data.Models;
 using LaptopStore.Data.ModelDTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using LaptopStore.Core;
 
 namespace LaptopStore.Web.Controllers
 {
@@ -24,14 +23,30 @@ namespace LaptopStore.Web.Controllers
             var data = await _accountService.GetAll();  
             return View(data);
         }
+
         public async Task<IActionResult> Create()
         {
             return View();
         }
+
         public async Task<IActionResult> Update(string id)
         {
             var data = await _accountService.GetById(id);
             return View(data);
+        }
+
+        [HttpPost]
+        public async Task<ServiceResponse> GetAccountPaging([FromBody] PagingRequest paging)
+        {
+            var response = new ServiceResponse();
+            try
+            {
+                return response.OnSuccess(await _accountService.GetAccountPaging(paging));
+            }
+            catch (Exception ex)
+            {
+                return response.OnError(ex);
+            }
         }
 
         [HttpPost]

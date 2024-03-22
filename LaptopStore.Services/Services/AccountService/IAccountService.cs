@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LaptopStore.Core;
 
 namespace LaptopStore.Services.Services.AccountService
 {
@@ -14,6 +15,8 @@ namespace LaptopStore.Services.Services.AccountService
         Task<Account> GetById(string id);
 
         Task<int> SaveAccount(AccountSaveDTO accountSaveDTO);
+
+        Task<PagingResponse> GetAccountPaging(PagingRequest paging);
 
         Task<bool> UpdateAccount(string id, AccountSaveDTO accountSaveDTO);
 
