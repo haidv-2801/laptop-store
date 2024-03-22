@@ -1,5 +1,7 @@
-﻿using LaptopStore.Data.Context;
+﻿using LaptopStore.Core.Utilities;
+using LaptopStore.Data.Context;
 using LaptopStore.Data.Models;
+using LaptopStore.Data.ModelDTO;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,23 +23,44 @@ namespace LaptopStore.Services.Services.AccountService
         {
             return await _dbContext.Set<Account>().OrderByDescending(e=>e.Username).ToListAsync();
         }
-        public async Task<int> Create(Account account)
+
+        public async Task<Account> GetById(string id)
         {
-            account.Id = Guid.NewGuid().ToString();
-            _dbContext.Add<Account>(account);
-            int rowAffect =await _dbContext.SaveChangesAsync();
-            return rowAffect;
+            var account = _dbContext.Accounts.SingleOrDefault(e=>e.Id == id);
+            return account;
         }
-        public async Task<int> Delete(string id)
+        public async Task<int> SaveAccount(AccountSaveDTO accountSaveDTO)
         {
-            int rowAffect = 0;
-            var entityToDelete = _dbContext.Find<Account>(id); // Tìm đối tượng cần xóa
-            if (entityToDelete != null)
-            {
-                _dbContext.Remove<Account>(entityToDelete); // Xóa đối tượng
-                rowAffect = await _dbContext.SaveChangesAsync(); // Lưu thay đổi vào cơ sở dữ liệu
-            }
-            return rowAffect;
+            var account = Mapper.MapInit<AccountSaveDTO, Account>(accountSaveDTO);
+            _dbContext.Accounts.Add(account);
+            int result = await _dbContext.SaveChangesAsync();
+            return result;
+        }
+
+        public async Task<bool> UpdateAccount(string id, AccountSaveDTO accountSaveDTO)
+        {
+            var account = await _dbContext.Accounts.FindAsync(id);
+            if (account == null)
+                return false;
+            account.FullName = accountSaveDTO.FullName;
+            account.Password = accountSaveDTO.Password;
+            account.Gender = accountSaveDTO.Gender;
+            account.Address = accountSaveDTO.Address;
+            account.AccountType = accountSaveDTO.AccountType;
+            account.Username = accountSaveDTO.Username;
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<int> DeleteAccount(string id)
+        {
+            var account = await _dbContext.Accounts.FindAsync(id);
+            if (account == null)
+                return 0;
+
+            _dbContext.Accounts.Remove(account);
+            int result = await _dbContext.SaveChangesAsync();
+            return result;
         }
     }
 }

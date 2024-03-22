@@ -1,12 +1,13 @@
-﻿@model LaptopStore.Data.ModelDTO.AccountSaveDTO
+﻿@model LaptopStore.Data.Models.Account
 @{
-    ViewBag.Title = "Thêm mới tài khoản";
+    ViewBag.Title = "Sửa thông tin tài khoản";
 }
 
-@section AccountCreateJS{
+@section AccountUpdateJS{
 <script type='text/javascript'>
-    function CreateAccount() {
+    function UpdateAccount(id) {
         const accountData ={
+            Id:id,
             Username:$('#username').val(),
             Password:$('#password').val(),
             FullName:$('#fullname').val(),
@@ -15,13 +16,13 @@
             Address:$('#address').val(),
         }
         $.ajax({
-            url: '/Account/SaveAccount', // Thay 'TenController' bằng tên controller của bạn
-            type: 'POST', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
+            url: '/Account/UpdateAccount/'+id, // Thay 'TenController' bằng tên controller của bạn
+            type: 'PUT', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
             contentType: 'application/json',
             data: JSON.stringify(accountData),
             success: function(result) {
                 // Xử lý kết quả sau khi xóa, nếu cần
-                alert('Thêm mới thành công');
+                alert('Cập nhật thành công');
                 // Cập nhật lại giao diện nếu cần
                 window.location.href = '/Account';
             },
@@ -36,7 +37,7 @@
 
 <div class="row">
     <div class="col">
-        <h2 class="text-info">Thêm mới tài khoản</h2>
+        <h2 class="text-info">Sửa thông tin tài khoản</h2>
         <hr />
         <div class="col-md-12">
 
@@ -66,8 +67,8 @@
                 <div class="col-md-6">
                     @Html.LabelFor(x => x.Gender, new { @class = "form-label fs-4" })
                     @Html.DropDownList("Gender", new List<SelectListItem>() {
-                    new SelectListItem(){Text="Male",Value="Male"},
-                    new SelectListItem(){Text="Female",Value="Female"}
+                    new SelectListItem(){Text="Male",Value="0"},
+                    new SelectListItem(){Text="Female",Value="1"}
                     }, "--Chọn giới tính--", new { @class = "form-control fs-4", @id="gender" })
                     @Html.ValidationMessageFor(x => x.Gender, "", new { @class = "text-danger" })
                 </div>
@@ -92,7 +93,7 @@
             </div>
 
             <div class="col-md-12 d-flex justify-content-lg-end mt-2">
-                <button class="btn btn-success btn-lg col-4" onclick="CreateAccount()">Lưu</button>
+                <button class="btn btn-success btn-lg col-4" onclick="UpdateAccount('@Model.Id')">Lưu</button>
             </div>
 
 

@@ -14,12 +14,13 @@
     function DeleteAccount(itemId) {
         console.log(1)
         $.ajax({
-            url: '/Account/Delete?id=' + itemId, // Thay 'TenController' bằng tên controller của bạn
+            url: '/Account/DeleteAccount/' + itemId, // Thay 'TenController' bằng tên controller của bạn
             type: 'DELETE', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
             success: function(result) {
                 // Xử lý kết quả sau khi xóa, nếu cần
                 alert('Xóa thành công');
                 // Cập nhật lại giao diện nếu cần
+                 window.location.reload();
             },
             error: function(xhr, status, error) {
                 // Xử lý lỗi nếu có
@@ -63,7 +64,7 @@
                                     {
                                         @Html.Raw("Nam")
                                     }
-                                    else
+                                    else if(emp.Gender == 1)
                                     {
 
                                         @Html.Raw("Nữ")
@@ -71,7 +72,7 @@
                                 </td>
                                 <td>@Html.DisplayFor(e => emp.Address)</td>
                                 <td>
-                                    <a href="@Url.Action("Edit", "Account", new {id = emp.Id })" class="btn btn-outline-warning btn-sm">Sửa</a>
+                                    <a href="@Url.Action("Update", "Account", new {id = emp.Id })" class="btn btn-outline-warning btn-sm">Sửa</a>
                                     <a href="@Url.Action("Detail", "Account", new {id = emp.Id })" class="btn btn-outline-info btn-sm">Chi tiết</a>
                                     <div onclick="DeleteAccount('@emp.Id')" class="btn btn-outline-danger btn-sm">Xóa</div>
                                 </td>

@@ -1,4 +1,5 @@
 ﻿using LaptopStore.Data.Models;
+using LaptopStore.Data.ModelDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,12 @@ namespace LaptopStore.Services.Services.AccountService
     public interface IAccountService
     {
         Task<List<Account>> GetAll();
-        Task<int> Create(Account account);
-        Task<int> Delete(string id);
+        Task<Account> GetById(string id);
+
+        Task<int> SaveAccount(AccountSaveDTO accountSaveDTO);
+
+        Task<bool> UpdateAccount(string id, AccountSaveDTO accountSaveDTO);
+
+        Task<int> DeleteAccount(string id);
     }
 }
