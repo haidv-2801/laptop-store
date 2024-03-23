@@ -64,31 +64,14 @@ namespace LaptopStore.Services.Services.AccountService
 
         public async Task<PagingResponse> GetAccountPaging(PagingRequest paging)
         {
-            int skip = (paging.Page - 1) * paging.PageSize;
             var pagingResponse = new PagingResponse();
             pagingResponse.Page = paging.Page;
             pagingResponse.PageSize = paging.PageSize;
 
-            //Search
-            var search = dbSet.Where(f =>
-                f.FullName.ToLower().Contains(paging.Search.ToLower())
-                || f.Username.ToLower().Contains(paging.Search.ToLower()));
-
-            //Sort
-            if (!string.IsNullOrEmpty(paging.Sort))
-            {
-                var sortArr = JsonConvert.DeserializeObject<List<string>>(paging.Sort);
-                foreach (var sort in sortArr)
-                {
-                    string fieldName = sort.Split(":")[0];
-                    string sortType = sort.Split(":")[1];
-                    //làm sau
-                }
-            }
-
-            //Paing
-            pagingResponse.Total = search.Count();
-            pagingResponse.Data = search.Skip(skip).Take(paging.PageSize).ToList();
+            //f => true có thể sửa theo nghiệp vụ ví dụ như f.Status = true;
+            var result = await FilterEntitiesPagingAsync(f => true, paging.Search, paging.SearchField, paging.Sort, paging.Page, paging.PageSize);
+                pagingResponse.Data = result.Data;
+                pagingResponse.Total = result.TotalRecords;
 
             return pagingResponse;
         }

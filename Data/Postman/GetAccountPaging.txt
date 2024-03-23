@@ -1,0 +1,9 @@
+curl --location 'https://localhost:7018/Account/GetAccountPaging' \
+--header 'Content-Type: application/json' \
+--data '{
+    "page": 1,
+    "pageSize": 10,
+    "search": "tdlong12",
+    "searchField": "username",
+    "sort":"fullName:ASC"
+}'
