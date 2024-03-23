@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\LaptopStore.Core\LaptopStore.Core.csproj" />
     <ProjectReference Include="..\LaptopStore.Data\LaptopStore.Data.csproj" />
   </ItemGroup>
