@@ -36,16 +36,16 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ServiceResponse> GetAccountPaging([FromBody] PagingRequest paging)
+        public async Task<IActionResult> GetAccountPaging([FromBody] PagingRequest paging)
         {
             var response = new ServiceResponse();
             try
             {
-                return response.OnSuccess(await _accountService.GetAccountPaging(paging));
+                return Ok(response.OnSuccess(await _accountService.GetAccountPaging(paging)));
             }
             catch (Exception ex)
             {
-                return response.OnError(ex);
+                return BadRequest(response.OnError(ex));
             }
         }
 

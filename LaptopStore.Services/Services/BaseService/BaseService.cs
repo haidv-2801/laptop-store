@@ -62,7 +62,7 @@ namespace LaptopStore.Services.Services.BaseService
           int pageNumber = 1,
           int pageSize = 10)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query = dbSet.AsNoTracking();
 
             if (filter != null)
                 query = query.Where(filter);
@@ -79,10 +79,10 @@ namespace LaptopStore.Services.Services.BaseService
                     if (property != null)
                     {
                         var propertyAccess = Expression.MakeMemberAccess(parameter, property);
-                        var toStringCall = Expression.Call(propertyAccess, propertyAccess.Type.GetMethod("ToString", Type.EmptyTypes));
+                        //var toStringCall = Expression.Call(propertyAccess, propertyAccess.Type.GetMethod("ToString", Type.EmptyTypes));
                         var containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) });
                         var searchTermExpression = Expression.Constant(searchTerm, typeof(string));
-                        var containsExpression = Expression.Call(toStringCall, containsMethod, searchTermExpression);
+                        var containsExpression = Expression.Call(propertyAccess, containsMethod, searchTermExpression);
 
                         searchExpression = searchExpression == null ? containsExpression : Expression.OrElse(searchExpression, containsExpression);
                     }
@@ -95,6 +95,9 @@ namespace LaptopStore.Services.Services.BaseService
             }
 
             var totalRecords = await query.CountAsync();
+
+            if (totalRecords == 0)
+                return (Data: new List<T>(), TotalRecords: totalRecords);
 
             if (!string.IsNullOrEmpty(sort))
             {

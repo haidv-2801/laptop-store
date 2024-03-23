@@ -1,6 +1,7 @@
 ﻿using LaptopStore.Core.Constants;
 using LaptopStore.Data.Context;
 using LaptopStore.Services;
+using LaptopStore.Services.Services.StorageService;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +39,14 @@ namespace LaptopStore.Web
             }
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionBuilder.ConnectionString));
             /*builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));*/
+
+            //StorageService
+            builder.Services.AddScoped<IStorageService>(serviceProvider =>
+            {
+                var env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
+                return new StorageService(env.WebRootPath);
+            });
+
             ServiceInjectionExtension.InjectService(builder.Services);
             var app = builder.Build();
 
