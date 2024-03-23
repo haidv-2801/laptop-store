@@ -1,0 +1,36 @@
+﻿@model LaptopStore.Data.ModelDTO.AccountLoginDTO
+
+@{
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+@section AccountCreateJS {
+    <script src='~/js/AccountCreate.js'></script>
+}
+
+
+<div class="row col-md-6 m-auto">
+    <div class="row">
+        <h2 class="text-info">ĐĂNG NHẬP</h2>
+        <hr />
+        <div class="col-md-12 mt-2">
+            <div class="row g-3">
+                <div class="row">
+                    @Html.LabelFor(x => x.UserName, new { @class = "form-label fs-4" })
+                    @Html.TextBoxFor(x => x.UserName, new { @class = "form-control fs-4", @id = "username" })
+                    @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "text-danger" })
+                </div>
+                <div class="row">
+                    @Html.LabelFor(x => x.Password, new { @class = "form-label fs-4" })
+                    @Html.TextBoxFor(x => x.Password, new { @class = "form-control fs-4", @id = "password",  @type="password" })
+                    @Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-3">
+                <button class="btn btn-success btn-lg col-4" onclick="Login()">ĐĂNG NHẬP</button>
+            </div>
+            <h3 class="row d-flex justify-content-between mt-2 errorLogin text-danger">
+            </h3>
+        </div>
+    </div>
+</div>

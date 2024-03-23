@@ -51,7 +51,7 @@ namespace LaptopStore.Services.Services.BaseService
 
         public async Task<IEnumerable<T>> GetEntitiesAsync()
         {
-            return await dbSet.ToListAsync();
+            return await dbSet.AsNoTracking().ToListAsync();
         }
 
         public async Task<(IEnumerable<T> Data, int TotalRecords)> FilterEntitiesPagingAsync(

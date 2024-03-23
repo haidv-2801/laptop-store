@@ -2,6 +2,7 @@
 using LaptopStore.Data.Context;
 using LaptopStore.Services;
 using LaptopStore.Services.Services.StorageService;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,30 +16,12 @@ namespace LaptopStore.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            // Đọc cài đặt từ file config và thêm vào Configuration
-            builder.Configuration.AddJsonFile("dbconfig.json", optional: true, reloadOnChange: true);
+
+            // Add cookie authen
+            CookiesAuthenication(builder);
 
             // Register db context
-            SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString(Constant.ConnectionStringKey));
-            /*var connectionString = builder.Configuration.GetConnectionString(Constant.ConnectionStringKey);*/
-            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("ServerName")))
-            {
-                connectionBuilder.DataSource = builder.Configuration.GetValue<string>("ServerName");
-            }
-            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("DatabaseName")))
-            {
-                connectionBuilder.InitialCatalog = builder.Configuration.GetValue<string>("DatabaseName");
-            }
-            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("UserId")))
-            {
-                connectionBuilder.UserID = builder.Configuration.GetValue<string>("UserId");
-            }
-            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("Password")))
-            {
-                connectionBuilder.Password = builder.Configuration.GetValue<string>("Password");
-            }
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionBuilder.ConnectionString));
-            /*builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));*/
+            InitDatabaseConnection(builder);
 
             //StorageService
             builder.Services.AddScoped<IStorageService>(serviceProvider =>
@@ -63,13 +46,102 @@ namespace LaptopStore.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            MapControllerRoutes(app);
+
+            app.Run();
+        }
+
+        /// <summary>
+        /// Map router ở đây
+        /// </summary>
+        /// <param name="app"></param>
+        private static void MapControllerRoutes(WebApplication app)
+        {
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Account}/{action=Index}/{id?}");
+        }
 
-            app.Run();
+        /// <summary>
+        /// Cookie authen
+        /// </summary>
+        /// <param name="app"></param>
+        private static void CookiesAuthenication(WebApplicationBuilder builder)
+        {
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie();
+
+            builder.Services.AddAuthentication("DemoSecurityScheme")
+            .AddCookie("DemoSecurityScheme", options =>
+            {
+                options.AccessDeniedPath = new PathString("/Account/Access");
+                options.LoginPath = "/Auth/Login";
+                options.LogoutPath = "/Auth/Logout";
+                options.Cookie = new CookieBuilder
+                {
+                    //Domain = "",
+                    HttpOnly = true,
+                    Name = ".LaptopStore.Security.Cookie",
+                    Path = "/",
+                    SameSite = SameSiteMode.Lax,
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest
+                };
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnSignedIn = context =>
+                    {
+                        Console.WriteLine("{0} - {1}: {2}", DateTime.Now,
+                            "OnSignedIn", context.Principal.Identity.Name);
+                        return Task.CompletedTask;
+                    },
+                    OnSigningOut = context =>
+                    {
+                        Console.WriteLine("{0} - {1}: {2}", DateTime.Now,
+                            "OnSigningOut", context.HttpContext.User.Identity.Name);
+                        return Task.CompletedTask;
+                    },
+                    OnValidatePrincipal = context =>
+                    {
+                        Console.WriteLine("{0} - {1}: {2}", DateTime.Now,
+                            "OnValidatePrincipal", context.Principal.Identity.Name);
+                        return Task.CompletedTask;
+                    }
+                };
+                //options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                options.LoginPath = new PathString("/Account/Login");
+                options.ReturnUrlParameter = "RequestPath";
+                options.SlidingExpiration = true;
+            });
+        }
+
+        private static void InitDatabaseConnection(WebApplicationBuilder builder)
+        {
+            // Đọc cài đặt từ file config và thêm vào Configuration
+            builder.Configuration.AddJsonFile("dbconfig.json", optional: true, reloadOnChange: true);
+
+            // Register db context
+            SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString(Constant.ConnectionStringKey));
+            /*var connectionString = builder.Configuration.GetConnectionString(Constant.ConnectionStringKey);*/
+            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("ServerName")))
+            {
+                connectionBuilder.DataSource = builder.Configuration.GetValue<string>("ServerName");
+            }
+            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("DatabaseName")))
+            {
+                connectionBuilder.InitialCatalog = builder.Configuration.GetValue<string>("DatabaseName");
+            }
+            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("UserId")))
+            {
+                connectionBuilder.UserID = builder.Configuration.GetValue<string>("UserId");
+            }
+            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("Password")))
+            {
+                connectionBuilder.Password = builder.Configuration.GetValue<string>("Password");
+            }
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionBuilder.ConnectionString));
         }
     }
 }

@@ -13,12 +13,17 @@ namespace LaptopStore.Core
         
         public string Message { get; set; } = string.Empty;
 
+        public string UserMessage { get; set; } = string.Empty;
+
         public object Data { get; set; }
+
+        public bool Success { get; set; }
 
         public ServiceResponse OnError(Exception ex, ResponseCode code = ResponseCode.BusinessError) 
         {
             this.Message = ex.Message;
             this.Code = code;
+            this.Success = false;
             return this;
         }
 
@@ -27,6 +32,7 @@ namespace LaptopStore.Core
             this.Code = ResponseCode.Success;
             this.Message = "Thành công";
             this.Data = data;
+            this.Success = true;
             return this;
         }
     }

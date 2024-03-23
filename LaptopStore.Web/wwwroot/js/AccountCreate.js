@@ -11,3 +11,19 @@
         window.location.href = '/Account';
     })
 }
+
+function Login() {
+    const accountData = {
+        Username: $('#username').val(),
+        Password: $('#password').val(),
+    }
+    baseCreate('/Auth/Login', accountData).then(res => {
+        debugger
+        if (!res.success) {
+            $('.errorLogin').text(res.message ?? "Có Lỗi xảy ra.");
+        } else {
+            window.location.href = "/Account";
+        }
+    }).catch(err => {
+    })
+}

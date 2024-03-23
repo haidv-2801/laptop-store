@@ -2,10 +2,8 @@
 using LaptopStore.Services.Services.StorageService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Net.WebSockets;
 
-namespace LaptopStore.Web.Controllers
+namespace LaptopStore.Web.ApiController
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -51,7 +49,7 @@ namespace LaptopStore.Web.Controllers
             try
             {
                 var image = await _storageService.GetImageAsync(name);
-                return new FileStreamResult(image, "image/jpeg");  
+                return new FileStreamResult(image, "image/jpeg");
             }
             catch (Exception ex)
             {
