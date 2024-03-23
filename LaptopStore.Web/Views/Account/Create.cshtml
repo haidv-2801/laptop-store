@@ -4,34 +4,7 @@
 }
 
 @section AccountCreateJS{
-<script type='text/javascript'>
-    function CreateAccount() {
-        const accountData ={
-            Username:$('#username').val(),
-            Password:$('#password').val(),
-            FullName:$('#fullname').val(),
-            Gender:$('#gender').val()?Number($('#gender').val()):null,
-            AccountType:$('#accountType').val()?Number($('#accountType').val()):null,
-            Address:$('#address').val(),
-        }
-        $.ajax({
-            url: '/Account/SaveAccount', // Thay 'TenController' bằng tên controller của bạn
-            type: 'POST', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
-            contentType: 'application/json',
-            data: JSON.stringify(accountData),
-            success: function(result) {
-                // Xử lý kết quả sau khi xóa, nếu cần
-                alert('Thêm mới thành công');
-                // Cập nhật lại giao diện nếu cần
-                window.location.href = '/Account';
-            },
-            error: function(xhr, status, error) {
-                // Xử lý lỗi nếu có
-                console.error(error);
-            }
-        });
-    }
-</script>
+<script src='~/js/AccountCreate.js'></script>
 }
 
 <div class="row">

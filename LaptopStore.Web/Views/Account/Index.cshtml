@@ -10,31 +10,17 @@
 </style>
 }
 @section AccountListJS{
-    <script>
-    function DeleteAccount(itemId) {
-        console.log(1)
-        $.ajax({
-            url: '/Account/DeleteAccount/' + itemId, // Thay 'TenController' bằng tên controller của bạn
-            type: 'DELETE', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
-            success: function(result) {
-                // Xử lý kết quả sau khi xóa, nếu cần
-                alert('Xóa thành công');
-                // Cập nhật lại giao diện nếu cần
-                 window.location.reload();
-            },
-            error: function(xhr, status, error) {
-                // Xử lý lỗi nếu có
-                console.error(error);
-            }
-        });
-    }
-</script>
+<script src='~/js/AccoutList.js'></script>
 }
 <div class="row">
     <div class="col">
         <h2 class="text-info">Danh sách tài khoản</h2>
         <hr />
-        <div class="d-flex justify-content-end mb-2">
+        <div class="d-flex justify-content-between mb-2">
+            <form class="form-inline d-flex">
+                <input id='search-text' class="form-control mr-sm-2" style="margin-right:8px;width:300px" type="search" placeholder="Search" aria-label="Search">
+                <button id='btn-search' class="btn btn-outline-success my-2 my-sm-0">Search</button>
+            </form>
             <a href="@Url.Action("Create", "Account")" class="btn btn btn-outline-primary">Thêm mới</a>
         </div>
         <div class="table-responsive">
@@ -45,47 +31,34 @@
                         <th>@Html.DisplayNameFor(e => e.Password)</th>
                         <th>@Html.DisplayNameFor(e => e.FullName)</th>
                         <th>@Html.DisplayNameFor(e => e.Gender)</th>
+                        <th>@Html.DisplayNameFor(e => e.AccountType)</th>
                         <th>@Html.DisplayNameFor(e => e.Address)</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @if (Model != null && Model.Count() > 0)
-                    {
-
-                        @foreach (var emp in Model)
-                        {
-                            <tr>
-                                <td>@Html.DisplayFor(e => emp.Username)</td>
-                                <td>@Html.DisplayFor(e => emp.Password)</td>
-                                <td>@Html.DisplayFor(e => emp.FullName)</td>
-                                <td>
-                                    @if (emp.Gender == 0)
-                                    {
-                                        @Html.Raw("Nam")
-                                    }
-                                    else if(emp.Gender == 1)
-                                    {
-
-                                        @Html.Raw("Nữ")
-                                    }
-                                </td>
-                                <td>@Html.DisplayFor(e => emp.Address)</td>
-                                <td>
-                                    <a href="@Url.Action("Update", "Account", new {id = emp.Id })" class="btn btn-outline-warning btn-sm">Sửa</a>
-                                    <a href="@Url.Action("Detail", "Account", new {id = emp.Id })" class="btn btn-outline-info btn-sm">Chi tiết</a>
-                                    <div onclick="DeleteAccount('@emp.Id')" class="btn btn-outline-danger btn-sm">Xóa</div>
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <span>Không có dữ liệu</span>
-                    }
+                <tbody id='table-body'>
                 </tbody>
             </table>
         </div>
+        <nav aria-label="Page navigation example">
+            <ul id='pagination' class="pagination justify-content-end align-items-center mt-2">
+                @*<li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                    </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                    </a>
+                    </li>*@
+            </ul>
+        </nav>
     </div>
 </div>
 
