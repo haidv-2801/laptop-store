@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LaptopStore.Core;
+using System;
 using System.Collections.Generic;
 
 namespace LaptopStore.Data.Models

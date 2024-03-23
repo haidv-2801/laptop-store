@@ -11,9 +11,13 @@ namespace LaptopStore.Core
         public int Page { get; set; }
         public int PageSize { get; set; }
         /// <summary>
-        /// FullName:Desc
+        /// FullName:DESC,Email:ASC
         /// </summary>
         public string Sort { get; set; }
         public string Search { get; set; }
+        /// <summary>
+        /// FullName,Email
+        /// </summary>
+        public string SearchField { get; set; }
     }
 }

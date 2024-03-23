@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LaptopStore.Core;
+using LaptopStore.Services.Services.BaseService;
 
 namespace LaptopStore.Services.Services.AccountService
 {
-    public interface IAccountService
+    public interface IAccountService : IBaseService<Account>
     {
         Task<List<Account>> GetAll();
         Task<Account> GetById(string id);

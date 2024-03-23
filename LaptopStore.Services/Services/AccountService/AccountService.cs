@@ -12,38 +12,35 @@ using LaptopStore.Core;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
 using LaptopStore.Core.Enums;
+using LaptopStore.Services.Services.BaseService;
 
 namespace LaptopStore.Services.Services.AccountService
 {
-    public class AccountService : IAccountService
+    public class AccountService : BaseService<Account>, IAccountService
     {
-        private readonly ApplicationDbContext _dbContext;
-        public AccountService(ApplicationDbContext dbContext)
+        public AccountService(ApplicationDbContext dbContext):base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
         public async Task<List<Account>> GetAll()
         {
-            return await _dbContext.Set<Account>().OrderByDescending(e => e.Username).ToListAsync();
+            return await dbSet.OrderByDescending(e => e.Username).ToListAsync();
         }
 
         public async Task<Account> GetById(string id)
         {
-            var account = _dbContext.Accounts.SingleOrDefault(e => e.Id == id);
-            return account;
+            return await GetEntityByIDAsync(id);
         }
         public async Task<int> SaveAccount(AccountSaveDTO accountSaveDTO)
         {
             var account = Mapper.MapInit<AccountSaveDTO, Account>(accountSaveDTO);
-            _dbContext.Accounts.Add(account);
-            int result = await _dbContext.SaveChangesAsync();
-            return result;
+            await AddEntityAsync(account);
+            return 1;
         }
 
         public async Task<bool> UpdateAccount(string id, AccountSaveDTO accountSaveDTO)
         {
-            var account = await _dbContext.Accounts.FindAsync(id);
+            var account = await GetEntityByIDAsync(id);
             if (account == null)
                 return false;
             account.FullName = accountSaveDTO.FullName;
@@ -52,19 +49,17 @@ namespace LaptopStore.Services.Services.AccountService
             account.Address = accountSaveDTO.Address;
             account.AccountType = accountSaveDTO.AccountType;
             account.Username = accountSaveDTO.Username;
-            await _dbContext.SaveChangesAsync();
+            await UpdateEntityAsync(account);
             return true;
         }
 
         public async Task<int> DeleteAccount(string id)
         {
-            var account = await _dbContext.Accounts.FindAsync(id);
+            var account = await GetEntityByIDAsync(id);
             if (account == null)
                 return 0;
 
-            _dbContext.Accounts.Remove(account);
-            int result = await _dbContext.SaveChangesAsync();
-            return result;
+            return await DeleteEntityAsync(account);
         }
 
         public async Task<PagingResponse> GetAccountPaging(PagingRequest paging)
@@ -75,7 +70,7 @@ namespace LaptopStore.Services.Services.AccountService
             pagingResponse.PageSize = paging.PageSize;
 
             //Search
-            var search = _dbContext.Set<Account>().Where(f =>
+            var search = dbSet.Where(f =>
                 f.FullName.ToLower().Contains(paging.Search.ToLower())
                 || f.Username.ToLower().Contains(paging.Search.ToLower()));
 

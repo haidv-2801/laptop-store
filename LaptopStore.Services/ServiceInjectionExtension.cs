@@ -1,4 +1,5 @@
 ﻿using LaptopStore.Services.Services.AccountService;
+using LaptopStore.Services.Services.BaseService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LaptopStore.Services
@@ -7,6 +8,7 @@ namespace LaptopStore.Services
     {
         public static void InjectService(IServiceCollection collections)
         {
+            collections.AddTransient(typeof(IBaseService<>), typeof(BaseService<>));
             collections.AddTransient<IAccountService, AccountService>();
         }
     }
