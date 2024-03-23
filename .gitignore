@@ -70,3 +70,6 @@ bld/
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
+
+# Ignore
+dbconfig.json

@@ -1,6 +1,7 @@
-using LaptopStore.Core.Constants;
+﻿using LaptopStore.Core.Constants;
 using LaptopStore.Data.Context;
 using LaptopStore.Services;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace LaptopStore.Web
@@ -13,10 +14,30 @@ namespace LaptopStore.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            // Đọc cài đặt từ file config và thêm vào Configuration
+            builder.Configuration.AddJsonFile("dbconfig.json", optional: true, reloadOnChange: true);
 
             // Register db context
-            var connectionString = builder.Configuration.GetConnectionString(Constant.ConnectionStringKey);
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+            SqlConnectionStringBuilder connectionBuilder = new SqlConnectionStringBuilder(builder.Configuration.GetConnectionString(Constant.ConnectionStringKey));
+            /*var connectionString = builder.Configuration.GetConnectionString(Constant.ConnectionStringKey);*/
+            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("ServerName")))
+            {
+                connectionBuilder.DataSource = builder.Configuration.GetValue<string>("ServerName");
+            }
+            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("DatabaseName")))
+            {
+                connectionBuilder.InitialCatalog = builder.Configuration.GetValue<string>("DatabaseName");
+            }
+            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("UserId")))
+            {
+                connectionBuilder.UserID = builder.Configuration.GetValue<string>("UserId");
+            }
+            if (!string.IsNullOrEmpty(builder.Configuration.GetValue<string>("Password")))
+            {
+                connectionBuilder.Password = builder.Configuration.GetValue<string>("Password");
+            }
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionBuilder.ConnectionString));
+            /*builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));*/
             ServiceInjectionExtension.InjectService(builder.Services);
             var app = builder.Build();
 
@@ -37,7 +58,7 @@ namespace LaptopStore.Web
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Index}/{id?}");
 
             app.Run();
         }
