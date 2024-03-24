@@ -1,0 +1,21 @@
+﻿@model LaptopStore.Data.Models.Position;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<style type="text/css">
+    .detail-info {
+        grid-template-columns: 30% 70%;
+    }
+
+    .detail-info .label-text {
+        font-weight: 600;
+    }
+</style>
+<div class="detail-info d-grid">
+    <div class="label-text">Vị trí:</div>
+    <div class="value-text">@Model.Name</div>
+    <div class="label-text">Diện tích:</div>
+    <div class="value-text">@Model.Acreage</div>
+    <div class="label-text">Số lượng sản phẩm:</div>
+    <div class="value-text">@Model.Quantity</div>
+</div>

@@ -4,12 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LaptopStore.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    @*<link rel="stylesheet" href="~/css/bootstrap.min.css"/>*@
+    <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LaptopStore.Web.styles.css" asp-append-version="true" />
     @RenderSection("AccountListCSS", required: false)
+    @RenderSection("PositionListCSS", required: false)
 </head>
 <body>
     <div class="wrapper">
@@ -194,14 +197,19 @@
             &copy; 2024 - LaptopStore.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>*@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    @*<script src="~/js/bootstrap.min.js"></script>*@
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
     <script src="~/js/app.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/baseCRUD.js"></script>
     @await RenderSectionAsync("AccountListJS", required: false)
     @await RenderSectionAsync("AccountCreateJS", required: false)
     @await RenderSectionAsync("AccountUpdateJS", required: false)
+    @await RenderSectionAsync("PositionListJS", required: false)
+    @await RenderSectionAsync("PositionCreateJS", required: false)
+    @await RenderSectionAsync("PositionUpdateJS", required: false)
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

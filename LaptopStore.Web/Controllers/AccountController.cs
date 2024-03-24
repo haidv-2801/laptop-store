@@ -20,8 +20,8 @@ namespace LaptopStore.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var data = await _accountService.GetAll();  
-            return View(data);
+            //var data = await _accountService.GetAll();  
+            return View();
         }
 
         public async Task<IActionResult> Create()
@@ -33,6 +33,15 @@ namespace LaptopStore.Web.Controllers
         {
             var data = await _accountService.GetById(id);
             return View(data);
+        }
+
+        public async Task<IActionResult> GetDetail(string id)
+        {
+            // Xử lý logic để lấy chi tiết bản ghi theo id
+            var model = await _accountService.GetById(id);// Lấy dữ liệu từ cơ sở dữ liệu hoặc từ các nguồn khác
+
+            // Trả về PartialView chứa dữ liệu chi tiết
+            return PartialView("_AccountDetailPartial", model);
         }
 
         [HttpPost]

@@ -10,7 +10,7 @@
 </style>
 }
 @section AccountListJS{
-<script src='~/js/AccoutList.js'></script>
+<script src='~/js/AccountList.js'></script>
 }
 <div class="row">
     <div class="col">
@@ -18,7 +18,7 @@
         <hr />
         <div class="d-flex justify-content-between mb-2">
             <form class="form-inline d-flex">
-                <input id='search-text' class="form-control mr-sm-2" style="margin-right:8px;width:300px" type="search" placeholder="Search" aria-label="Search">
+                <input id='search-text' class="form-control mr-sm-2" style="margin-right:8px;width:300px" placeholder="Search" aria-label="Search">
                 <button id='btn-search' class="btn btn-outline-success my-2 my-sm-0">Search</button>
             </form>
             <a href="@Url.Action("Create", "Account")" class="btn btn btn-outline-primary">Thêm mới</a>
@@ -59,6 +59,40 @@
                     </li>*@
             </ul>
         </nav>
+    </div>
+    <!-- Modal View Detail-->
+    <div class="modal fade" id="accountDetail" tabindex="-1" aria-labelledby="accountDetailLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="accountDetailLabel">Thông tin chi tiết</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="accountDetailBody" class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Confirm Delete-->
+    <div class="modal fade" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-6" id="deleteConfirmLabel">Xác nhận</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa tài khoản này không?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button id="btn-delete-confirm" type="button" class="btn btn-primary btn-danger">Xóa</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

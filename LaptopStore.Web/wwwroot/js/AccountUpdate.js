@@ -11,4 +11,5 @@
     baseUpdate('/Account/UpdateAccount/'+id, accountData).then(res => {
         window.location.href = '/Account';
     })
+    return false
 }

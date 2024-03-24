@@ -1,0 +1,45 @@
+﻿@model LaptopStore.Data.Models.Account;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<style type="text/css">
+    .detail-info {
+        grid-template-columns: 20% 80%;
+    }
+
+    .detail-info .label-text {
+        font-weight: 600;
+    }
+</style>
+<div class="detail-info d-grid">
+    <div class="label-text">Họ và tên:</div>
+    <div class="value-text">@Model.FullName</div>
+    <div class="label-text">Tài khoản:</div>
+    <div class="value-text">@Model.Username</div>
+    <div class="label-text">Mật khẩu:</div>
+    <div class="value-text">@Model.Password</div>
+    <div class="label-text">Giới tính:</div>
+    <div class="value-text">
+        @if (@Model.Gender == 0)
+        {
+            @Html.Raw("Nam")
+        }
+        else if (@Model.Gender == 1)
+        {
+            @Html.Raw("Nữ")
+        }
+    </div>
+    <div class="label-text">Vai trò: </div>
+    <div class="value-text">
+        @if (@Model.AccountType == 0)
+        {
+            @Html.Raw("Admin")
+        }
+        else if (@Model.Gender == 1)
+        {
+            @Html.Raw("Nhân viên")
+        }
+    </div>
+    <div class="label-text">Địa chỉ: </div>
+    <div class="value-text">@Model.Address</div>
+</div>

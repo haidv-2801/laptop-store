@@ -10,6 +10,7 @@
     baseCreate('/Account/SaveAccount', accountData).then(res => {
         window.location.href = '/Account';
     })
+    return false
 }
 
 function Login() {
