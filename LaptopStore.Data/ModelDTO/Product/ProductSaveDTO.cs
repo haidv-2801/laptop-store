@@ -1,19 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace LaptopStore.Data.Models
+namespace LaptopStore.Data.ModelDTO
 {
-    public partial class Product
+    public class ProductSaveDTO
     {
-        public Product()
-        {
-            ReceiptDetails = new HashSet<ReceiptDetail>();
-            WarehouseExportDetails = new HashSet<WarehouseExportDetail>();
-        }
-
-        public string Id { get; set; } = null!;
-
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         [DisplayName("Tên sản phẩm")]
         public string Name { get; set; } = null!;
 
@@ -48,9 +42,6 @@ namespace LaptopStore.Data.Models
         [DisplayName("Ảnh")]
         public string? Image { get; set; }
 
-        public virtual Position Position { get; set; } = null!;
-        public virtual ProductCategory ProductCategory { get; set; } = null!;
-        public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
-        public virtual ICollection<WarehouseExportDetail> WarehouseExportDetails { get; set; }
+        public IFormFile? ImageFormData { get; set; }
     }
 }

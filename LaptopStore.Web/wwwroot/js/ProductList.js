@@ -2,14 +2,8 @@
 var pageTotal = 1
 var size = 5
 var search = '';
-var deleteId = null
-function DeleteAccount() {
-    if (deleteId) {
-        baseDelete('/Account/DeleteAccount/' + deleteId).then(res => {
-            window.location.reload();
-            $('#deleteConfirm').modal('hide');
-        })
-    }
+function DeleteProduct(itemId) {
+    baseDelete('/Product/DeleteProduct/' + itemId)
 }
 $(document).ready(function () {
     getDataByPaging()
@@ -20,11 +14,11 @@ function getDataByPaging() {
         Page: currentPage,
         PageSize: size,
         Search: search,
-        SearchField: 'UserName,FullName'
+        SearchField: 'Name'
     }
     
     // Gọi hàm JavaScript của bạn ở đây
-    baseGetDataFilterPaging('/Account/GetAccountPaging', paging).then(res => {
+    baseGetDataFilterPaging('/Product/GetProductPaging', paging).then(res => {
         if (res.code === 200) {
             const data = res.data?.data
             renderDataList(data)
@@ -64,34 +58,28 @@ function renderPagination(total, size) {
 function renderDataList(data) {
     document.getElementById('table-body').innerHTML = ""
     if (data?.length > 0) {
+        debugger
         $.each(data, function (index, item) {
-            let gender = ''
-            if (item.gender === 0) {
-                gender = 'Nam'
-            } else if (item.gender === 1) {
-                gender = 'Nữ'
-            }
-            let role = ''
-            if (item.accountType === 0) {
-                role = 'Quản trị'
-            } else {
-                role = 'Nhân viên'
+            let updateUrl = 'Product/Update?id=' + item.id;
+            let detailUrl = 'Product/Detail?id=' + item.id;
 
+            let imagePath = null;
+            if (item.image) {
+                imagePath = `https://localhost:7018/api/Storage/Image/${item.image.split('/')[2]}`;
             }
-            let updateUrl = 'Account/Update?id=' + item.id;
-            let detailUrl = 'Account/Detail?id=' + item.id;
+
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                                        <td>${item.username}</td>
-                                        <td>${item.password}</td>
-                                        <td>${item.fullName}</td>
-                                        <td>${gender}</td>
-                                        <td>${role}</td>
-                                        <td>${item.address}</td>
+                                        <td>${item.name}</td>
+                                        <img style="max-height: 100px;" src='${imagePath}'></img>
+                                        <td>${item.productCategoryName}</td>
+                                        <td>${item.positionName}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${item.warrantyTime}</td>
                                         <td>
                                             <a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>
-                                            <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>
-                                            <div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
+                                            <a href="${detailUrl}" class="btn btn-outline-info btn-sm">Chi tiết</a>
+                                            <div onclick="DeleteProduct('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
                                         </td>`
             document.getElementById('table-body').append(newRow)
         })
@@ -99,23 +87,6 @@ function renderDataList(data) {
         document.getElementById('table-body').innerHTML = '<span>Không có dữ liệu</span>'
     }
 }
-
-function handleDelete(id) {
-    deleteId = id
-    $('#deleteConfirm').modal('show');
-}
-
-function handleViewDetail(id) {
-    baseGetDetailModal('Account/GetDetail/' + id).then(res => {
-        $('#accountDetailBody').html(res);
-        $('#accountDetail').modal('show');
-    })
-}
-
-// Xử lý sự kiện click xác nhận xóa
-$('#btn-delete-confirm').on('click', function () {
-    DeleteAccount()
-});
 
 // Xử lý sự kiện click cho các nút phân trang
 $('#pagination').on('click', '.page-link', function () {
@@ -166,8 +137,6 @@ $('#pagination').on('click', '.btn-next', function () {
 
 // Xử lý sự kiện click cho các nút phân trang
 $('#btn-search').on('click', function () {
-    // Ngăn chặn form gửi dữ liệu và làm mới trang
-    event.preventDefault();
     // Lấy số trang từ thuộc tính data-page của nút được click
     search = $('#search-text').val()
     currentPage = 1

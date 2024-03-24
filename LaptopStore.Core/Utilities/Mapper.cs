@@ -10,10 +10,10 @@ namespace LaptopStore.Core.Utilities
 {
     public static class Mapper
     {
-        public static TDes? MapInit<TSrc, TDes>(TSrc source)
+        public static TDes MapInit<TSrc, TDes>(TSrc source)
         {
             TinyMapper.Bind<TSrc, TDes>();
-            return TinyMapper.Map(source, default(TDes));
+            return (TDes)TinyMapper.Map(typeof(TSrc), typeof(TDes), source);
         }
     }
 }

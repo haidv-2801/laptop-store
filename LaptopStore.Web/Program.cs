@@ -3,6 +3,7 @@ using LaptopStore.Data.Context;
 using LaptopStore.Services;
 using LaptopStore.Services.Services.StorageService;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,6 +44,10 @@ namespace LaptopStore.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            // Chuyển hướng các yêu cầu từ /images đến wwwroot/images
+            app.UseRewriter(new RewriteOptions()
+                .AddRewrite(@"^images/(.*)", "wwwroot/images/$1", skipRemainingRules: true));
 
             app.UseRouting();
 

@@ -4,12 +4,10 @@ using System.ComponentModel;
 
 namespace LaptopStore.Data.Models
 {
-    public partial class Product
+    public class ProductViewDTO
     {
-        public Product()
+        public ProductViewDTO()
         {
-            ReceiptDetails = new HashSet<ReceiptDetail>();
-            WarehouseExportDetails = new HashSet<WarehouseExportDetail>();
         }
 
         public string Id { get; set; } = null!;
@@ -25,6 +23,8 @@ namespace LaptopStore.Data.Models
 
         [DisplayName("Thể loại")]
         public string ProductCategoryId { get; set; } = null!;
+
+        public string ProductCategoryName { get; set; } = null!;
 
         [DisplayName("Số lượng")]
         public int? Quantity { get; set; }
@@ -44,13 +44,9 @@ namespace LaptopStore.Data.Models
 
         [DisplayName("Vị trí")]
         public string PositionId { get; set; } = null!;
+        public string PositionName { get; set; } = null!;
 
         [DisplayName("Ảnh")]
         public string? Image { get; set; }
-
-        public virtual Position Position { get; set; } = null!;
-        public virtual ProductCategory ProductCategory { get; set; } = null!;
-        public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
-        public virtual ICollection<WarehouseExportDetail> WarehouseExportDetails { get; set; }
     }
 }

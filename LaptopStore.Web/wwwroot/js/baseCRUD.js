@@ -87,3 +87,24 @@ function baseGetDetailModal(url, data) {
     });
 }
 
+function uploadImage(formData) {
+    return new Promise(function (resolve, reject) {
+        fetch('/api/Storage/Image', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                reject(response)
+            }
+            return response.json();
+        })
+        .then(data => {
+            resolve(data);
+        })
+        .catch(error => {
+            reject(error);
+        });
+    });
+}
+

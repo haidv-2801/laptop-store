@@ -84,6 +84,8 @@ namespace LaptopStore.Data.Context
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Image).HasColumnType("text");
+
                 entity.Property(e => e.LunchTime).HasColumnType("date");
 
                 entity.Property(e => e.Name).HasMaxLength(255);

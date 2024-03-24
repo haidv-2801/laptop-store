@@ -2,6 +2,7 @@
 using LaptopStore.Services.Services.AuthService;
 using LaptopStore.Services.Services.BaseService;
 using LaptopStore.Services.Services.PositionService;
+using LaptopStore.Services.Services.ProductService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LaptopStore.Services
@@ -14,6 +15,7 @@ namespace LaptopStore.Services
             collections.AddTransient<IAccountService, AccountService>();
             collections.AddTransient<IPositionService, PositionService>();
             collections.AddTransient<IAuthService, AuthService>();
+            collections.AddTransient<IProductService, ProductService>();
         }
     }
 }
