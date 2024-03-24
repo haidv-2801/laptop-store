@@ -14,8 +14,8 @@
         <div class="col-md-12">
 
             @*@Html.AntiForgeryToken()*@
-            @using (Html.BeginForm())
-            {
+            <form id="update-position-form">
+
                 <div class="row mb-2">
                     <div id="msg">
                     </div>
@@ -23,7 +23,7 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         @Html.LabelFor(x => x.Name, new { @class = "form-label fs-4" })
-                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control fs-4", @id="positionName", @readonly = "readonly" })
+                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control fs-4", @id="positionName" })
                         @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-6">
@@ -48,7 +48,8 @@
                 <div class="col-md-12 d-flex justify-content-lg-end mt-2">
                     <button class="btn btn-success btn-lg col-4" onclick="UpdatePosition('@Model.Id')">Lưu</button>
                 </div>
-            }
+            </form>
+            
 
 
             <div class="col-md-12 d-flex justify-content-lg-start mt-2">
@@ -57,21 +58,3 @@
         </div>
     </div>
 </div>
-@section scripts{
-    @*<script src="~/Content/JS/jquery-3.6.0.js"></script>*@
-<script src="~/lib/jquery/dist/jquery.js"></script>
-    @*<script src="~/Content/JS/jquery.validate.js"></script>*@
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-    @*<script src="~/Content/JS/jquery.validate.unobtrusive.js"></script>*@
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    @*<script src="~/Content/JS/jquery.unobtrusive-ajax.js"></script>*@
-<script>
-    $("#form0").attr("enctype", "multipart/form-data")
-
-    function clearAll() {
-        $("#form0").trigger("reset");
-    }
-</script>
-
-
-}

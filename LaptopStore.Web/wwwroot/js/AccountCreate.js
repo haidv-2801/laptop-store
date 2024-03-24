@@ -1,16 +1,19 @@
 ﻿function CreateAccount() {
-    const accountData = {
-        Username: $('#username').val(),
-        Password: $('#password').val(),
-        FullName: $('#fullname').val(),
-        Gender: $('#gender').val() ? Number($('#gender').val()) : null,
-        AccountType: $('#accountType').val() ? Number($('#accountType').val()) : null,
-        Address: $('#address').val(),
+    // Ngăn chặn hành động mặc định của form
+    event.preventDefault();
+    if ($('#create-account-form').valid()) {
+        const accountData = {
+            Username: $('#username').val(),
+            Password: $('#password').val(),
+            FullName: $('#fullname').val(),
+            Gender: $('#gender').val() ? Number($('#gender').val()) : null,
+            AccountType: $('#accountType').val() ? Number($('#accountType').val()) : null,
+            Address: $('#address').val(),
+        }
+        baseCreate('/Account/SaveAccount', accountData).then(res => {
+            window.location.href = '/Account';
+        })
     }
-    baseCreate('/Account/SaveAccount', accountData).then(res => {
-        window.location.href = '/Account';
-    })
-    return false
 }
 
 function Login() {

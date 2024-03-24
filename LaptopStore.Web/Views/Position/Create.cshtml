@@ -3,8 +3,8 @@
     ViewBag.Title = "Thêm mới vị trí";
 }
 
-@section PositionCreateJS{
-<script src='~/js/PositionCreate.js'></script>
+@section PositionCreateJS {
+    <script src='~/js/PositionCreate.js'></script>
 }
 
 <div class="row">
@@ -14,8 +14,7 @@
         <div class="col-md-12">
 
             @*@Html.AntiForgeryToken()*@
-            @using (Html.BeginForm())
-            {
+            <form id="create-position-form">
 
                 <div class="row mb-2">
                     <div id="msg">
@@ -24,33 +23,35 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         @Html.LabelFor(x => x.Name, new { @class = "form-label fs-4" })
-                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control fs-4", @id="positionName" })
+                        @Html.TextBoxFor(x => x.Name, new { @class = "form-control fs-4", @id = "positionName" })
                         @Html.ValidationMessageFor(x => x.Name, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-6">
                         @Html.LabelFor(x => x.Acreage, new { @class = "form-label fs-4" })
-                        @Html.TextBoxFor(x => x.Acreage, new { @class = "form-control fs-4" , @id="acreage"})
+                        @Html.TextBoxFor(x => x.Acreage, new { @class = "form-control fs-4", @id = "acreage" })
                         @Html.ValidationMessageFor(x => x.Acreage, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="col-md-6">
                         @Html.LabelFor(x => x.Quantity, new { @class = "form-label fs-4" })
-                        @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control fs-4" , @id="productQuantity"})
+                        @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control fs-4", @id = "productQuantity" })
                         @*@Html.EditorFor(x => x.FullName, new { htmlAttributes = new { @class = "form-control fs-4", @id="fullname" }, Type = "date" })*@
                         @Html.ValidationMessageFor(x => x.Quantity, "", new { @class = "text-danger" })
                     </div>
                     @* <div class="col-md-6">
-                        @Html.LabelFor(x => x.Picture, new { @class = "form-label fs-4" })
-                        @Html.TextBoxFor(x => x.Picture, new { @class = "form-control fs-4", Type = "file" })
-                        @Html.ValidationMessageFor(x => x.Picture, "", new { @class = "text-danger" })
-                        </div>*@
+                    @Html.LabelFor(x => x.Picture, new { @class = "form-label fs-4" })
+                    @Html.TextBoxFor(x => x.Picture, new { @class = "form-control fs-4", Type = "file" })
+                    @Html.ValidationMessageFor(x => x.Picture, "", new { @class = "text-danger" })
+                    </div>*@
                 </div>
 
                 <div class="col-md-12 d-flex justify-content-lg-end mt-2">
                     <button class="btn btn-success btn-lg col-4" onclick="CreatePosition()">Lưu</button>
                 </div>
 
-            }
+
+            </form>
+
 
             <div class="col-md-12 d-flex justify-content-lg-start mt-2">
                 <a href="@Url.Action("Index", "Position")" class="btn btn-danger btn-sm fs-4"><i class="fa-regular fa-hand-back-point-left"></i> Trở về danh sách</a>

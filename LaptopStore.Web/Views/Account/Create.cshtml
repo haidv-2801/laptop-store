@@ -14,8 +14,8 @@
         <div class="col-md-12">
 
             @*@Html.AntiForgeryToken()*@
-            @using (Html.BeginForm())
-            {
+
+            <form id="create-account-form">
 
                 <div class="row mb-2">
                     <div id="msg">
@@ -70,8 +70,10 @@
                 <div class="col-md-12 d-flex justify-content-lg-end mt-2">
                     <button class="btn btn-success btn-lg col-4" onclick="CreateAccount()">Lưu</button>
                 </div>
+            </form>
 
-            }
+
+            
 
             <div class="col-md-12 d-flex justify-content-lg-start mt-2">
                 <a href="@Url.Action("Index", "Account")" class="btn btn-danger btn-sm fs-4"><i class="fa-regular fa-hand-back-point-left"></i> Trở về danh sách</a>
@@ -79,21 +81,3 @@
         </div>
     </div>
 </div>
-@section scripts{
-    @*<script src="~/Content/JS/jquery-3.6.0.js"></script>*@
-<script src="~/lib/jquery/dist/jquery.js"></script>
-    @*<script src="~/Content/JS/jquery.validate.js"></script>*@
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-    @*<script src="~/Content/JS/jquery.validate.unobtrusive.js"></script>*@
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    @*<script src="~/Content/JS/jquery.unobtrusive-ajax.js"></script>*@
-<script>
-    $("#form0").attr("enctype", "multipart/form-data")
-
-    function clearAll() {
-        $("#form0").trigger("reset");
-    }
-</script>
-
-
-}

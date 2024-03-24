@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Web.Mvc
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -66,8 +67,8 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Create", "SubCategory")">
-                            <i class="fa-solid fa-diagram-subtask"></i><span class="align-middle">Add SubCategory</span>
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Position")">
+                            <i class="fa-solid fa-diagram-subtask"></i><span class="align-middle">Vị trí</span>
                         </a>
                     </li>
 
@@ -199,6 +200,8 @@
         </div>
     </footer>*@
     <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     @*<script src="~/js/bootstrap.min.js"></script>*@
     <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>

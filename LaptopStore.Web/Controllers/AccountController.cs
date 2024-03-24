@@ -63,8 +63,8 @@ namespace LaptopStore.Web.Controllers
         {
             try
             {
-                var data = await _accountService.SaveAccount(accountSaveDTO);
-                return Json(data);
+                    var data = await _accountService.SaveAccount(accountSaveDTO);
+                    return Json(data);
             }
             catch (Exception ex)
             {
