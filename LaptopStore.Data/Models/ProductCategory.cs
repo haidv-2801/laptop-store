@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace LaptopStore.Data.Models
 {
@@ -11,6 +12,7 @@ namespace LaptopStore.Data.Models
         }
 
         public string Id { get; set; } = null!;
+        [DisplayName("Tên danh mục")]
         public string Name { get; set; } = null!;
 
         public virtual ICollection<Product> Products { get; set; }

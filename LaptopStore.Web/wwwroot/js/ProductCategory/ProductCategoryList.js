@@ -3,9 +3,9 @@ var pageTotal = 1
 var size = 5
 var search = '';
 var deleteId = null
-function DeleteAccount() {
+function DeleteProductCategory() {
     if (deleteId) {
-        baseDelete('/Account/DeleteAccount/' + deleteId).then(res => {
+        baseDelete('/ProductCategory/DeleteProductCategory/' + deleteId).then(res => {
             window.location.reload();
             $('#deleteConfirm').modal('hide');
         })
@@ -15,16 +15,16 @@ $(document).ready(function () {
     getDataByPaging()
 });
 
+
 function getDataByPaging() {
     const paging = {
         Page: currentPage,
         PageSize: size,
         Search: search,
-        SearchField: 'UserName,FullName'
+        SearchField: 'Name'
     }
-    
     // Gọi hàm JavaScript của bạn ở đây
-    baseGetDataFilterPaging('/Account/GetAccountPaging', paging).then(res => {
+    baseGetDataFilterPaging('/ProductCategory/GetProductCategoryPaging', paging).then(res => {
         if (res.code === 200) {
             const data = res.data?.data
             renderDataList(data)
@@ -65,34 +65,18 @@ function renderDataList(data) {
     document.getElementById('table-body').innerHTML = ""
     if (data?.length > 0) {
         $.each(data, function (index, item) {
-            let gender = ''
-            if (item.gender === 0) {
-                gender = 'Nam'
-            } else if (item.gender === 1) {
-                gender = 'Nữ'
-            }
-            let role = ''
-            if (item.accountType === 0) {
-                role = 'Quản trị'
-            } else {
-                role = 'Nhân viên'
 
-            }
-            let updateUrl = 'Account/Update?id=' + item.id;
-            let detailUrl = 'Account/Detail?id=' + item.id;
+            let updateUrl = 'ProductCategory/Update?id=' + item.id;
+            let detailUrl = 'ProductCategory/Detail?id=' + item.id;
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                                        <td>${item.username}</td>
-                                        <td>${item.password}</td>
-                                        <td>${item.fullName}</td>
-                                        <td>${gender}</td>
-                                        <td>${role}</td>
-                                        <td>${item.address}</td>
+                                        <td>${item.name}</td>
+                                        <td>${item.productQuantity}</td>
                                         <td>
                                             <a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>
-                                            <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>
                                             <div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
                                         </td>`
+            /*<div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>*/
             document.getElementById('table-body').append(newRow)
         })
     } else {
@@ -105,17 +89,63 @@ function handleDelete(id) {
     $('#deleteConfirm').modal('show');
 }
 
-function handleViewDetail(id) {
-    baseGetPartialView('Account/GetDetail/' + id).then(res => {
-        $('#accountDetailBody').html(res);
-        $('#accountDetail').modal('show');
+function handleOpenCreateModal(id) {
+    baseGetPartialView('ProductCategory/Create').then(res => {
+        $('#productCategoryCreateBody').html(res);
+        $('#productCategoryCreate').modal('show');
     })
 }
 
+function handleViewDetail(id) {
+    baseGetPartialView('ProductCategory/Create').then(res => {
+        $('#productCategoryDetailBody').html(res);
+        $('#productCategoryDetail').modal('show');
+    })
+}
+
+// Xử lý sự kiện click lưu thông tin danh mục mới
+function handleSaveCreateData() {
+    // Ngăn chặn hành động mặc định của form
+    event.preventDefault();
+    if ($('#create-product-category-form').valid()) {
+        const categoryData = {
+            Name: $('#categoryName').val(),
+        }
+        baseCreate('/ProductCategory/SaveProductCategory', categoryData).then(res => {
+            $('#productCategoryCreate').modal('hide');
+        })
+    }
+};
+
 // Xử lý sự kiện click xác nhận xóa
 $('#btn-delete-confirm').on('click', function () {
-    DeleteAccount()
+    checkExistsProduct().then(res => {
+        if (res) {
+            alert('Tồn tại sản phẩm. Không thể xóa')
+            $('#deleteConfirm').modal('hide');
+
+        } else {
+            DeleteProductCategory()
+        }
+    })
 });
+
+function checkExistsProduct() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: 'ProductCategory/CheckExistsProduct/' + deleteId, // Thay 'TenController' bằng tên controller của bạn
+            type: 'GET', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
+            success: function (result) {
+                // Xử lý kết quả sau khi xóa, nếu cần
+                resolve(result);
+            },
+            error: function (xhr, status, error) {
+                // Xử lý lỗi nếu có
+                reject(error);
+            }
+        });
+    });
+}
 
 // Xử lý sự kiện click cho các nút phân trang
 $('#pagination').on('click', '.page-link', function () {

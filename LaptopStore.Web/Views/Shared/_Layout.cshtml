@@ -15,6 +15,7 @@
     @RenderSection("AccountListCSS", required: false)
     @RenderSection("ProductListCSS", required: false)
     @RenderSection("PositionListCSS", required: false)
+    @RenderSection("ProductCategoryListCSS", required: false)
 </head>
 <body>
     <div class="wrapper">
@@ -219,5 +220,8 @@
     @await RenderSectionAsync("ProductListJS", required: false)
     @await RenderSectionAsync("ProductCreateJS", required: false)
     @await RenderSectionAsync("Scripts", required: false)
+    
+    @* Product Category*@
+    @await RenderSectionAsync("ProductCategoryListJS", required: false)
 </body>
 </html>

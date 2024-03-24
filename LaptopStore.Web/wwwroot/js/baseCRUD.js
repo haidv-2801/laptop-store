@@ -70,7 +70,7 @@ function baseUpdate(url, data) {
         });
     });
 }
-function baseGetDetailModal(url, data) {
+function baseGetPartialView(url, data) {
     return new Promise(function (resolve, reject) {
         $.ajax({
             url: url, // Thay 'TenController' bằng tên controller của bạn

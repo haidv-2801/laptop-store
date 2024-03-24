@@ -90,7 +90,7 @@ function handleDelete(id) {
 }
 
 function handleViewDetail(id) {
-    baseGetDetailModal('Position/GetDetail/' + id).then(res => {
+    baseGetPartialView('Position/GetDetail/' + id).then(res => {
         $('#positionDetailBody').html(res);
         $('#positionDetail').modal('show');
     })
