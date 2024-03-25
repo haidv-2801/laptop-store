@@ -84,7 +84,7 @@ namespace LaptopStore.Web.Controllers
         {
             try
             {
-                var existsProductCategory = await _productCategoryService.CheckDuplicateName(productCategorySaveDTO.Name);
+                var existsProductCategory = await _productCategoryService.CheckDuplicateNameNotThis(id, productCategorySaveDTO.Name);
                 if (existsProductCategory)
                 {
                     return _serviceResponse.ResponseData("Đã tồn tại danh mục này", null);

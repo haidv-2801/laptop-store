@@ -1,0 +1,64 @@
+﻿@model LaptopStore.Data.ModelDTO.Customer.CustomerSaveDTO
+@{
+    ViewBag.Title = "Thêm mới khách hàng";
+}
+
+@section CustomerCreateJS {
+    <script src='~/js/Customer/CustomerCreate.js'></script>
+}
+
+<div class="row">
+    <div class="col">
+        <h2 class="text-info">Thêm mới khách hàng</h2>
+        <hr />
+        <div class="col-md-12">
+
+            @*@Html.AntiForgeryToken()*@
+            <form id="create-customer-form">
+
+                <div class="row mb-2">
+                    <div id="msg">
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        @Html.LabelFor(x => x.LastName, new { @class = "form-label fs-4" })
+                        @Html.TextBoxFor(x => x.LastName, new { @class = "form-control fs-4", @id = "lastName" })
+                        @Html.ValidationMessageFor(x => x.LastName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(x => x.FirstName, new { @class = "form-label fs-4" })
+                        @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control fs-4", @id = "firstName" })
+                        @Html.ValidationMessageFor(x => x.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(x => x.Phone, new { @class = "form-label fs-4" })
+                        @Html.TextBoxFor(x => x.Phone, new { @class = "form-control fs-4", @id = "phone" })
+                        @Html.ValidationMessageFor(x => x.Phone, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(x => x.Email, new { @class = "form-label fs-4" })
+                        @Html.TextBoxFor(x => x.Email, new { @class = "form-control fs-4", @id = "email" })
+                        @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(x => x.Address, new { @class = "form-label fs-4" })
+                        @Html.TextAreaFor(x => x.Address, new { @class = "form-control fs-4", @id = "address" })
+                        @Html.ValidationMessageFor(x => x.Address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-md-12 d-flex justify-content-lg-end mt-2">
+                    <button class="btn btn-success btn-lg col-4" onclick="CreateCustomer()">Lưu</button>
+                </div>
+
+
+            </form>
+
+
+            <div class="col-md-12 d-flex justify-content-lg-start mt-2">
+                <a href="@Url.Action("Index", "Customer")" class="btn btn-danger btn-sm fs-4"><i class="fa-regular fa-hand-back-point-left"></i> Trở về danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>

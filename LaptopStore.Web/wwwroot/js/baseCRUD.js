@@ -67,7 +67,6 @@ function baseCreate(url, data) {
                     $('#notifyToast').addClass(`bg-${notifyStyle}`)
                     $('#notifyToastBody').html('Thêm mới thành công');
                     $('#notifyToast').toast('show');
-                    getDataByPaging()
                 } else {
                     notifyStyle = 'warning'
                     $('#notifyToast').addClass(`bg-${notifyStyle}`)
@@ -102,7 +101,6 @@ function baseUpdate(url, data) {
                     $('#notifyToast').addClass(`bg-${notifyStyle}`)
                     $('#notifyToastBody').html('Cập nhật thành công');
                     $('#notifyToast').toast('show');
-                    getDataByPaging()
                 } else {
                     notifyStyle = 'warning'
                     $('#notifyToast').addClass(`bg-${notifyStyle}`)

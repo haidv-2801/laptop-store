@@ -1,0 +1,23 @@
+﻿@model LaptopStore.Data.Models.Customer;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<style type="text/css">
+    .detail-info {
+        grid-template-columns: 30% 70%;
+    }
+
+    .detail-info .label-text {
+        font-weight: 600;
+    }
+</style>
+<div class="detail-info d-grid">
+    <div class="label-text">Tên khách hàng:</div>
+    <div class="value-text">@Model.LastName @Model.FirstName</div>
+    <div class="label-text">Số điện thoại:</div>
+    <div class="value-text">@Model.Phone</div>
+    <div class="label-text">Email:</div>
+    <div class="value-text">@Model.Email</div>
+    <div class="label-text">Địa chỉ:</div>
+    <div class="value-text">@Model.Address</div>
+</div>

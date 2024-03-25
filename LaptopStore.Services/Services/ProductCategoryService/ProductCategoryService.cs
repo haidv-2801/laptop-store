@@ -56,6 +56,14 @@ namespace LaptopStore.Services.Services.ProductCategoryService
 
             return true;
         }
+        public async Task<bool> CheckDuplicateNameNotThis(string id, string name)
+        {
+            var productCategory = context.Set<ProductCategory>().AsNoTracking().FirstOrDefault(e => e.Name == name && e.Id != id);
+            if (productCategory == null)
+                return false;
+
+            return true;
+        }
         
         public async Task<bool> CheckExistsProduct(string id)
         {

@@ -24,6 +24,7 @@ namespace LaptopStore.Services.Services.PositionService
         Task<int> DeletePosition(string id);
 
         Task<bool> CheckDuplicateName(string name);
+        Task<bool> CheckDuplicateNameNotThis(string id, string name);
         Task<bool> CheckExistsProduct(string id);
     }
 }

@@ -1,28 +1,28 @@
-﻿using LaptopStore.Services.Services.PositionService;
+﻿using LaptopStore.Services.Services.SupplierService;
 using LaptopStore.Web.Models;
-using LaptopStore.Data.ModelDTO;
+using LaptopStore.Data.ModelDTO.Supplier;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using LaptopStore.Core;
 
 namespace LaptopStore.Web.Controllers
 {
-    public class PositionController : Controller
+    public class SupplierController : Controller
     {
-        private readonly ILogger<PositionController> _logger;
-        private readonly IPositionService _positionService;
+        private readonly ILogger<SupplierController> _logger;
+        private readonly ISupplierService _supplierService;
         private readonly ServiceResponse _serviceResponse;
 
-        public PositionController(ILogger<PositionController> logger, IPositionService positionService)
+        public SupplierController(ILogger<SupplierController> logger, ISupplierService supplierService)
         {
             _logger = logger;
-            _positionService = positionService;
+            _supplierService = supplierService;
             _serviceResponse = new ServiceResponse();
         }
 
         public async Task<IActionResult> Index()
         {
-            //var data = await _positionService.GetAll();  
+            //var data = await _supplierService.GetAll();  
             return View();
         }
 
@@ -33,25 +33,25 @@ namespace LaptopStore.Web.Controllers
 
         public async Task<IActionResult> Update(string id)
         {
-            var data = await _positionService.GetById(id);
+            var data = await _supplierService.GetById(id);
             return View(data);
         }
 
         public async Task<IActionResult> GetDetail(string id)
         {
             // Xử lý logic để lấy chi tiết bản ghi theo id
-            var model = await _positionService.GetById(id);// Lấy dữ liệu từ cơ sở dữ liệu hoặc từ các nguồn khác
+            var model = await _supplierService.GetById(id);// Lấy dữ liệu từ cơ sở dữ liệu hoặc từ các nguồn khác
 
             // Trả về PartialView chứa dữ liệu chi tiết
-            return PartialView("_PositionDetailPartial", model);
+            return PartialView("_SupplierDetailPartial", model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetPositionPaging([FromBody] PagingRequest paging)
+        public async Task<IActionResult> GetSupplierPaging([FromBody] PagingRequest paging)
         {
             try
             {
-                return Ok(_serviceResponse.OnSuccess(await _positionService.GetPositionPaging(paging)));
+                return Ok(_serviceResponse.OnSuccess(await _supplierService.GetSupplierPaging(paging)));
             }
             catch (Exception ex)
             {
@@ -60,16 +60,16 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ServiceResponse> SavePosition([FromBody]PositionSaveDTO positionSaveDTO)
+        public async Task<ServiceResponse> SaveSupplier([FromBody]SupplierSaveDTO supplierSaveDTO)
         {
             try
             {
-                var existsProductCategory = await _positionService.CheckDuplicateName(positionSaveDTO.Name);
+                var existsProductCategory = await _supplierService.CheckDuplicateName(supplierSaveDTO.Name);
                 if (existsProductCategory)
                 {
-                    return _serviceResponse.ResponseData("Đã tồn tại vị trí này", null);
+                    return _serviceResponse.ResponseData("Đã tồn tại NCC này", null);
                 }
-                var data = await _positionService.SavePosition(positionSaveDTO);
+                var data = await _supplierService.SaveSupplier(supplierSaveDTO);
                 return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
@@ -79,16 +79,16 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPut]
-        public async Task<ServiceResponse> UpdatePosition([FromRoute] string id, [FromBody] PositionSaveDTO positionSaveDTO)
+        public async Task<ServiceResponse> UpdateSupplier([FromRoute] string id, [FromBody] SupplierSaveDTO supplierSaveDTO)
         {
             try
             {
-                var existsProductCategory = await _positionService.CheckDuplicateNameNotThis(id, positionSaveDTO.Name);
+                var existsProductCategory = await _supplierService.CheckDuplicateNameNotThis(id, supplierSaveDTO.Name);
                 if (existsProductCategory)
                 {
-                    return _serviceResponse.ResponseData("Đã tồn tại vị trí này", null);
+                    return _serviceResponse.ResponseData("Đã tồn tại NCC này", null);
                 }
-                var data = await _positionService.UpdatePosition(id, positionSaveDTO);
+                var data = await _supplierService.UpdateSupplier(id, supplierSaveDTO);
                 return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
@@ -98,16 +98,11 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpDelete]
-        public async Task<ServiceResponse> DeletePosition([FromRoute] string id)
+        public async Task<ServiceResponse> DeleteSupplier([FromRoute] string id)
         {
             try
             {
-                var existsProduct = await _positionService.CheckExistsProduct(id);
-                if (existsProduct)
-                {
-                    return _serviceResponse.ResponseData("Tồn tại sản phẩm. Không thể xóa", null);
-                }
-                var data = await _positionService.DeletePosition(id);
+                var data = await _supplierService.DeleteSupplier(id);
                 return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)

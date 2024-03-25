@@ -18,6 +18,7 @@ namespace LaptopStore.Services.Services.ProductCategoryService
 
         Task<int> DeleteProductCategory(string id);
         Task<bool> CheckDuplicateName(string name);
+        Task<bool> CheckDuplicateNameNotThis(string id, string name);
         Task<bool> CheckExistsProduct(string id);
     }
 }

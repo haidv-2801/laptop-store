@@ -15,6 +15,8 @@
     @RenderSection("AccountListCSS", required: false)
     @RenderSection("ProductListCSS", required: false)
     @RenderSection("PositionListCSS", required: false)
+    @RenderSection("SupplierListCSS", required: false)
+    @RenderSection("CustomerListCSS", required: false)
     @RenderSection("ProductCategoryListCSS", required: false)
 </head>
 <body>
@@ -224,12 +226,26 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/enums.js"></script>
     <script src="~/js/baseCRUD.js"></script>
+
+    @*Account*@
     @await RenderSectionAsync("AccountListJS", required: false)
     @await RenderSectionAsync("AccountCreateJS", required: false)
     @await RenderSectionAsync("AccountUpdateJS", required: false)
+
+    @*Position*@
     @await RenderSectionAsync("PositionListJS", required: false)
     @await RenderSectionAsync("PositionCreateJS", required: false)
     @await RenderSectionAsync("PositionUpdateJS", required: false)
+
+    @*Supplier*@
+    @await RenderSectionAsync("SupplierListJS", required: false)
+    @await RenderSectionAsync("SupplierCreateJS", required: false)
+    @await RenderSectionAsync("SupplierUpdateJS", required: false)
+
+    @*Customer*@
+    @await RenderSectionAsync("CustomerListJS", required: false)
+    @await RenderSectionAsync("CustomerCreateJS", required: false)
+    @await RenderSectionAsync("CustomerUpdateJS", required: false)
 
     @* Product *@
     @await RenderSectionAsync("ProductListJS", required: false)
