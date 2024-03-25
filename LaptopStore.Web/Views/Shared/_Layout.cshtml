@@ -35,8 +35,14 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Order")">
-                            <i class="fa-regular fa-cart-shopping-fast"></i><span class="align-middle">Đơn hàng</span>
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "ExportOrder")">
+                            <i class="fa-regular fa-cart-shopping-fast"></i><span class="align-middle">Đơn xuất kho</span>
+                        </a>
+                    </li>
+                    
+                    <li class="sidebar-item">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "ImportOrder")">
+                            <i class="fa-regular fa-cart-shopping-fast"></i><span class="align-middle">Đơn nhập kho</span>
                         </a>
                     </li>
 
@@ -45,10 +51,16 @@
                             <i class="fa-solid fa-table"></i><span class="align-middle">Sản phẩm</span>
                         </a>
                     </li>
+                    
+                    <li class="sidebar-item">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "ProductCategory")">
+                            <i class="fa-solid fa-table"></i><span class="align-middle">Danh mục sản phẩm</span>
+                        </a>
+                    </li>
 
                     <li class="sidebar-item">
                         <a class="sidebar-link fs-4" href="@Url.Action("Index", "Supplier")">
-                            <i class="fa-regular fa-truck-field"></i><span class="align-middle">Supplier</span>
+                            <i class="fa-regular fa-truck-field"></i><span class="align-middle">Nhà cung cấp</span>
                         </a>
                     </li>
 
@@ -60,11 +72,6 @@
                     <li class="sidebar-item">
                         <a class="sidebar-link fs-4" href="@Url.Action("Index", "Account")">
                             <i class="fa-solid fa-person-chalkboard"></i><span class="align-middle">Tài khoản</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Create", "Category")">
-                            <i class="fa-regular fa-cabinet-filing"></i><span class="align-middle">Add Category</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -208,6 +215,7 @@
     <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
     <script src="~/js/app.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/enums.js"></script>
     <script src="~/js/baseCRUD.js"></script>
     @await RenderSectionAsync("AccountListJS", required: false)
     @await RenderSectionAsync("AccountCreateJS", required: false)

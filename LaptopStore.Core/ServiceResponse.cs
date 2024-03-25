@@ -10,7 +10,7 @@ namespace LaptopStore.Core
     public class ServiceResponse
     {
         public ResponseCode Code { get; set; } = ResponseCode.Success;
-        
+
         public string Message { get; set; } = string.Empty;
 
         public string UserMessage { get; set; } = string.Empty;
@@ -19,11 +19,20 @@ namespace LaptopStore.Core
 
         public bool Success { get; set; }
 
-        public ServiceResponse OnError(Exception ex, ResponseCode code = ResponseCode.BusinessError) 
+        public ServiceResponse OnError(Exception ex, ResponseCode code = ResponseCode.BusinessError)
         {
             this.Message = ex.Message;
             this.Code = code;
             this.Success = false;
+            return this;
+        }
+
+        public ServiceResponse ResponseData(string message, object? data, bool success = true, ResponseCode code = ResponseCode.BusinessError)
+        {
+            this.Message = message;
+            this.Code = code;
+            this.Data = data;
+            this.Success = success;
             return this;
         }
 

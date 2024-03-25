@@ -4,6 +4,7 @@ using LaptopStore.Data.ModelDTO.ProductCategory;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using LaptopStore.Core;
+using System.Xml.Linq;
 
 namespace LaptopStore.Web.Controllers
 {
@@ -11,11 +12,13 @@ namespace LaptopStore.Web.Controllers
     {
         private readonly ILogger<ProductCategoryController> _logger;
         private readonly IProductCategoryService _productCategoryService;
+        private readonly ServiceResponse _serviceResponse;
 
         public ProductCategoryController(ILogger<ProductCategoryController> logger, IProductCategoryService productCategoryService)
         {
             _logger = logger;
             _productCategoryService = productCategoryService;
+            _serviceResponse = new ServiceResponse();
         }
 
         public async Task<IActionResult> Index()
@@ -32,7 +35,7 @@ namespace LaptopStore.Web.Controllers
         public async Task<IActionResult> Update(string id)
         {
             var data = await _productCategoryService.GetById(id);
-            return View(data);
+            return PartialView("_ProductCategoryUpdatePartial", data);
         }
 
         public async Task<IActionResult> GetDetail(string id)
@@ -59,30 +62,40 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> SaveProductCategory([FromBody]ProductCategorySaveDTO productCategorySaveDTO)
+        public async Task<ServiceResponse> SaveProductCategory([FromBody]ProductCategorySaveDTO productCategorySaveDTO)
         {
             try
             {
+                var existsProductCategory = await _productCategoryService.CheckDuplicateName(productCategorySaveDTO.Name);
+                if (existsProductCategory)
+                {
+                    return _serviceResponse.ResponseData("Đã tồn tại danh mục này",null);
+                }
                 var data = await _productCategoryService.SaveProductCategory(productCategorySaveDTO);
-                return Json(data);
+                return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException.Message);
+                return _serviceResponse.OnError(ex);
             }
         }
 
         [HttpPut]
-        public async Task<JsonResult> UpdateProductCategory([FromRoute] string id, [FromBody] ProductCategorySaveDTO productCategorySaveDTO)
+        public async Task<ServiceResponse> UpdateProductCategory([FromRoute] string id, [FromBody] ProductCategorySaveDTO productCategorySaveDTO)
         {
             try
             {
+                var existsProductCategory = await _productCategoryService.CheckDuplicateName(productCategorySaveDTO.Name);
+                if (existsProductCategory)
+                {
+                    return _serviceResponse.ResponseData("Đã tồn tại danh mục này", null);
+                }
                 var data = await _productCategoryService.UpdateProductCategory(id, productCategorySaveDTO);
-                return Json(data);
+                return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException.Message);
+                return _serviceResponse.OnError(ex);
             }
         }
 

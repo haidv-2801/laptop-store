@@ -2,15 +2,15 @@
 @{
     ViewBag.Title = "Danh sách danh mục sản phẩm";
 }
-@section ProductCategoryListCSS{
-<style type="text/css">
-    tbody {
-        max-height: calc(100vh - 71px - 300px);
-    }
-</style>
+@section ProductCategoryListCSS {
+    <style type="text/css">
+        tbody {
+            max-height: calc(100vh - 71px - 300px);
+        }
+    </style>
 }
-@section ProductCategoryListJS{
-<script src='~/js/ProductCategory/ProductCategoryList.js'></script>
+@section ProductCategoryListJS {
+    <script src='~/js/ProductCategory/ProductCategoryList.js'></script>
 }
 <div class="row">
     <div class="col">
@@ -39,20 +39,20 @@
         <nav aria-label="Page navigation example">
             <ul id='pagination' class="pagination justify-content-end align-items-center mt-2">
                 @*<li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    <span class="sr-only">Previous</span>
-                    </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    <span class="sr-only">Next</span>
-                    </a>
-                    </li>*@
+                <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+                </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+                </a>
+                </li>*@
             </ul>
         </nav>
     </div>
@@ -65,11 +65,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="productCategoryCreateBody" class="modal-body">
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-success" onclick="handleSaveCreateData()" >Lưu</button>
+                    <button type="button" class="btn btn-success" onclick="handleSaveCreateData()">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Update-->
+    <div class="modal fade" id="productCategoryUpdate" tabindex="-1" aria-labelledby="productCategoryUpdateLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title" id="productCategoryUpdateLabel">Sửa danh mục</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="productCategoryUpdateBody" class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success" onclick="handleSaveUpdateData()">Lưu</button>
                 </div>
             </div>
         </div>
@@ -107,6 +123,70 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+@* Alert *@
+<div id="productCategoryToast" style="z-index:1100" class="toast align-items-center position-absolute top-0 end-0 bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+    <div class="d-flex">
+        <div id="productCategoryToastBody" class="toast-body">
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+<div id="deleteExistsProductToast" class="toast align-items-center position-absolute top-0 end-0 bg-warning" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+    <div class="d-flex">
+        <div class="toast-body">
+            Tồn tại sản phẩm. Không thể xóa
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+<div id="deleteSuccessToast" class="toast align-items-center position-absolute top-0 end-0 bg-success" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+    <div class="d-flex">
+        <div class="toast-body">
+            Xóa danh mục sản phẩm thành công
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+<div id="deleteFailedToast" class="toast align-items-center position-absolute top-0 end-0 bg-success" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+    <div class="d-flex">
+        <div class="toast-body">
+            Xóa danh mục sản phẩm thất bại
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+<div id="createSuccessToast" class="toast align-items-center position-absolute top-0 end-0 bg-success" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+    <div class="d-flex">
+        <div class="toast-body">
+            Thêm danh mục sản phẩm thành công
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+<div id="createFailedToast" class="toast align-items-center position-absolute top-0 end-0 bg-success" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+    <div class="d-flex">
+        <div class="toast-body">
+            Thêm danh mục sản phẩm thất bại
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+<div id="updateSuccessToast" class="toast align-items-center position-absolute top-0 end-0 bg-success" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+    <div class="d-flex">
+        <div class="toast-body">
+            Sửa danh mục sản phẩm thành công
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+<div id="updateFailedToast" class="toast align-items-center position-absolute top-0 end-0 bg-success" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
+    <div class="d-flex">
+        <div class="toast-body">
+            Sửa danh mục sản phẩm thất bại
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
 

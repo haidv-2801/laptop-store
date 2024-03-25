@@ -3,11 +3,17 @@ var pageTotal = 1
 var size = 5
 var search = '';
 var deleteId = null
+var clickedId = null
 function DeleteProductCategory() {
     if (deleteId) {
         baseDelete('/ProductCategory/DeleteProductCategory/' + deleteId).then(res => {
-            window.location.reload();
+            currentPage=1
+            getDataByPaging()
             $('#deleteConfirm').modal('hide');
+            $('#deleteSuccessToast').toast('show');
+        }).catch(e => {
+            $('#deleteFailedToast').toast('show');
+
         })
     }
 }
@@ -65,15 +71,12 @@ function renderDataList(data) {
     document.getElementById('table-body').innerHTML = ""
     if (data?.length > 0) {
         $.each(data, function (index, item) {
-
-            let updateUrl = 'ProductCategory/Update?id=' + item.id;
-            let detailUrl = 'ProductCategory/Detail?id=' + item.id;
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
                                         <td>${item.name}</td>
                                         <td>${item.productQuantity}</td>
                                         <td>
-                                            <a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>
+                                            <div onclick="handleOpenUpdateModal('${item.id}')" class="btn btn-outline-warning btn-sm">Sửa</div>
                                             <div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
                                         </td>`
             /*<div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>*/
@@ -89,10 +92,17 @@ function handleDelete(id) {
     $('#deleteConfirm').modal('show');
 }
 
-function handleOpenCreateModal(id) {
+function handleOpenCreateModal() {
     baseGetPartialView('ProductCategory/Create').then(res => {
         $('#productCategoryCreateBody').html(res);
         $('#productCategoryCreate').modal('show');
+    })
+}
+function handleOpenUpdateModal(id) {
+    clickedId=id
+    baseGetPartialView('ProductCategory/Update/'+id).then(res => {
+        $('#productCategoryUpdateBody').html(res);
+        $('#productCategoryUpdate').modal('show');
     })
 }
 
@@ -112,7 +122,45 @@ function handleSaveCreateData() {
             Name: $('#categoryName').val(),
         }
         baseCreate('/ProductCategory/SaveProductCategory', categoryData).then(res => {
-            $('#productCategoryCreate').modal('hide');
+            if (res.code === ResponseCode.Success) {
+
+                $('#productCategoryCreate').modal('hide');
+                $('#createSuccessToast').toast('show');
+                getDataByPaging()
+            } else {
+                $('#productCategoryToastBody').html(res.message);
+                $('#productCategoryToast').toast('show');
+
+            }
+        }).catch(e => {
+            $('#createFaildToast').toast('show');
+
+        })
+    }
+};
+// Xử lý sự kiện click lưu thông tin sửa danh mục
+function handleSaveUpdateData() {
+    // Ngăn chặn hành động mặc định của form
+    event.preventDefault();
+    if ($('#update-product-category-form').valid()) {
+        const categoryData = {
+            Id: clickedId,
+            Name: $('#categoryName').val(),
+        }
+        baseUpdate('/ProductCategory/UpdateProductCategory/' + clickedId, categoryData).then(res => {
+            if (res.code === ResponseCode.Success) {
+
+                $('#productCategoryUpdate').modal('hide');
+                $('#updateSuccessToast').toast('show');
+                getDataByPaging()
+            } else {
+                $('#productCategoryToastBody').html(res.message);
+                $('#productCategoryToast').toast('show');
+
+            }
+        }).catch(e => {
+            $('#updateFaildToast').toast('show');
+
         })
     }
 };
@@ -121,7 +169,7 @@ function handleSaveCreateData() {
 $('#btn-delete-confirm').on('click', function () {
     checkExistsProduct().then(res => {
         if (res) {
-            alert('Tồn tại sản phẩm. Không thể xóa')
+            $('#deleteExistsProductToast').toast('show');
             $('#deleteConfirm').modal('hide');
 
         } else {

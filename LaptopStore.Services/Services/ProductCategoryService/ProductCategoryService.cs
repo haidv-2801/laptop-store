@@ -50,7 +50,7 @@ namespace LaptopStore.Services.Services.ProductCategoryService
         }
         public async Task<bool> CheckDuplicateName(string name)
         {
-            bool? productCategory = null;
+            var productCategory = context.Set<ProductCategory>().AsNoTracking().FirstOrDefault(e => e.Name == name);
             if (productCategory == null)
                 return false;
 
