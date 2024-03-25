@@ -7,12 +7,12 @@ var clickedId = null
 function DeleteProductCategory() {
     if (deleteId) {
         baseDelete('/ProductCategory/DeleteProductCategory/' + deleteId).then(res => {
-            currentPage=1
-            getDataByPaging()
+            if (res.code === ResponseCode.Success) {
+                currentPage = 1
+                getDataByPaging()
+            }
             $('#deleteConfirm').modal('hide');
-            $('#deleteSuccessToast').toast('show');
         }).catch(e => {
-            $('#deleteFailedToast').toast('show');
 
         })
     }
@@ -99,8 +99,8 @@ function handleOpenCreateModal() {
     })
 }
 function handleOpenUpdateModal(id) {
-    clickedId=id
-    baseGetPartialView('ProductCategory/Update/'+id).then(res => {
+    clickedId = id
+    baseGetPartialView('ProductCategory/Update/' + id).then(res => {
         $('#productCategoryUpdateBody').html(res);
         $('#productCategoryUpdate').modal('show');
     })
@@ -125,15 +125,11 @@ function handleSaveCreateData() {
             if (res.code === ResponseCode.Success) {
 
                 $('#productCategoryCreate').modal('hide');
-                $('#createSuccessToast').toast('show');
                 getDataByPaging()
             } else {
-                $('#productCategoryToastBody').html(res.message);
-                $('#productCategoryToast').toast('show');
 
             }
         }).catch(e => {
-            $('#createFaildToast').toast('show');
 
         })
     }
@@ -151,15 +147,9 @@ function handleSaveUpdateData() {
             if (res.code === ResponseCode.Success) {
 
                 $('#productCategoryUpdate').modal('hide');
-                $('#updateSuccessToast').toast('show');
                 getDataByPaging()
-            } else {
-                $('#productCategoryToastBody').html(res.message);
-                $('#productCategoryToast').toast('show');
-
             }
         }).catch(e => {
-            $('#updateFaildToast').toast('show');
 
         })
     }
@@ -167,15 +157,7 @@ function handleSaveUpdateData() {
 
 // Xử lý sự kiện click xác nhận xóa
 $('#btn-delete-confirm').on('click', function () {
-    checkExistsProduct().then(res => {
-        if (res) {
-            $('#deleteExistsProductToast').toast('show');
-            $('#deleteConfirm').modal('hide');
-
-        } else {
-            DeleteProductCategory()
-        }
-    })
+    DeleteProductCategory()
 });
 
 function checkExistsProduct() {

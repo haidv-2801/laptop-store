@@ -50,14 +50,13 @@ namespace LaptopStore.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GetProductCategoryPaging([FromBody] PagingRequest paging)
         {
-            var response = new ServiceResponse();
             try
             {
-                return Ok(response.OnSuccess(await _productCategoryService.GetProductCategoryPaging(paging)));
+                return Ok(_serviceResponse.OnSuccess(await _productCategoryService.GetProductCategoryPaging(paging)));
             }
             catch (Exception ex)
             {
-                return BadRequest(response.OnError(ex));
+                return BadRequest(_serviceResponse.OnError(ex));
             }
         }
 
@@ -100,16 +99,21 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpDelete]
-        public async Task<JsonResult> DeleteProductCategory([FromRoute] string id)
+        public async Task<ServiceResponse> DeleteProductCategory([FromRoute] string id)
         {
             try
             {
+                var existsProduct = await _productCategoryService.CheckExistsProduct(id);
+                if (existsProduct)
+                {
+                    return _serviceResponse.ResponseData("Tồn tại sản phẩm. Không thể xóa", null);
+                }
                 var data = await _productCategoryService.DeleteProductCategory(id);
-                return Json(data);
+                return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException.Message);
+                return _serviceResponse.OnError(ex);
             }
         }
         [HttpPost]

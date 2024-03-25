@@ -1,14 +1,17 @@
 ﻿function UpdatePosition(id) {
     event.preventDefault();
     if ($('#update-position-form').valid()) {
+        let acreageValue = $('#acreage').val()
         const positionData = {
             Id: id,
             Name: $('#positionName').val(),
-            Acreage: $('#acreage').val(),
-            Quantity: $('#productQuantity').val()
+            Acreage: (acreageValue && !isNaN(acreageValue)) ? Number(acreageValue) : 0,
+            /*Quantity: $('#productQuantity').val()*/
         }
-        baseCreate('/Position/UpdatePosition/' + id, positionData).then(res => {
-            window.location.href = '/Position';
+        baseUpdate('/Position/UpdatePosition/' + id, positionData).then(res => {
+            if (res.code === ResponseCode.Success) {
+                window.location.href = '/Position';
+            }
         })
     }
 }

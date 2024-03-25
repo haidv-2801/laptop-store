@@ -11,11 +11,13 @@ namespace LaptopStore.Web.Controllers
     {
         private readonly ILogger<PositionController> _logger;
         private readonly IPositionService _positionService;
+        private readonly ServiceResponse _serviceResponse;
 
         public PositionController(ILogger<PositionController> logger, IPositionService positionService)
         {
             _logger = logger;
             _positionService = positionService;
+            _serviceResponse = new ServiceResponse();
         }
 
         public async Task<IActionResult> Index()
@@ -47,56 +49,70 @@ namespace LaptopStore.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GetPositionPaging([FromBody] PagingRequest paging)
         {
-            var response = new ServiceResponse();
             try
             {
-                return Ok(response.OnSuccess(await _positionService.GetPositionPaging(paging)));
+                return Ok(_serviceResponse.OnSuccess(await _positionService.GetPositionPaging(paging)));
             }
             catch (Exception ex)
             {
-                return BadRequest(response.OnError(ex));
+                return BadRequest(_serviceResponse.OnError(ex));
             }
         }
 
         [HttpPost]
-        public async Task<JsonResult> SavePosition([FromBody]PositionSaveDTO positionSaveDTO)
+        public async Task<ServiceResponse> SavePosition([FromBody]PositionSaveDTO positionSaveDTO)
         {
             try
             {
+                var existsProductCategory = await _positionService.CheckDuplicateName(positionSaveDTO.Name);
+                if (existsProductCategory)
+                {
+                    return _serviceResponse.ResponseData("Đã tồn tại vị trí này", null);
+                }
                 var data = await _positionService.SavePosition(positionSaveDTO);
-                return Json(data);
+                return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException.Message);
+                return _serviceResponse.OnError(ex);
             }
         }
 
         [HttpPut]
-        public async Task<JsonResult> UpdatePosition([FromRoute] string id, [FromBody] PositionSaveDTO positionSaveDTO)
+        public async Task<ServiceResponse> UpdatePosition([FromRoute] string id, [FromBody] PositionSaveDTO positionSaveDTO)
         {
             try
             {
+                var existsProductCategory = await _positionService.CheckDuplicateName(positionSaveDTO.Name);
+                if (existsProductCategory)
+                {
+                    return _serviceResponse.ResponseData("Đã tồn tại vị trí này", null);
+                }
                 var data = await _positionService.UpdatePosition(id, positionSaveDTO);
-                return Json(data);
+                return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException.Message);
+                return _serviceResponse.OnError(ex);
             }
         }
 
         [HttpDelete]
-        public async Task<JsonResult> DeletePosition([FromRoute] string id)
+        public async Task<ServiceResponse> DeletePosition([FromRoute] string id)
         {
             try
             {
+                var existsProduct = await _positionService.CheckExistsProduct(id);
+                if (existsProduct)
+                {
+                    return _serviceResponse.ResponseData("Tồn tại sản phẩm. Không thể xóa", null);
+                }
                 var data = await _positionService.DeletePosition(id);
-                return Json(data);
+                return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException.Message);
+                return _serviceResponse.OnError(ex);
             }
         }
 

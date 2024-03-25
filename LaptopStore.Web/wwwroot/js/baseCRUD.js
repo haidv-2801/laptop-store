@@ -1,4 +1,5 @@
-﻿function baseGetDataFilterPaging(url, paging) {
+﻿let notifyStyle=null
+function baseGetDataFilterPaging(url, paging) {
     return new Promise(function (resolve, reject) {
         $.ajax({
             url: url, // Thay 'TenController' bằng tên controller của bạn
@@ -25,10 +26,28 @@ function baseDelete(url) {
             type: 'DELETE', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
             success: function (result) {
 
+                if (result.code === ResponseCode.Success) {
+                    notifyStyle = 'success'
+                    $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                    $('#notifyToastBody').html('Xóa thành công');
+                    $('#notifyToast').toast('show');
+                    getDataByPaging()
+                } else {
+                    notifyStyle = 'warning'
+                    $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                    $('#notifyToastBody').html(result.message);
+                    $('#notifyToast').toast('show');
+
+                }
+
                 resolve(result);
             },
             error: function (xhr, status, error) {
                 // Xử lý lỗi nếu có
+                notifyStyle = 'danger'
+                $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                $('#notifyToastBody').html(error.message);
+                $('#notifyToast').toast('show');
                 reject(error);
             }
         });
@@ -43,10 +62,27 @@ function baseCreate(url, data) {
             data: JSON.stringify(data),
             success: function (result) {
                 // Xử lý kết quả sau khi xóa, nếu cần
+                if (result.code === ResponseCode.Success) {
+                    notifyStyle = 'success'
+                    $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                    $('#notifyToastBody').html('Thêm mới thành công');
+                    $('#notifyToast').toast('show');
+                    getDataByPaging()
+                } else {
+                    notifyStyle = 'warning'
+                    $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                    $('#notifyToastBody').html(result.message);
+                    $('#notifyToast').toast('show');
+
+                }
                 resolve(result);
             },
             error: function (xhr, status, error) {
                 // Xử lý lỗi nếu có
+                notifyStyle = 'danger'
+                $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                $('#notifyToastBody').html(error.message);
+                $('#notifyToast').toast('show');
                 reject(error);
             }
         });
@@ -61,10 +97,27 @@ function baseUpdate(url, data) {
             data: JSON.stringify(data),
             success: function (result) {
                 // Xử lý kết quả sau khi xóa, nếu cần
+                if (result.code === ResponseCode.Success) {
+                    notifyStyle = 'success'
+                    $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                    $('#notifyToastBody').html('Cập nhật thành công');
+                    $('#notifyToast').toast('show');
+                    getDataByPaging()
+                } else {
+                    notifyStyle = 'warning'
+                    $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                    $('#notifyToastBody').html(result.message);
+                    $('#notifyToast').toast('show');
+
+                }
                 resolve(result);
             },
             error: function (xhr, status, error) {
                 // Xử lý lỗi nếu có
+                notifyStyle = 'danger'
+                $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                $('#notifyToastBody').html(error.message);
+                $('#notifyToast').toast('show');
                 reject(error);
             }
         });
@@ -108,3 +161,8 @@ function uploadImage(formData) {
     });
 }
 
+/*Bắt sự kiến đóng toast thông báo*/
+$('#notifyToast').on('hidden.bs.toast', function () {
+    // Xử lý logic sau khi toast đóng ở đây
+    $('#notifyToast').removeClass(`bg-${notifyStyle}`)
+});

@@ -6,7 +6,10 @@ var deleteId = null
 function DeletePosition() {
     if (deleteId) {
         baseDelete('/Position/DeletePosition/' + deleteId).then(res => {
-            window.location.reload();
+            if (res.code === ResponseCode.Success) {
+                currentPage = 1
+                getDataByPaging()
+            }
             $('#deleteConfirm').modal('hide');
         })
     }

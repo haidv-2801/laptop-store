@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col">
-        <h2 class="text-info">Sửa thông tin tài khoản</h2>
+        <h2 class="text-info">Sửa thông tin vị trí</h2>
         <hr />
         <div class="col-md-12">
 
@@ -32,12 +32,11 @@
                         @Html.ValidationMessageFor(x => x.Acreage, "", new { @class = "text-danger" })
                     </div>
 
-                    <div class="col-md-6">
+                    @*<div class="col-md-6">
                         @Html.LabelFor(x => x.Quantity, new { @class = "form-label fs-4" })
                         @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control fs-4" , @id="productQuantity"})
-                        @*@Html.EditorFor(x => x.FullName, new { htmlAttributes = new { @class = "form-control fs-4", @id="fullname" }, Type = "date" })*@
                         @Html.ValidationMessageFor(x => x.Quantity, "", new { @class = "text-danger" })
-                    </div>
+                    </div>*@
                     @* <div class="col-md-6">
                         @Html.LabelFor(x => x.Picture, new { @class = "form-label fs-4" })
                         @Html.TextBoxFor(x => x.Picture, new { @class = "form-control fs-4", Type = "file" })

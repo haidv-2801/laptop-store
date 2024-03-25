@@ -57,6 +57,24 @@ namespace LaptopStore.Services.Services.PositionService
             return await DeleteEntityAsync(position);
         }
 
+        public async Task<bool> CheckDuplicateName(string name)
+        {
+            var position = context.Set<Position>().AsNoTracking().FirstOrDefault(e => e.Name == name);
+            if (position == null)
+                return false;
+
+            return true;
+        }
+
+        public async Task<bool> CheckExistsProduct(string id)
+        {
+            var product = context.Set<Product>().AsNoTracking().FirstOrDefault(e => e.PositionId == id);
+            if (product == null)
+                return false;
+
+            return true;
+        }
+
         public async Task<PagingResponse> GetPositionPaging(PagingRequest paging)
         {
             var pagingResponse = new PagingResponse();
