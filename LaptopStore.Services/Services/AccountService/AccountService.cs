@@ -1,5 +1,4 @@
 ﻿using LaptopStore.Core.Utilities;
-using LaptopStore.Data.Context;
 using LaptopStore.Data.Models;
 using LaptopStore.Data.ModelDTO;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +12,7 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using LaptopStore.Core.Enums;
 using LaptopStore.Services.Services.BaseService;
+using LaptopStore.Data.Context;
 
 namespace LaptopStore.Services.Services.AccountService
 {

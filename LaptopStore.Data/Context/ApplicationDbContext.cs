@@ -18,11 +18,13 @@ namespace LaptopStore.Data.Context
         }
 
         public virtual DbSet<Account> Accounts { get; set; } = null!;
+        public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<Position> Positions { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductCategory> ProductCategories { get; set; } = null!;
         public virtual DbSet<Receipt> Receipts { get; set; } = null!;
         public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; } = null!;
+        public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
         public virtual DbSet<WarehouseExport> WarehouseExports { get; set; } = null!;
         public virtual DbSet<WarehouseExportDetail> WarehouseExportDetails { get; set; } = null!;
 
@@ -50,7 +52,15 @@ namespace LaptopStore.Data.Context
 
                 entity.Property(e => e.Address).HasMaxLength(500);
 
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
                 entity.Property(e => e.FullName).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Password)
                     .HasMaxLength(50)
@@ -61,6 +71,34 @@ namespace LaptopStore.Data.Context
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.ToTable("Customer");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(36)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Address).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Email).HasMaxLength(255);
+
+                entity.Property(e => e.FirstName).HasMaxLength(100);
+
+                entity.Property(e => e.LastName).HasMaxLength(100);
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Phone).HasMaxLength(20);
+            });
+
             modelBuilder.Entity<Position>(entity =>
             {
                 entity.ToTable("Position");
@@ -68,6 +106,14 @@ namespace LaptopStore.Data.Context
                 entity.Property(e => e.Id)
                     .HasMaxLength(36)
                     .IsUnicode(false);
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Name).HasMaxLength(255);
             });
@@ -84,9 +130,17 @@ namespace LaptopStore.Data.Context
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
                 entity.Property(e => e.Image).HasColumnType("text");
 
                 entity.Property(e => e.LunchTime).HasColumnType("date");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Name).HasMaxLength(255);
 
@@ -139,6 +193,14 @@ namespace LaptopStore.Data.Context
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
                 entity.Property(e => e.Name).HasMaxLength(255);
             });
 
@@ -150,7 +212,15 @@ namespace LaptopStore.Data.Context
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
                 entity.Property(e => e.ImportTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Username)
                     .HasMaxLength(50)
@@ -171,6 +241,14 @@ namespace LaptopStore.Data.Context
                 entity.Property(e => e.Id)
                     .HasMaxLength(36)
                     .IsUnicode(false);
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.ProductId)
                     .HasMaxLength(36)
@@ -195,6 +273,31 @@ namespace LaptopStore.Data.Context
                     .HasConstraintName("FK_ReceiptDetail_Receipt");
             });
 
+            modelBuilder.Entity<Supplier>(entity =>
+            {
+                entity.ToTable("Supplier");
+
+                entity.Property(e => e.Id)
+                    .HasMaxLength(36)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ContactName).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Email).HasMaxLength(100);
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(255);
+
+                entity.Property(e => e.Phone).HasMaxLength(20);
+            });
+
             modelBuilder.Entity<WarehouseExport>(entity =>
             {
                 entity.ToTable("WarehouseExport");
@@ -203,7 +306,15 @@ namespace LaptopStore.Data.Context
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
                 entity.Property(e => e.ExportTime).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Username)
                     .HasMaxLength(50)
@@ -224,6 +335,14 @@ namespace LaptopStore.Data.Context
                 entity.Property(e => e.Id)
                     .HasMaxLength(36)
                     .IsUnicode(false);
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(255);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.ProductId)
                     .HasMaxLength(36)

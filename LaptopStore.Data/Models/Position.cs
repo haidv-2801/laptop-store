@@ -22,6 +22,10 @@ namespace LaptopStore.Data.Models
         public double Acreage { get; set; }
         [DisplayName("Số lượng sản phẩm")]
         public int? Quantity { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public string? ModifiedBy { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
     }

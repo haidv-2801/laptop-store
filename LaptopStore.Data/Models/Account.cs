@@ -33,6 +33,10 @@ namespace LaptopStore.Data.Models
         [Required(ErrorMessage = "Vai trò không được để trống")]
         [DisplayName("Vai trò")]
         public int AccountType { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public string? ModifiedBy { get; set; }
 
         public virtual ICollection<Receipt> Receipts { get; set; }
         public virtual ICollection<WarehouseExport> WarehouseExports { get; set; }
