@@ -116,9 +116,9 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Logout", "admin_Login")">
+                        <div class="sidebar-link fs-4" onclick="Logout()">
                             <i class="fa-regular fa-right-from-bracket"></i><span class="align-middle">LogOut</span>
-                        </a>
+                        </div>
                     </li>
 
                 </ul>
@@ -226,6 +226,22 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/enums.js"></script>
     <script src="~/js/baseCRUD.js"></script>
+    <script>
+        function Logout(){
+            $.ajax({
+            url: '/Auth/Logout', // Thay 'TenController' bằng tên controller của bạn
+            type: 'GET', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
+            success: function (result) {
+                // Xử lý kết quả sau khi xóa, nếu cần
+                if (result.code === ResponseCode.Success && res.data) {
+                    window.location.href='/Auth'
+                } else {}
+            },
+            error: function (xhr, status, error) {
+            }
+        });
+        }
+    </script>
 
     @*Account*@
     @await RenderSectionAsync("AccountListJS", required: false)

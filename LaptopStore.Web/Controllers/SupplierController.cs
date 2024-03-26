@@ -4,9 +4,11 @@ using LaptopStore.Data.ModelDTO.Supplier;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using LaptopStore.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopStore.Web.Controllers
 {
+    [Authorize]
     public class SupplierController : Controller
     {
         private readonly ILogger<SupplierController> _logger;

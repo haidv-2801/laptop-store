@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using LaptopStore.Core;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopStore.Web.Controllers
 {
+    [Authorize]
     public class ProductCategoryController : Controller
     {
         private readonly ILogger<ProductCategoryController> _logger;

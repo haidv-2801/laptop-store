@@ -23,6 +23,11 @@ namespace LaptopStore.Web.Controllers
         {
             return Redirect("/Auth/Login");
         }
+        
+        public IActionResult Access()
+        {
+            return View();
+        }
 
         [HttpGet]
         public IActionResult Login()
@@ -37,7 +42,20 @@ namespace LaptopStore.Web.Controllers
             try
             {
                 res = await _authService.SignIn(accountLoginDTO);
-                _httpContextAccessor.HttpContext.Session.SetString("UserLogin", JsonConvert.SerializeObject(res.Data));
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return res.OnError(ex);
+            }
+        }
+        [HttpGet]
+        public async Task<ServiceResponse> Logout()
+        {
+            var res = new ServiceResponse();
+            try
+            {
+                res = await _authService.SignOut();
                 return res;
             }
             catch (Exception ex)

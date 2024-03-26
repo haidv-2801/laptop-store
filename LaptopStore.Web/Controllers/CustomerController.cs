@@ -4,9 +4,11 @@ using LaptopStore.Data.ModelDTO.Customer;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using LaptopStore.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopStore.Web.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private readonly ILogger<CustomerController> _logger;

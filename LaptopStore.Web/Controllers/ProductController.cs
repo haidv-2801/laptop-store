@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using LaptopStore.Data.Models;
 using LaptopStore.Data.Context;
 using System.Net.NetworkInformation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopStore.Web.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;

@@ -18,9 +18,9 @@ namespace LaptopStore.Services.Services.BaseService
     {
         protected readonly DbContext context;
         protected readonly DbSet<T> dbSet;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        protected readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BaseService(DbContext context, IHttpContextAccessor httpContextAccessor)
+        public BaseService(DbContext context, IHttpContextAccessor? httpContextAccessor)
         {
             this.context = context;
             dbSet = context.Set<T>();

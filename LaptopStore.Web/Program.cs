@@ -2,6 +2,7 @@
 using LaptopStore.Data.Context;
 using LaptopStore.Services;
 using LaptopStore.Services.Services.StorageService;
+using LaptopStore.Web.MiddleWare;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Data.SqlClient;
@@ -62,6 +63,9 @@ namespace LaptopStore.Web
             // Kích hoạt Session Middleware
             app.UseSession();
 
+            // Đăng ký middleware kiểm tra xác thực
+            //app.UseMiddleware<AuthenticationMiddleware>();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -87,11 +91,11 @@ namespace LaptopStore.Web
         /// <param name="app"></param>
         private static void CookiesAuthenication(WebApplicationBuilder builder)
         {
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie();
+            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie();
 
-            builder.Services.AddAuthentication("DemoSecurityScheme")
-            .AddCookie("DemoSecurityScheme", options =>
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
                 options.AccessDeniedPath = new PathString("/Account/Access");
                 options.LoginPath = "/Auth/Login";
@@ -127,7 +131,7 @@ namespace LaptopStore.Web
                     }
                 };
                 //options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-                options.LoginPath = new PathString("/Account/Login");
+                options.LoginPath = new PathString("/Auth/Login");
                 options.ReturnUrlParameter = "RequestPath";
                 options.SlidingExpiration = true;
             });

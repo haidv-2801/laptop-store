@@ -13,5 +13,6 @@ namespace LaptopStore.Services.Services.AuthService
     public interface IAuthService : IBaseService<Account>
     {
         public Task<ServiceResponse> SignIn(AccountLoginDTO accountLoginDTO);
+        public Task<ServiceResponse> SignOut();
     }
 }

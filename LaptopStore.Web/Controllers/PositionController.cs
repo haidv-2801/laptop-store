@@ -4,9 +4,11 @@ using LaptopStore.Data.ModelDTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using LaptopStore.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopStore.Web.Controllers
 {
+    [Authorize]
     public class PositionController : Controller
     {
         private readonly ILogger<PositionController> _logger;
