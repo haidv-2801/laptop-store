@@ -6,7 +6,10 @@ var deleteId = null
 function DeleteAccount() {
     if (deleteId) {
         baseDelete('/Account/DeleteAccount/' + deleteId).then(res => {
-            window.location.reload();
+            if (res.code === ResponseCode.Success) {
+                currentPage = 1
+                getDataByPaging()
+            }
             $('#deleteConfirm').modal('hide');
         })
     }

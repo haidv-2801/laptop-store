@@ -2,16 +2,21 @@
 using LaptopStore.Data.ModelDTO;
 using LaptopStore.Services.Services.AuthService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using LaptopStore.Data.Models;
+using Newtonsoft.Json;
 
 namespace LaptopStore.Web.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IHttpContextAccessor httpContextAccessor)
         {
             _authService = authService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Index()
@@ -31,7 +36,9 @@ namespace LaptopStore.Web.Controllers
             var res = new ServiceResponse();
             try
             {
-                return res = await _authService.SignIn(accountLoginDTO);
+                res = await _authService.SignIn(accountLoginDTO);
+                _httpContextAccessor.HttpContext.Session.SetString("UserLogin", JsonConvert.SerializeObject(res.Data));
+                return res;
             }
             catch (Exception ex)
             {

@@ -1,8 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LaptopStore.Core;
+using LaptopStore.Data.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.WebSockets;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,15 +18,30 @@ namespace LaptopStore.Services.Services.BaseService
     {
         protected readonly DbContext context;
         protected readonly DbSet<T> dbSet;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BaseService(DbContext context)
+        public BaseService(DbContext context, IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
             dbSet = context.Set<T>();
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         public async Task<T> AddEntityAsync(T entity)
         {
+            var hasCreatedDateProperty = typeof(T).GetProperty("CreatedDate") != null;
+            if (hasCreatedDateProperty)
+            {
+                typeof(T).GetProperty("CreatedDate").SetValue(entity, DateTime.Now);
+            }
+            var hasCreatedByProperty = typeof(T).GetProperty("CreatedBy") != null;
+            if (hasCreatedByProperty)
+            {
+                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                typeof(T).GetProperty("CreatedBy").SetValue(entity, account.FullName);
+            }
             await dbSet.AddAsync(entity);
             await context.SaveChangesAsync();
             return entity;
@@ -29,6 +49,18 @@ namespace LaptopStore.Services.Services.BaseService
 
         public async Task<int> UpdateEntityAsync(T entity)
         {
+            var hasCreatedDateProperty = typeof(T).GetProperty("ModifiedDate") != null;
+            if (hasCreatedDateProperty)
+            {
+                typeof(T).GetProperty("ModifiedDate").SetValue(entity, DateTime.Now);
+            }
+            var hasCreatedByProperty = typeof(T).GetProperty("ModifiedBy") != null;
+            if (hasCreatedByProperty)
+            {
+                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                typeof(T).GetProperty("ModifiedBy").SetValue(entity, account.FullName);
+            }
             dbSet.Attach(entity);
             context.Entry(entity).State = EntityState.Modified;
             return await context.SaveChangesAsync();

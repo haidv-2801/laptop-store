@@ -13,12 +13,13 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using LaptopStore.Core.Enums;
 using LaptopStore.Services.Services.BaseService;
+using Microsoft.AspNetCore.Http;
 
 namespace LaptopStore.Services.Services.PositionService
 {
     public class PositionService : BaseService<Position>, IPositionService
     {
-        public PositionService(ApplicationDbContext dbContext):base(dbContext)
+        public PositionService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
         }
 

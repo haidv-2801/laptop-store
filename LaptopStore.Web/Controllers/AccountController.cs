@@ -11,11 +11,13 @@ namespace LaptopStore.Web.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly IAccountService _accountService;
+        private readonly ServiceResponse _serviceResponse;
 
         public AccountController(ILogger<AccountController> logger, IAccountService accountService)
         {
             _logger = logger;
             _accountService = accountService;
+            _serviceResponse = new ServiceResponse();
         }
 
         public async Task<IActionResult> Index()
@@ -59,44 +61,44 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> SaveAccount([FromBody]AccountSaveDTO accountSaveDTO)
+        public async Task<ServiceResponse> SaveAccount([FromBody]AccountSaveDTO accountSaveDTO)
         {
             try
             {
                     var data = await _accountService.SaveAccount(accountSaveDTO);
-                    return Json(data);
+                    return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException.Message);
+                return _serviceResponse.OnError(ex);
             }
         }
 
         [HttpPut]
-        public async Task<JsonResult> UpdateAccount([FromRoute] string id, [FromBody] AccountSaveDTO accountSaveDTO)
+        public async Task<ServiceResponse> UpdateAccount([FromRoute] string id, [FromBody] AccountSaveDTO accountSaveDTO)
         {
             try
             {
                 var data = await _accountService.UpdateAccount(id, accountSaveDTO);
-                return Json(data);
+                return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException.Message);
+                return _serviceResponse.OnError(ex);
             }
         }
 
         [HttpDelete]
-        public async Task<JsonResult> DeleteAccount([FromRoute] string id)
+        public async Task<ServiceResponse> DeleteAccount([FromRoute] string id)
         {
             try
             {
                 var data = await _accountService.DeleteAccount(id);
-                return Json(data);
+                return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
-                return Json(ex.InnerException.Message);
+                return _serviceResponse.OnError(ex);
             }
         }
 

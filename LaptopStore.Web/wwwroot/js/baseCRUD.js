@@ -31,7 +31,6 @@ function baseDelete(url) {
                     $('#notifyToast').addClass(`bg-${notifyStyle}`)
                     $('#notifyToastBody').html('Xóa thành công');
                     $('#notifyToast').toast('show');
-                    getDataByPaging()
                 } else {
                     notifyStyle = 'warning'
                     $('#notifyToast').addClass(`bg-${notifyStyle}`)

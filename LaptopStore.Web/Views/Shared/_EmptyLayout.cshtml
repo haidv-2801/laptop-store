@@ -4,51 +4,32 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LaptopStore.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LaptopStore.Web.styles.css" asp-append-version="true" />
     @RenderSection("AccountListCSS", required: false)
+    @RenderSection("LoginCSS", required: false)
+    <style type="text/css">
+        body{
+            margin-bottom: 0 !important;
+        }
+        .content{
+            height: 100vh;
+            background: #dfb1a096;
+        }
+
+            .content .container-fluid{
+            }
+        </style>
 </head>
 <body>
     <div class="wrapper">
         @*Sidebar Navegation Start Here*@
         <div class="main">
-            <nav class="navbar navbar-expand navbar-light navbar-bg">
-                <a class="sidebar-toggle js-sidebar-toggle">
-                    <i class="hamburger align-self-center"></i>
-                </a>
-                <div class="navbar-collapse collapse">
-                    <ul class="navbar-nav navbar-align">
-                        @*Top Navegation Start Here*@
-                        <li class="nav-item dropdown">
-                            <a class=" d-inline-block d-sm-none nav-link fs-4" href="#">
-                                <i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Hello!&nbsp;</span>
-                                @*<i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Hello!&nbsp;@Session["username"]</span>*@
-                            </a>
-
-                            <a class="nav-link d-none d-sm-inline-block fs-4" href="#" data-bs-toggle="dropdown">
-                                <i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Hello!&nbsp;</span>
-                                @*<i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Hello!&nbsp;@Session["username"]</span>*@
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link d-none d-sm-inline-block fs-4" href="@Url.Action("Index", "Profile")">
-                                <i class="fa-solid fa-user"></i>&nbsp;<span>Profile</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-none d-sm-inline-block fs-4" href="@Url.Action("Logout", "admin_Login")">
-                                <i class="fa-regular fa-right-from-bracket"></i>&nbsp;<span>Logout</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
             @*Content Area Srart Here*@
             <div class="content">
-                <div class="container-fluid p-0">
+                <div class="container-fluid h-100 d-flex justify-content-center align-content-center p-0">
                     @RenderBody()
                 </div>
             </div>
@@ -98,10 +79,13 @@
             &copy; 2024 - LaptopStore.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>*@
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
     <script src="~/js/app.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/enums.js"></script>
     <script src="~/js/baseCRUD.js"></script>
     @await RenderSectionAsync("AccountListJS", required: false)
     @await RenderSectionAsync("AccountCreateJS", required: false)

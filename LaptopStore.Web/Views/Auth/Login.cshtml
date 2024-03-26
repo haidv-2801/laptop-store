@@ -4,33 +4,57 @@
     Layout = "~/Views/Shared/_EmptyLayout.cshtml";
 }
 
+@section LoginCSS {
+    <style type="text/css">
+        .login-body {
+            max-width: 700px;
+            min-width: 500px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 8px -3px;
+        }
+
+            .login-body .text-info {
+                padding: 56px;
+                text-align: center;
+            }
+
+            .login-body .form-body {
+                padding: 24px;
+            }
+
+                .login-body .form-body .errorLogin {
+                    font-size: 16px;
+                }
+    </style>
+}
+
 @section AccountCreateJS {
     <script src='~/js/AccountCreate.js'></script>
 }
 
 
-<div class="row col-md-6 m-auto">
-    <div class="row">
+<div class="login-body col-md-6 m-auto">
+    <div class="h-100">
         <h2 class="text-info">ĐĂNG NHẬP</h2>
-        <hr />
-        <div class="col-md-12 mt-2">
-            <div class="row g-3">
-                <div class="row">
-                    @Html.LabelFor(x => x.UserName, new { @class = "form-label fs-4" })
-                    @Html.TextBoxFor(x => x.UserName, new { @class = "form-control fs-4", @id = "username" })
+        <div class="form-body col-md-12">
+            <div class="d-flex justify-content-between mt-2 errorLogin text-danger mb-3">
+            </div>
+            <div class="">
+                <div class="mb-4">
+                    @Html.LabelFor(x => x.UserName, new { @class = "form-label" })
+                    @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", @id = "username" })
                     @Html.ValidationMessageFor(x => x.UserName, "", new { @class = "text-danger" })
                 </div>
-                <div class="row">
-                    @Html.LabelFor(x => x.Password, new { @class = "form-label fs-4" })
-                    @Html.TextBoxFor(x => x.Password, new { @class = "form-control fs-4", @id = "password",  @type="password" })
+                <div class="">
+                    @Html.LabelFor(x => x.Password, new { @class = "form-label" })
+                    @Html.TextBoxFor(x => x.Password, new { @class = "form-control", @id = "password", @type = "password" })
                     @Html.ValidationMessageFor(x => x.Password, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="row d-flex justify-content-center mt-3">
-                <button class="btn btn-success btn-lg col-4" onclick="Login()">ĐĂNG NHẬP</button>
+            <div class=" d-flex justify-content-center mt-5">
+                <button class="btn btn-success btn-lg" onclick="Login()">ĐĂNG NHẬP</button>
             </div>
-            <h3 class="row d-flex justify-content-between mt-2 errorLogin text-danger">
-            </h3>
         </div>
     </div>
 </div>

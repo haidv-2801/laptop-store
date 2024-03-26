@@ -13,12 +13,13 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using LaptopStore.Core.Enums;
 using LaptopStore.Services.Services.BaseService;
+using Microsoft.AspNetCore.Http;
 
 namespace LaptopStore.Services.Services.CustomerService
 {
     public class CustomerService : BaseService<Customer>, ICustomerService
     {
-        public CustomerService(ApplicationDbContext dbContext):base(dbContext)
+        public CustomerService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
         }
 

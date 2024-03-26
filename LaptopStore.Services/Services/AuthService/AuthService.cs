@@ -18,7 +18,7 @@ namespace LaptopStore.Services.Services.AuthService
 {
     public class AuthService : BaseService<Account>, IAuthService
     {
-        public AuthService(ApplicationDbContext dbContext) : base(dbContext)
+        public AuthService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
         }
 
@@ -39,7 +39,7 @@ namespace LaptopStore.Services.Services.AuthService
             var account = await dbSet.FirstOrDefaultAsync(f => f.Username == accountLoginDTO.UserName && f.Password == hashedPassword);
             if(account == null)
                 throw new Exception($"Tài khoản hoặc mật khẩu không đúng.");
-
+            
             return res.OnSuccess(account);
         }
 

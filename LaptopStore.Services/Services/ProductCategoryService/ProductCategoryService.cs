@@ -5,12 +5,13 @@ using LaptopStore.Data.ModelDTO.ProductCategory;
 using Microsoft.EntityFrameworkCore;
 using LaptopStore.Core;
 using LaptopStore.Services.Services.BaseService;
+using Microsoft.AspNetCore.Http;
 
 namespace LaptopStore.Services.Services.ProductCategoryService
 {
     public class ProductCategoryService : BaseService<ProductCategory>, IProductCategoryService
     {
-        public ProductCategoryService(ApplicationDbContext dbContext):base(dbContext)
+        public ProductCategoryService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
         }
 

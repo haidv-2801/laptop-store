@@ -17,6 +17,15 @@ namespace LaptopStore.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            // Cấu hình Session Middleware
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(60); // Thời gian timeout của session
+                options.Cookie.Name = ".My.Session"; // Tên của cookie session
+                                                     // Cấu hình khác nếu cần thiết
+            });
+            // Đăng ký IHttpContextAccessor
+            builder.Services.AddHttpContextAccessor();
 
             // Add cookie authen
             CookiesAuthenication(builder);
@@ -50,6 +59,8 @@ namespace LaptopStore.Web
                 .AddRewrite(@"^images/(.*)", "wwwroot/images/$1", skipRemainingRules: true));
 
             app.UseRouting();
+            // Kích hoạt Session Middleware
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();

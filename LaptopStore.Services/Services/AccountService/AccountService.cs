@@ -13,12 +13,13 @@ using Newtonsoft.Json;
 using LaptopStore.Core.Enums;
 using LaptopStore.Services.Services.BaseService;
 using LaptopStore.Data.Context;
+using Microsoft.AspNetCore.Http;
 
 namespace LaptopStore.Services.Services.AccountService
 {
     public class AccountService : BaseService<Account>, IAccountService
     {
-        public AccountService(ApplicationDbContext dbContext):base(dbContext)
+        public AccountService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
         }
 
@@ -33,6 +34,7 @@ namespace LaptopStore.Services.Services.AccountService
         }
         public async Task<int> SaveAccount(AccountSaveDTO accountSaveDTO)
         {
+            accountSaveDTO.Password = Hasher.MD5(accountSaveDTO.Password);
             var account = Mapper.MapInit<AccountSaveDTO, Account>(accountSaveDTO);
             await AddEntityAsync(account);
             return 1;
@@ -44,7 +46,7 @@ namespace LaptopStore.Services.Services.AccountService
             if (account == null)
                 return false;
             account.FullName = accountSaveDTO.FullName;
-            account.Password = accountSaveDTO.Password;
+            account.Password = Hasher.MD5(accountSaveDTO.Password); ;
             account.Gender = accountSaveDTO.Gender;
             account.Address = accountSaveDTO.Address;
             account.AccountType = accountSaveDTO.AccountType;

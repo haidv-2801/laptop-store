@@ -13,12 +13,13 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using LaptopStore.Core.Enums;
 using LaptopStore.Services.Services.BaseService;
+using Microsoft.AspNetCore.Http;
 
 namespace LaptopStore.Services.Services.SupplierService
 {
     public class SupplierService : BaseService<Supplier>, ISupplierService
     {
-        public SupplierService(ApplicationDbContext dbContext):base(dbContext)
+        public SupplierService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
         }
 
