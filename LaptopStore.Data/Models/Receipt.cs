@@ -13,8 +13,12 @@ namespace LaptopStore.Data.Models
         }
 
         public string Id { get; set; } = null!;
+        [DisplayName("Thời gian nhập")]
         public DateTime ImportTime { get; set; }
+        [DisplayName("Trạng thái")]
         public int Status { get; set; }
+
+        [DisplayName("Người nhập")]
         public string Username { get; set; } = null!;
         [DisplayName("Ngày tạo")]
         public DateTime? CreatedDate { get; set; }

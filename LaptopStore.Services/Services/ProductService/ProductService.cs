@@ -46,6 +46,21 @@ namespace LaptopStore.Services.Services.ProductService
             if (product == null)
                 return false;
 
+            product.Name = productSaveDTO.Name;
+            product.UnitPrice = productSaveDTO.UnitPrice;
+            product.Unit = productSaveDTO.Unit;
+            product.ProductCategoryId = productSaveDTO.ProductCategoryId;
+            product.Quantity = productSaveDTO.Quantity;
+            product.Ram = productSaveDTO.Ram;
+            product.Cpu = productSaveDTO.Cpu;
+            product.Screen = productSaveDTO.Screen;
+            product.Pin = productSaveDTO.Pin;
+            product.Origin = productSaveDTO.Origin;
+            product.WarrantyTime = productSaveDTO.WarrantyTime;
+            product.LunchTime = productSaveDTO.LunchTime;
+            product.PositionId = productSaveDTO.PositionId;
+            product.Image = productSaveDTO.Image;
+
             await UpdateEntityAsync(product);
             return true;
         }

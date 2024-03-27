@@ -22,7 +22,6 @@ function Login() {
         Password: $('#password').val(),
     }
     baseCreate('/Auth/Login', accountData).then(res => {
-        debugger
         if (!res.success) {
             $('.errorLogin').text(res.message ?? "Có Lỗi xảy ra.");
         } else {

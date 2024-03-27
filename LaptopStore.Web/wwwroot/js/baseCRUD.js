@@ -58,7 +58,7 @@ function baseCreate(url, data) {
             url: url, // Thay 'TenController' bằng tên controller của bạn
             type: 'POST', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
             contentType: 'application/json',
-            data: JSON.stringify(data),
+            data: JSON.stringify({ ...data, CreatedDate: new Date(), ModifiedDate: new Date(), CreatedBy: "admin", ModifiedBy: "admin" }),
             success: function (result) {
                 // Xử lý kết quả sau khi xóa, nếu cần
                 if (result.code === ResponseCode.Success) {

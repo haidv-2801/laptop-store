@@ -9,27 +9,25 @@ using Microsoft.EntityFrameworkCore;
 using LaptopStore.Data.Models;
 using LaptopStore.Data.Context;
 using System.Net.NetworkInformation;
-using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopStore.Web.Controllers
 {
-    [Authorize]
-    public class ProductController : Controller
+    public class ReceiptController : Controller
     {
-        private readonly ILogger<ProductController> _logger;
-        private readonly IProductService _productService;
+        private readonly ILogger<ReceiptController> _logger;
+        private readonly IReceiptService _receiptService;
         private readonly ApplicationDbContext _dbContext;
 
-
-        public ProductController(ILogger<ProductController> logger, IProductService accountService, ApplicationDbContext dbContext)
+        public ReceiptController(ILogger<ReceiptController> logger, IReceiptService receiptService, ApplicationDbContext dbContext)
         {
             _logger = logger;
-            _productService = accountService;
+            _receiptService = receiptService;
             _dbContext = dbContext; 
         }
 
         public async Task<IActionResult> Index()
         {
+            await Task.CompletedTask;
             return View();
         }
 
@@ -40,26 +38,21 @@ namespace LaptopStore.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ListAllProduct()
-        {
-            return Ok(await _dbContext.Set<Product>().AsNoTracking().ToListAsync());
-        }
-
         public async Task<IActionResult> Update(string id)
         {
             ViewBag.Categories = await _dbContext.Set<ProductCategory>().AsNoTracking().ToListAsync();
             ViewBag.Positions = await _dbContext.Set<Position>().AsNoTracking().ToListAsync();
-            var data = await _productService.GetById(id);
+            var data = await _receiptService.GetById(id);
             return View(data);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetProductPaging([FromBody] PagingRequest paging)
+        public async Task<IActionResult> GetReceiptPaging([FromBody] PagingRequest paging)
         {
             var response = new ServiceResponse();
             try
             {
-                return Ok(response.OnSuccess(await _productService.GetProductPaging(paging)));
+                return Ok(response.OnSuccess(await _receiptService.GetReceiptPaging(paging)));
             }
             catch (Exception ex)
             {
@@ -68,12 +61,12 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ServiceResponse> SaveProduct([FromBody] ProductSaveDTO saveDTO)
+        public async Task<ServiceResponse> SaveReceipt([FromBody] Receipt saveDTO)
         {
             var res = new ServiceResponse();
             try
             {
-                return res.OnSuccess(await _productService.SaveProduct(saveDTO));
+                return res.OnSuccess(await _receiptService.SaveReceipt(saveDTO));
             }
             catch (Exception ex)
             {
@@ -82,12 +75,12 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPut]
-        public async Task<ServiceResponse> UpdateProduct([FromRoute] string id, [FromBody] ProductSaveDTO saveDTO)
+        public async Task<ServiceResponse> UpdateReceipt([FromRoute] string id, [FromBody] Receipt saveDTO)
         {
             var res = new ServiceResponse();
             try
             {
-                return res.OnSuccess(await _productService.UpdateProduct(id, saveDTO));
+                return res.OnSuccess(await _receiptService.UpdateReceipt(id, saveDTO));
             }
             catch (Exception ex)
             {
@@ -96,12 +89,12 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpDelete]
-        public async Task<ServiceResponse> DeleteProduct([FromRoute] string id)
+        public async Task<ServiceResponse> DeleteReceipt([FromRoute] string id)
         {
             var res = new ServiceResponse();
             try
             {
-                return res.OnSuccess(await _productService.DeleteProduct(id));
+                return res.OnSuccess(await _receiptService.DeleteReceipt(id));
             }
             catch (Exception ex)
             {

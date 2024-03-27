@@ -2,12 +2,17 @@
 var pageTotal = 1
 var size = 5
 var search = '';
-function DeleteProduct(itemId) {
-    baseDelete('/Product/DeleteProduct/' + itemId).then(res => {
-        if (res.success) {
-            window.location.href = '/Product';
-        }
-    });
+var deleteId = null
+function DeleteReceipt() {
+    if (deleteId) {
+        baseDelete('/Receipt/DeleteReceipt/' + deleteId).then(res => {
+            if (res.code === ResponseCode.Success) {
+                currentPage = 1
+                getDataByPaging()
+            }
+            $('#deleteConfirm').modal('hide');
+        })
+    }
 }
 $(document).ready(function () {
     getDataByPaging()
@@ -18,11 +23,10 @@ function getDataByPaging() {
         Page: currentPage,
         PageSize: size,
         Search: search,
-        SearchField: 'Name'
+        SearchField: 'Username'
     }
-    
     // Gọi hàm JavaScript của bạn ở đây
-    baseGetDataFilterPaging('/Product/GetProductPaging', paging).then(res => {
+    baseGetDataFilterPaging('/Receipt/GetReceiptPaging', paging).then(res => {
         if (res.code === 200) {
             const data = res.data?.data
             renderDataList(data)
@@ -62,28 +66,20 @@ function renderPagination(total, size) {
 function renderDataList(data) {
     document.getElementById('table-body').innerHTML = ""
     if (data?.length > 0) {
-        
         $.each(data, function (index, item) {
-            let updateUrl = 'Product/Update?id=' + item.id;
-            let detailUrl = 'Product/Detail?id=' + item.id;
 
-            let imagePath = null;
-            if (item.image) {
-                imagePath = `${item.image}`;
-            }
-
+            let updateUrl = 'Receipt/Update?id=' + item.id;
+            let detailUrl = 'Receipt/Detail?id=' + item.id;
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                                        <td>${item.name ?? ""}</td>
-                                        <img style="max-height: 100px;" src='${imagePath}'></img>
-                                        <td>${item.productCategoryName ?? ""}</td>
-                                        <td>${item.positionName ?? ""}</td>
-                                        <td>${item.quantity ?? "0"}</td>
-                                        <td>${item.warrantyTime ?? ""}</td>
+                                        <td>${item.importTime}</td>
+                                        <td>${item.status}</td>
+                                        <td>${item.username}</td>
+                                        <td>${ e.usernameNavigation.fullName}</td>
                                         <td>
                                             <a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>
-                                            <a href="${detailUrl}" class="btn btn-outline-info btn-sm">Chi tiết</a>
-                                            <div onclick="DeleteProduct('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
+                                            <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>
+                                            <div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
                                         </td>`
             document.getElementById('table-body').append(newRow)
         })
@@ -91,6 +87,23 @@ function renderDataList(data) {
         document.getElementById('table-body').innerHTML = '<span>Không có dữ liệu</span>'
     }
 }
+
+function handleDelete(id) {
+    deleteId = id
+    $('#deleteConfirm').modal('show');
+}
+
+function handleViewDetail(id) {
+    baseGetPartialView('Receipt/GetDetail/' + id).then(res => {
+        $('#customerDetailBody').html(res);
+        $('#customerDetail').modal('show');
+    })
+}
+
+// Xử lý sự kiện click xác nhận xóa
+$('#btn-delete-confirm').on('click', function () {
+    DeleteReceipt()
+});
 
 // Xử lý sự kiện click cho các nút phân trang
 $('#pagination').on('click', '.page-link', function () {
@@ -141,9 +154,9 @@ $('#pagination').on('click', '.btn-next', function () {
 
 // Xử lý sự kiện click cho các nút phân trang
 $('#btn-search').on('click', function () {
-    // Lấy số trang từ thuộc tính data-page của nút được click
     // Ngăn chặn form gửi dữ liệu và làm mới trang
     event.preventDefault();
+    // Lấy số trang từ thuộc tính data-page của nút được click
     search = $('#search-text').val()
     currentPage = 1
 

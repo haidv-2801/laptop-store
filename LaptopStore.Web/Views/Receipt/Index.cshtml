@@ -1,8 +1,11 @@
-﻿@model IEnumerable<LaptopStore.Data.Models.Product>
+﻿@model IEnumerable<LaptopStore.Data.Models.Receipt>
+
 @{
-    ViewBag.Title = "Danh sách sản phẩm";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section ProductListCSS {
+
+@section ReceiptListCSS {
     <style type="text/css">
         tbody {
             max-height: calc(100vh - 71px - 300px);
@@ -10,31 +13,29 @@
     </style>
 }
 
-@section ProductListJS {
-    <script src='~/js/ProductList.js'></script>
+@section ReceiptListJS {
+    <script src='~/js/Receipt/ReceiptList.js'></script>
 }
 
 <div class="row">
     <div class="col">
-        <h2 class="text-info">Danh sách sản phẩm</h2>
+        <h2 class="text-info">Danh sách nhập kho</h2>
         <hr />
         <div class="d-flex justify-content-between mb-2">
             <form class="form-inline d-flex">
                 <input id='search-text' class="form-control mr-sm-2" style="margin-right:8px;width:300px" placeholder="Search" aria-label="Search">
                 <button id='btn-search' class="btn btn-outline-success my-2 my-sm-0">Search</button>
             </form>
-            <a href="@Url.Action("Create", "Product")" class="btn btn btn-outline-primary">Thêm mới</a>
+            <a href="@Url.Action("Create", "Receipt")" class="btn btn btn-outline-primary">Thêm mới</a>
         </div>
         <div class="table-responsive">
             <table class="table table-condensed table-hover table-bordered table-striped table">
                 <thead>
                     <tr>
-                        <th>@Html.DisplayNameFor(e => e.Name)</th>
-                        <th>@Html.DisplayNameFor(e => e.Image)</th>
-                        <th>@Html.DisplayNameFor(e => e.ProductCategoryId)</th>
-                        <th>@Html.DisplayNameFor(e => e.PositionId)</th>
-                        <th>@Html.DisplayNameFor(e => e.Quantity)</th>
-                        <th>@Html.DisplayNameFor(e => e.WarrantyTime)</th>
+                        <th>@Html.DisplayNameFor(e => e.ImportTime)</th>
+                        <th>@Html.DisplayNameFor(e => e.Status)</th>
+                        <th>@Html.DisplayNameFor(e => e.Username)</th>
+                        <th>@Html.DisplayNameFor(e => e.UsernameNavigation.FullName)</th>
                         <th>Action</th>
                     </tr>
                 </thead>

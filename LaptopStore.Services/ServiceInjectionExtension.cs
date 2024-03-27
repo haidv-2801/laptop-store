@@ -5,6 +5,7 @@ using LaptopStore.Services.Services.CustomerService;
 using LaptopStore.Services.Services.PositionService;
 using LaptopStore.Services.Services.ProductCategoryService;
 using LaptopStore.Services.Services.ProductService;
+using LaptopStore.Services.Services.ReceiptService;
 using LaptopStore.Services.Services.SupplierService;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +23,7 @@ namespace LaptopStore.Services
             collections.AddTransient<IProductCategoryService, ProductCategoryService>();
             collections.AddTransient<ISupplierService, SupplierService>();
             collections.AddTransient<ICustomerService, CustomerService>();
+            collections.AddTransient<IReceiptService, ReceiptService>();
         }
     }
 }

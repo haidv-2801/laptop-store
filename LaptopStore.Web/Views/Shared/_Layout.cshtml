@@ -17,6 +17,7 @@
     @RenderSection("PositionListCSS", required: false)
     @RenderSection("SupplierListCSS", required: false)
     @RenderSection("CustomerListCSS", required: false)
+    @RenderSection("ReceiptListCSS", required: false)
     @RenderSection("ProductCategoryListCSS", required: false)
 </head>
 <body>
@@ -43,7 +44,7 @@
                     </li>
                     
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "ImportOrder")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Receipt")">
                             <i class="fa-regular fa-cart-shopping-fast"></i><span class="align-middle">Đơn nhập kho</span>
                         </a>
                     </li>
@@ -263,9 +264,15 @@
     @await RenderSectionAsync("CustomerCreateJS", required: false)
     @await RenderSectionAsync("CustomerUpdateJS", required: false)
 
+    @*Receipt*@
+    @await RenderSectionAsync("ReceiptListJS", required: false)
+    @await RenderSectionAsync("ReceiptCreateJS", required: false)
+    @await RenderSectionAsync("ReceiptUpdateJS", required: false)
+
     @* Product *@
     @await RenderSectionAsync("ProductListJS", required: false)
     @await RenderSectionAsync("ProductCreateJS", required: false)
+    @await RenderSectionAsync("ProductUpdateJS", required: false)
     @await RenderSectionAsync("Scripts", required: false)
     
     @* Product Category*@

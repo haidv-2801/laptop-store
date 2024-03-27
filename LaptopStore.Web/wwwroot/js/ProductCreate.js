@@ -2,7 +2,6 @@
 
 function InitEvent() {
     $("#createProduct [Name='Image']").on("change", e => {
-        debugger
         ChangeImage(e);
     })
 }
