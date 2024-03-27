@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.WebSockets;
 using System.Reflection;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,8 +40,15 @@ namespace LaptopStore.Services.Services.BaseService
             if (hasCreatedByProperty)
             {
                 _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
-                var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
-                typeof(T).GetProperty("CreatedBy").SetValue(entity, account.FullName);
+                if(value != null)
+                {
+                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    typeof(T).GetProperty("CreatedBy").SetValue(entity, account.FullName);
+                }
+                else
+                {
+                    typeof(T).GetProperty("CreatedBy").SetValue(entity, "admin");
+                }
             }
             await dbSet.AddAsync(entity);
             await context.SaveChangesAsync();
@@ -58,8 +66,15 @@ namespace LaptopStore.Services.Services.BaseService
             if (hasCreatedByProperty)
             {
                 _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
-                var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
-                typeof(T).GetProperty("ModifiedBy").SetValue(entity, account.FullName);
+                if(value != null)
+                {
+                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    typeof(T).GetProperty("ModifiedBy").SetValue(entity, account.FullName);
+                }
+                else
+                {
+                    typeof(T).GetProperty("ModifiedBy").SetValue(entity, "admin");
+                }
             }
             dbSet.Attach(entity);
             context.Entry(entity).State = EntityState.Modified;

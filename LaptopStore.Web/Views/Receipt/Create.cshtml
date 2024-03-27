@@ -12,6 +12,7 @@
 
 <h2 class="text-info">@ViewData["Title"]</h2>
 <hr />
+
 <div class="row w-full" id="createReceipt">
     <div class="col-md-12">
         <div class="form-group flex-fill mb-2 d-none">
@@ -27,16 +28,27 @@
             </div>
             <div class="form-group flex-fill mb-2">
                 <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
+                <select asp-for="Status" class="form-select">
+                    <option value="0">Mới</option>
+                    <option value="1">Hoàn thành</option>
+                </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
         </div>
         <div class="d-flex gap-3">
+           
             <div class="form-group flex-fill mb-2">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
+                <label  class="control-label">Nhân viên</label>
+                @*<input asp-for="Customer" class="form-control" />*@
+                <select class="form-select">
+                    @for (var i = 0; i < @ViewBag.Customer.Count; i++)
+                    {
+                        <option value="@ViewBag.Customer[i].Id">@ViewBag.Customer[i].LastName  @ViewBag.Customer[i].FirstName</option>
+                    }
+                </select>
+                <span class="text-danger"></span>
             </div>
+
             <div class="form-group d-none flex-fill mb-2">
                 <label asp-for="CreatedDate" class="control-label"></label>
                 <input asp-for="CreatedDate" class="form-control" />
@@ -63,6 +75,33 @@
             <span asp-validation-for="ModifiedBy" class="text-danger"></span>
         </div>
         <div class="form-group flex-fill mb-2 btn btn-danger" onclick="OpenModalAddProduct()"><a>+ Thêm sản phẩm</a></div>
+        <hr />
+        <div class="d-flex gap-3 mt-2 d-none" id="receiptProductsWrapper">
+            <div id="receiptProducts">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="text-info">Danh sách sản phẩm</h4>
+                        <div class="table-responsive">
+                            <table class="table table-condensed table-hover table-bordered table-striped table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Ảnh</th>
+                                        <th>Số lượng nhập</th>
+                                        <th>Đơn giá nhập</th>
+                                        <th>Thành tiền</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="col-md-12 d-flex justify-content-lg-end mt-2">
             <button class="btn btn-success btn-lg col-2" onclick="CreateReceipt()">Lưu</button>
         </div>
@@ -76,21 +115,32 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Chọn sản phẩm nhập
-                        <table>
-                            <thead>
-                                <tr>
-                                    <td style="font-weight: bold;">Tên hàng hóa</td>
-                                    <td style="font-weight: bold;">Ảnh</td>
-                                </tr>
-                            </thead>
-                            <tbody id="productList">
-                            </tbody>
-                        </table>
+                        <div class="d-flex gap-3 mt-2">
+                            <div id="receiptProductsModal">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4 class="text-info">Danh sách sản phẩm</h4>
+                                        <div class="table-responsive">
+                                            <table class="table table-condensed table-hover table-bordered table-striped table">
+                                                <thead>
+                                                    <tr>
+                                                        <th><input type="checkbox" id="selectAll" /></th>
+                                                        <th>Tên sản phẩm</th>
+                                                        <th>Ảnh</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button id="btn-delete-confirm" type="button" class="btn btn-primary btn-danger">Lưu</button>
+                        <button type="button" class="btn btn-secondary" onclick="CloseAddProductModal()">Đóng</button>
+                        <button id="btn-save-product" type="button" class="btn btn-primary btn-success" onclick="handleClickAddProductToReceipt()">Lưu</button>
                     </div>
                 </div>
             </div>

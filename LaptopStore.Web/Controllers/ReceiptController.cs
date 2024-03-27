@@ -33,8 +33,8 @@ namespace LaptopStore.Web.Controllers
 
         public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = await _dbContext.Set<ProductCategory>().AsNoTracking().ToListAsync();
-            ViewBag.Positions = await _dbContext.Set<Position>().AsNoTracking().ToListAsync();
+            ViewBag.Customer = await _dbContext.Set<Customer>().AsNoTracking().ToListAsync();
+            ViewBag.Account = await _dbContext.Set<Account>().AsNoTracking().ToListAsync();
             return View();
         }
 
