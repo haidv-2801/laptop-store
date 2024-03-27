@@ -1,0 +1,140 @@
+﻿@model LaptopStore.Data.Models.WarehouseExport
+
+@{
+    ViewData["Title"] = "Thêm mới xuất kho";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section WarehouseExportCreateJS {
+<script src='~/js/WarehouseExport/WarehouseExportCreate.js'></script>
+}
+
+<h2 class="text-info">@ViewData["Title"]</h2>
+<hr />
+<div class="row w-full" id="createWarehouseExport">
+    <div class="col-md-12">
+        <div class="form-group flex-fill mb-2 d-none">
+            <label asp-for="Id" class="control-label"></label>
+            <input asp-for="Id" class="form-control" />
+            <span asp-validation-for="Id" class="text-danger"></span>
+        </div>
+        <div class="d-flex gap-3">
+            <div class="form-group flex-fill mb-2">
+                <label asp-for="ExportTime" class="control-label"></label>
+                <input asp-for="ExportTime" class="form-control" />
+                <span asp-validation-for="ExportTime" class="text-danger"></span>
+            </div>
+            <div class="form-group flex-fill mb-2">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-select">
+                    <option value="0">Mới</option>
+                    <option value="1">Hoàn thành</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="d-flex gap-3">
+            @*<div class="form-group flex-fill mb-2">
+                <label asp-for="Username" class="control-label"></label>
+                <select asp-for="Username" class="form-select">
+                @for (var i = 0; i < @ViewBag.Account.Count; i++)
+                {
+                <option value="@ViewBag.Account[i].Id">@ViewBag.Account[i].FullName</option>
+                }
+                </select>
+                <span asp-validation-for="Username" class="text-danger"></span>
+                </div>*@
+            <div class="form-group flex-fill mb-2">
+                <label asp-for="Customer" class="control-label"></label>
+                @*<input asp-for="Customer" class="form-control" />*@
+                <select asp-for="Customer" class="form-select">
+                    @for (var i = 0; i < @ViewBag.Customer.Count; i++)
+                    {
+                        <option value="@ViewBag.Customer[i].Id">@ViewBag.Customer[i].LastName  @ViewBag.Customer[i].FirstName</option>
+                    }
+                </select>
+                <span asp-validation-for="Customer" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div class="d-flex d-none gap-3">
+            <div class="form-group flex-fill mb-2">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group flex-fill mb-2">
+                <label asp-for="ModifiedDate" class="control-label"></label>
+                <input asp-for="ModifiedDate" class="form-control" />
+                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group d-none flex-fill mb-2">
+            <label asp-for="ModifiedBy" class="control-label"></label>
+            <input asp-for="ModifiedBy" class="form-control" />
+            <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+        </div>
+        <div class="form-group flex-fill mb-2 btn btn-danger" onclick="OpenModalAddProduct()"><a>+ Thêm sản phẩm</a></div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="font-weight: bold;">Tên hàng hóa</th>
+                    <th style="font-weight: bold;">Ảnh</th>
+                    <th style="font-weight: bold;">Số lượng</th>
+                    <th style="font-weight: bold;">Đơn giá</th>
+                    <th style="font-weight: bold;">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody id="productSelectedList">
+            </tbody>
+        </table>
+
+        <div class="col-md-12 d-flex justify-content-lg-end mt-2">
+            <button class="btn btn-success btn-lg col-2" onclick="CreateWarehouseExport()">Lưu</button>
+        </div>
+
+        <!-- Modal add product-->
+        <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-6" id="deleteConfirmLabel">Chọn sản phẩm</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll" /></th>
+                                    <th style="font-weight: bold;">Tên hàng hóa</th>
+                                    <th style="font-weight: bold;">Ảnh</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productList">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="CloseAddProductModal()">Đóng</button>
+                        <button id="btn-save-product" type="button" class="btn btn-primary btn-success" onclick="SaveProductSelected()">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="col-md-12 d-flex justify-content-lg-start mt-2">
+    <a href="@Url.Action("Index", "WarehouseExport")" class="btn btn-danger btn-sm fs-4"><i class="fa-regular fa-hand-back-point-left"></i><< Trở về danh sách</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

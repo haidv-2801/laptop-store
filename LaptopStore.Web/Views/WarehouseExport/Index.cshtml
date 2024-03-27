@@ -1,0 +1,67 @@
+﻿@model IEnumerable<LaptopStore.Data.Models.WarehouseExport>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section WarehouseExportListCSS {
+    <style type="text/css">
+        tbody {
+            max-height: calc(100vh - 71px - 300px);
+        }
+    </style>
+}
+
+@section WarehouseExportListJS {
+    <script src='~/js/WarehouseExport/WarehouseExportList.js'></script>
+}
+
+<div class="row">
+    <div class="col">
+        <h2 class="text-info">Danh sách xuất kho</h2>
+        <hr />
+        <div class="d-flex justify-content-between mb-2">
+            <form class="form-inline d-flex">
+                <input id='search-text' class="form-control mr-sm-2" style="margin-right:8px;width:300px" placeholder="Search" aria-label="Search">
+                <button id='btn-search' class="btn btn-outline-success my-2 my-sm-0">Search</button>
+            </form>
+            <a href="@Url.Action("Create", "WarehouseExport")" class="btn btn btn-outline-primary">Thêm mới</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover table-bordered table-striped table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(e => e.ExportTime)</th>
+                        <th>@Html.DisplayNameFor(e => e.Status)</th>
+                        <th>@Html.DisplayNameFor(e => e.Username)</th>
+                        <th>@Html.DisplayNameFor(e => e.UsernameNavigation.FullName)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id='table-body'>
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul id='pagination' class="pagination justify-content-end align-items-center mt-2">
+                @*<li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+                </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+                </a>
+                </li>*@
+            </ul>
+        </nav>
+    </div>
+</div>
+

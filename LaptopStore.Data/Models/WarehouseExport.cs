@@ -14,7 +14,9 @@ namespace LaptopStore.Data.Models
 
         public string Id { get; set; } = null!;
         public DateTime ExportTime { get; set; }
+        [DisplayName("Trạng thái")]
         public int Status { get; set; }
+        [DisplayName("Nhân viên")]
         public string Username { get; set; } = null!;
         [DisplayName("Ngày tạo")]
         public DateTime? CreatedDate { get; set; }
@@ -25,6 +27,7 @@ namespace LaptopStore.Data.Models
         [DisplayName("Người sửa")]
         public string? ModifiedBy { get; set; }
 
+        public virtual Customer Customer { get; set; }
         public virtual Account UsernameNavigation { get; set; } = null!;
         public virtual ICollection<WarehouseExportDetail> WarehouseExportDetails { get; set; }
     }

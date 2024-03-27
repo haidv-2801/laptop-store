@@ -18,6 +18,7 @@
     @RenderSection("SupplierListCSS", required: false)
     @RenderSection("CustomerListCSS", required: false)
     @RenderSection("ReceiptListCSS", required: false)
+    @RenderSection("WarehouseExportListCSS", required: false)
     @RenderSection("ProductCategoryListCSS", required: false)
 </head>
 <body>
@@ -38,7 +39,7 @@
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "ExportOrder")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "WarehouseExport")">
                             <i class="fa-regular fa-cart-shopping-fast"></i><span class="align-middle">Đơn xuất kho</span>
                         </a>
                     </li>
@@ -268,6 +269,11 @@
     @await RenderSectionAsync("ReceiptListJS", required: false)
     @await RenderSectionAsync("ReceiptCreateJS", required: false)
     @await RenderSectionAsync("ReceiptUpdateJS", required: false)
+    
+    @*WarehouseExport*@
+    @await RenderSectionAsync("WarehouseExportListJS", required: false)
+    @await RenderSectionAsync("WarehouseExportCreateJS", required: false)
+    @await RenderSectionAsync("WarehouseExportUpdateJS", required: false)
 
     @* Product *@
     @await RenderSectionAsync("ProductListJS", required: false)
