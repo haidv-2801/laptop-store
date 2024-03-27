@@ -1,10 +1,11 @@
-﻿    var selectedItems = []; // Mảng lưu trữ các bản ghi được chọn
+﻿var selectedItems = []; // Mảng lưu trữ các bản ghi được chọn
+var availableItems = []; // Mảng bản ghi được chọn trước đó
 $(document).ready(function () {
 
     // Xử lý chọn từng bản ghi
-    $('.checkbox-item').change(function () {
+    $(document).on('change', '.checkbox-item',function () {
         var isChecked = $(this).prop('checked');
-        var item = $(this).data('item');
+        var item = JSON.parse(decodeURIComponent($(this).data('item')));
 
         // Nếu checkbox được chọn, thêm itemId vào danh sách
         if (isChecked) {
@@ -24,7 +25,7 @@ $(document).ready(function () {
         if (isChecked) {
             $('.checkbox-item').each(function () {
                 var item = $(this).data('item');
-                selectedItems.push(item);
+                selectedItems.push(JSON.parse(decodeURIComponent(item)));
             });
         } else {
             // Nếu checkbox bị bỏ chọn, xóa tất cả các itemId khỏi danh sách
@@ -43,6 +44,11 @@ $(document).ready(function () {
         var quantity = parseInt($(this).closest('tr').find('.quantity').val()) || 0;
         var amount = unitPrice * quantity;
         $(this).closest('tr').find('.amount').text(amount);
+        const thisId = $(this).data('id')
+        let currentItem = selectedItems.find(e => e.id === thisId)
+        currentItem.selectedUnitPrice = unitPrice
+        currentItem.selectedQuantity = quantity
+        currentItem.selectedAmount = amount
     });
 });
 
@@ -72,8 +78,30 @@ function CloseAddProductModal() {
 function SaveProductSelected() {
     $(modalAddProduct).modal('hide')
     document.getElementById('productSelectedList').innerHTML = ""
+
+    //Kiểm tra những bản ghi được thêm mới hoặc xóa đi
+    let newSelecteds = [...availableItems]
     $.each(selectedItems, function (index, item) {
-        let selectedItem = JSON.parse(decodeURIComponent(item))
+        //let selectedItem = JSON.parse(decodeURIComponent(item))
+        let selectedItem = item
+        if (!availableItems.some(e => e.id === selectedItem.id)) {
+            newSelecteds.push(selectedItem)
+        }
+    })
+
+    $.each(availableItems, function (index, item) {
+        //let selectedItem = JSON.parse(decodeURIComponent(item))
+        let selectedItem = item
+        if (!selectedItems.some(e => e.id === selectedItem.id)) {
+            newSelecteds=newSelecteds.filter(e => e.id !== selectedItem.id)
+        }
+    })
+
+    availableItems = newSelecteds
+
+    $.each(availableItems, function (index, item) {
+        //let selectedItem = JSON.parse(decodeURIComponent(item))
+        let selectedItem = item
         let imagePath = null;
         if (selectedItem.image) {
             imagePath = `${selectedItem.image}`;
@@ -84,14 +112,14 @@ function SaveProductSelected() {
                             <td class="pe-auto">${selectedItem.name ?? ""}</td>
                             <td><img class="pe-auto" style="max-height: 100px;" src='${imagePath}'></img></td>
                             <td>
-                                <input type='number' class="quantity form-control" data-id="${selectedItem.Id}" />
+                                <input type='number' class="quantity form-control" data-id="${selectedItem.id}" value="${selectedItem.selectedQuantity}" />
                                 <span class="validate-text text-danger"></span>
                             </td>
                             <td>
-                                <input type='number' class="unit-price form-control" data-id="${selectedItem.Id}" />
+                                <input type='number' class="unit-price form-control" data-id="${selectedItem.id}" value="${selectedItem.selectedUnitPrice}" />
                                 <span class="validate-text text-danger"></span>
                             </td>
-                            <td class="amount"></td>
+                            <td class="amount">${selectedItem.selectedAmount||''}</td>
                             `
         document.getElementById('productSelectedList').append(newRow)
 })
@@ -104,6 +132,12 @@ function OpenModalAddProduct() {
         if (data) {
             $("#productList").html("")
             if (data?.length > 0) {
+                if (availableItems.length === data?.length) {
+                    $('#selectAll').prop('checked', true);
+                } else {
+                    $('#selectAll').prop('checked', false);
+
+                }
                 $.each(data, function (index, item) {
                     let imagePath = null;
                     if (item.image) {
@@ -112,7 +146,7 @@ function OpenModalAddProduct() {
 
                     var newRow = document.createElement('tr');
                     newRow.innerHTML = `
-                                        <td><input type="checkbox" class="checkbox-item" data-id="${item.id}" data-item="${encodeURIComponent(JSON.stringify(item))}" /></td>
+                                        <td><input type="checkbox" class="checkbox-item" data-id="${item.id}" data-item="${encodeURIComponent(JSON.stringify(item))}" ${availableItems.some(e=>e.id === item.id)?"checked":""}/></td>
                                         <td class="pe-auto">${item.name ?? ""}</td>
                                         <img class="pe-auto" style="max-height: 100px;" src='${imagePath}'></img>
                                        `
