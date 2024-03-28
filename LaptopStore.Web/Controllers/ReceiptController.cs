@@ -10,6 +10,7 @@ using LaptopStore.Data.Models;
 using LaptopStore.Data.Context;
 using System.Net.NetworkInformation;
 using LaptopStore.Data.ModelDTO.Receipt;
+using System.Net.WebSockets;
 
 namespace LaptopStore.Web.Controllers
 {
@@ -23,13 +24,26 @@ namespace LaptopStore.Web.Controllers
         {
             _logger = logger;
             _receiptService = receiptService;
-            _dbContext = dbContext; 
+            _dbContext = dbContext;
         }
 
         public async Task<IActionResult> Index()
         {
             await Task.CompletedTask;
             return View();
+        }
+
+        public async Task<IActionResult> Detail(string id)
+        {
+            var model = await _receiptService.GetById(id);// Lấy dữ liệu từ cơ sở dữ liệu hoặc từ các nguồn khác
+            var receiptDetails = from rcd in _dbContext.Set<ReceiptDetail>()
+                                 join prod in _dbContext.Set<Product>() on rcd.ProductId equals prod.Id
+                                 where rcd.ReceiptId == model.Id
+                                 select new ReceiptProductViewDTO { Id = prod.Id, Name = prod.Name, Image = prod.Image, Quantity = rcd.Quantity, UnitPrice = rcd.UnitPrice };
+
+            ViewBag.ReceiptDetails = receiptDetails.ToList();
+
+            return PartialView("_ReceiptDetailPartial", model);
         }
 
         public async Task<IActionResult> Create()

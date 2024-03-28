@@ -17,6 +17,7 @@ using LaptopStore.Services.Services.ProductService;
 using Microsoft.AspNetCore.Http;
 using LaptopStore.Data.ModelDTO.Receipt;
 using LaptopStore.Data.ModelDTO.WarehouseExport;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LaptopStore.Services.Services.ReceiptService
 {
@@ -86,7 +87,21 @@ namespace LaptopStore.Services.Services.ReceiptService
             if (product == null)
                 return 0;
 
-            return await DeleteEntityAsync(product);
+            using var transaction = context.Database.BeginTransaction();
+            try
+            {
+                var receiptDetails = context.Set<ReceiptDetail>().Where(f => f.ReceiptId == product.Id);
+                context.Set<ReceiptDetail>().RemoveRange(receiptDetails);
+                await context.SaveChangesAsync();
+                var res = await DeleteEntityAsync(product);
+                transaction.Commit();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback(); 
+                return 0;
+            }
         }
 
         public async Task<PagingResponse> GetReceiptPaging(PagingRequest paging)

@@ -29,7 +29,6 @@ function getDataByPaging() {
     baseGetDataFilterPaging('/Receipt/GetReceiptPaging', paging).then(res => {
         if (res.code === 200) {
             const data = res.data?.data
-            debugger
             renderDataList(data)
             renderPagination(res.data.total, size)
         }
@@ -90,7 +89,6 @@ function renderDataList(data) {
                                         <td>${statusText}</td>
                                         <td>${item.username}</td>
                                         <td>
-                                            ${edit}
                                             <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>
                                              ${del}
                                         </td>`
@@ -107,9 +105,9 @@ function handleDelete(id) {
 }
 
 function handleViewDetail(id) {
-    baseGetPartialView('Receipt/GetDetail/' + id).then(res => {
-        $('#customerDetailBody').html(res);
-        $('#customerDetail').modal('show');
+    baseGetPartialView('Receipt/Detail/' + id).then(res => {
+        $('#receiptDetailBody').html(res);
+        $('#receiptDetail').modal('show');
     })
 }
 
