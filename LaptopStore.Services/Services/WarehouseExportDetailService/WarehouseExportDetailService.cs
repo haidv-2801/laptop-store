@@ -1,4 +1,4 @@
-﻿using LaptopStore.Core.Utilities;
+﻿/*using LaptopStore.Core.Utilities;
 using LaptopStore.Data.Context;
 using LaptopStore.Data.Models;
 using LaptopStore.Data.ModelDTO;
@@ -15,23 +15,23 @@ using LaptopStore.Core.Enums;
 using LaptopStore.Services.Services.BaseService;
 using LaptopStore.Services.Services.ProductService;
 using Microsoft.AspNetCore.Http;
-using LaptopStore.Data.ModelDTO.WarehouseExport;
+using LaptopStore.Data.ModelDTO.WarehouseExportDetail;
 using LaptopStore.Data.ModelDTO.ProductCategory;
 
 namespace LaptopStore.Services.Services.WarehouseExportService
 {
-    public class WarehouseExportService : BaseService<WarehouseExport>, IWarehouseExportService
+    public class WarehouseExportService : BaseService<WarehouseExportDetail>, IWarehouseExportService
     {
         public WarehouseExportService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
         }
 
-        public async Task<List<WarehouseExport>> GetAll()
+        public async Task<List<WarehouseExportDetail>> GetAll()
         {
             return await dbSet.ToListAsync();
         }
 
-        public async Task<WarehouseExport> GetById(string id)
+        public async Task<WarehouseExportDetail> GetById(string id)
         {
             return await GetEntityByIDAsync(id);
         }
@@ -45,7 +45,7 @@ namespace LaptopStore.Services.Services.WarehouseExportService
 
                 transaction.CreateSavepoint("CreateWarehouseExport");
 
-                var warehouseExport = Mapper.MapInit<WarehouseExportSaveDTO, WarehouseExport>(warehouseExportSaveDTO);
+                var warehouseExport = Mapper.MapInit<WarehouseExportSaveDTO, WarehouseExportDetail>(warehouseExportSaveDTO);
                 var success = await AddEntityAsync(warehouseExport);
                 if(success != null)
                 {
@@ -61,7 +61,7 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             return result;
         }
 
-        public async Task<bool> UpdateWarehouseExport(string id, WarehouseExport receipt)
+        public async Task<bool> UpdateWarehouseExport(string id, WarehouseExportDetail receipt)
         {
             var rec = await GetEntityByIDAsync(id);
             if (rec == null)
@@ -97,3 +97,4 @@ namespace LaptopStore.Services.Services.WarehouseExportService
         }
     }
 }
+*/

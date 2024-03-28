@@ -7,35 +7,49 @@
 
 
 @section WarehouseExportCreateJS {
-<script src='~/js/WarehouseExport/WarehouseExportCreate.js'></script>
+    <script src='~/js/WarehouseExport/WarehouseExportCreate.js'></script>
 }
+<style type="text/css">
+    #modalAddProduct .modal-dialog {
+        max-width: 800px;
+    }
+
+    #modalAddProduct th:first-child, #modalAddProduct td:first-child {
+        width: 50px;
+    }
+
+    #modalAddProduct #productList {
+        max-height: calc(100vh - 300px);
+    }
+</style>
 
 <h2 class="text-info">@ViewData["Title"]</h2>
 <hr />
 <div class="row w-full" id="createWarehouseExport">
     <div class="col-md-12">
-        <div class="form-group flex-fill mb-2 d-none">
-            <label asp-for="Id" class="control-label"></label>
-            <input asp-for="Id" class="form-control" />
-            <span asp-validation-for="Id" class="text-danger"></span>
-        </div>
-        <div class="d-flex gap-3">
-            <div class="form-group flex-fill mb-2">
-                <label asp-for="ExportTime" class="control-label"></label>
-                <input asp-for="ExportTime" class="form-control" />
-                <span asp-validation-for="ExportTime" class="text-danger"></span>
+        <form id="create-warehouse-export-form">
+            <div class="form-group flex-fill mb-2 d-none">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
             </div>
-            <div class="form-group flex-fill mb-2">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-select">
-                    <option value="0">Mới</option>
-                    <option value="1">Hoàn thành</option>
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
+            <div class="d-flex gap-3">
+                <div class="form-group flex-fill mb-2">
+                    <label asp-for="ExportTime" class="control-label"></label>
+                    <input id="exportTime" asp-for="ExportTime" class="form-control" />
+                    <span asp-validation-for="ExportTime" class="text-danger"></span>
+                </div>
+                <div class="form-group flex-fill mb-2">
+                    <label asp-for="Status" class="control-label"></label>
+                    <select id="status" asp-for="Status" class="form-select">
+                        <option value="0">Mới</option>
+                        <option value="1">Hoàn thành</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
             </div>
-        </div>
-        <div class="d-flex gap-3">
-            @*<div class="form-group flex-fill mb-2">
+            <div class="d-flex gap-3">
+                @*<div class="form-group flex-fill mb-2">
                 <label asp-for="Username" class="control-label"></label>
                 <select asp-for="Username" class="form-select">
                 @for (var i = 0; i < @ViewBag.Account.Count; i++)
@@ -45,68 +59,81 @@
                 </select>
                 <span asp-validation-for="Username" class="text-danger"></span>
                 </div>*@
-            <div class="form-group flex-fill mb-2">
-                <label asp-for="Customer" class="control-label"></label>
-                @*<input asp-for="Customer" class="form-control" />*@
-                <select asp-for="Customer" class="form-select">
-                    @for (var i = 0; i < @ViewBag.Customer.Count; i++)
-                    {
-                        <option value="@ViewBag.Customer[i].Id">@ViewBag.Customer[i].LastName  @ViewBag.Customer[i].FirstName</option>
-                    }
-                </select>
-                <span asp-validation-for="Customer" class="text-danger"></span>
+                <div class="form-group flex-fill mb-2">
+                    <label asp-for="Customer" class="control-label"></label>
+                    @*<input asp-for="Customer" class="form-control" />*@
+                    <select id="customer" asp-for="Customer" class="form-select">
+                        @for (var i = 0; i < @ViewBag.Customer.Count; i++)
+                        {
+                            <option value="@ViewBag.Customer[i].Id">@ViewBag.Customer[i].LastName  @ViewBag.Customer[i].FirstName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Customer" class="text-danger"></span>
+                </div>
+
             </div>
 
-        </div>
-
-        <div class="d-flex d-none gap-3">
-            <div class="form-group flex-fill mb-2">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            <div class="d-flex d-none gap-3">
+                <div class="form-group flex-fill mb-2">
+                    <label asp-for="CreatedBy" class="control-label"></label>
+                    <input asp-for="CreatedBy" class="form-control" />
+                    <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                </div>
+                <div class="form-group flex-fill mb-2">
+                    <label asp-for="ModifiedDate" class="control-label"></label>
+                    <input asp-for="ModifiedDate" class="form-control" />
+                    <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group flex-fill mb-2">
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+
+            <div class="form-group d-none flex-fill mb-2">
+                <label asp-for="ModifiedBy" class="control-label"></label>
+                <input asp-for="ModifiedBy" class="form-control" />
+                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
             </div>
-        </div>
+            <div class="form-group flex-fill mb-2 btn btn-danger" onclick="OpenModalAddProduct()"><a>+ Thêm sản phẩm</a></div>
 
-        <div class="form-group d-none flex-fill mb-2">
-            <label asp-for="ModifiedBy" class="control-label"></label>
-            <input asp-for="ModifiedBy" class="form-control" />
-            <span asp-validation-for="ModifiedBy" class="text-danger"></span>
-        </div>
-        <div class="form-group flex-fill mb-2 btn btn-danger" onclick="OpenModalAddProduct()"><a>+ Thêm sản phẩm</a></div>
+            <div class="d-flex gap-3 mt-2" id="warehouseExportProductsWrapper">
+                <div id="warehouseExportProducts">
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="text-info">Danh sách sản phẩm</h4>
+                            <div class="table-responsive">
+                                <table class="table table-condensed table-hover table-bordered table-striped table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Ảnh</th>
+                                            <th>Số lượng nhập</th>
+                                            <th>Đơn giá bán</th>
+                                            <th>Thành tiền</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productSelectedList">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 d-flex justify-content-lg-end mt-2">
+                <button class="btn btn-success btn-lg col-2" onclick="CreateWarehouseExport()">Lưu</button>
+            </div>
+        </form>
 
-        <table>
-            <thead>
-                <tr>
-                    <th style="font-weight: bold;">Tên hàng hóa</th>
-                    <th style="font-weight: bold;">Ảnh</th>
-                    <th style="font-weight: bold;">Số lượng</th>
-                    <th style="font-weight: bold;">Đơn giá</th>
-                    <th style="font-weight: bold;">Thành tiền</th>
-                </tr>
-            </thead>
-            <tbody id="productSelectedList">
-            </tbody>
-        </table>
-
-        <div class="col-md-12 d-flex justify-content-lg-end mt-2">
-            <button class="btn btn-success btn-lg col-2" onclick="CreateWarehouseExport()">Lưu</button>
-        </div>
 
         <!-- Modal add product-->
         <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-6" id="deleteConfirmLabel">Chọn sản phẩm</h1>
+                        <h1 class="modal-title" id="deleteConfirmLabel">Chọn sản phẩm</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <table>
+                    <div class="modal-body table-responsive">
+                        <table class="table table-condensed table-hover table-bordered table-striped table">
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="selectAll" /></th>

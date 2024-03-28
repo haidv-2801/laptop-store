@@ -3995,6 +3995,9 @@ img {
     #aa-catg-head-banner .aa-catg-head-banner-area .aa-catg-head-banner-content {
         padding: 5% 0;
     }
+    #modalAddProduct .modal-dialog {
+        max-width: 800px;
+    }
 }
 
 @media (max-width: 991px) {
@@ -4094,6 +4097,9 @@ img {
     #aa-blog-archive .aa-blog-archive-area .aa-blog-sidebar {
         margin-top: 30px;
     }
+    #modalAddProduct .modal-dialog {
+        max-width: calc(100vw - 200px);
+    }
 }
 
 @media (max-width: 767px) {
@@ -4190,6 +4196,9 @@ img {
     .aa-blog-details .aa-blog-content-single .blog-single-social {
         margin-top: 20px;
         text-align: center;
+    }
+    #modalAddProduct .modal-dialog {
+        max-width: 100vw;
     }
 }
 

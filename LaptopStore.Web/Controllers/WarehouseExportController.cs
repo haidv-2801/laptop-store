@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using LaptopStore.Data.Models;
 using LaptopStore.Data.Context;
 using System.Net.NetworkInformation;
+using LaptopStore.Data.ModelDTO.WarehouseExport;
 
 namespace LaptopStore.Web.Controllers
 {
@@ -62,7 +63,7 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ServiceResponse> SaveWarehouseExport([FromBody] WarehouseExport saveDTO)
+        public async Task<ServiceResponse> SaveWarehouseExport([FromBody] WarehouseExportSaveDTO saveDTO)
         {
             var res = new ServiceResponse();
             try

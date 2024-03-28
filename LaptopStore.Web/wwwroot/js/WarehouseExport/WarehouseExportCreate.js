@@ -49,18 +49,24 @@ $(document).ready(function () {
         currentItem.selectedUnitPrice = unitPrice
         currentItem.selectedQuantity = quantity
         currentItem.selectedAmount = amount
+        CalculateTotal()
     });
 });
 
 function CreateWarehouseExport() {
     event.preventDefault();
-    if ($('#create-warehouseExport-form').valid()) {
+    if ($('#create-warehouse-export-form').valid()) {
         const customerData = {
-            FirstName: $('#firstName').val(),
-            LastName: $('#lastName').val(),
-            Phone: $('#phone').val(),
-            Email: $('#email').val(),
-            Address: $('#address').val(),
+            ExportTime: $('#exportTime').val(),
+            Status: $('#status').val(),
+            CustomerId: $('#customer').val(),
+            Products: availableItems.map(e => {
+                return {
+                    Id: e.id,
+                    UnitPrice: e.unitPrice,
+                    Quantity: e.quantity
+                }
+            })
         }
         baseCreate('/WarehouseExport/SaveWarehouseExport', customerData).then(res => {
             if (res.code === ResponseCode.Success) {
@@ -75,10 +81,7 @@ function CloseAddProductModal() {
     $(modalAddProduct).modal('hide')
 }
 
-function SaveProductSelected() {
-    $(modalAddProduct).modal('hide')
-    document.getElementById('productSelectedList').innerHTML = ""
-
+function createNewSelectedProduct() {
     //Kiểm tra những bản ghi được thêm mới hoặc xóa đi
     let newSelecteds = [...availableItems]
     $.each(selectedItems, function (index, item) {
@@ -93,12 +96,21 @@ function SaveProductSelected() {
         //let selectedItem = JSON.parse(decodeURIComponent(item))
         let selectedItem = item
         if (!selectedItems.some(e => e.id === selectedItem.id)) {
-            newSelecteds=newSelecteds.filter(e => e.id !== selectedItem.id)
+            newSelecteds = newSelecteds.filter(e => e.id !== selectedItem.id)
         }
     })
 
     availableItems = newSelecteds
+}
 
+function handleDeleteOneSelectedProduct(id) {
+    if (id) {
+        availableItems = availableItems.filter(f => f.id !== id);
+        renderSelectedProductTable();
+    }
+}
+function renderSelectedProductTable() {
+    document.getElementById('productSelectedList').innerHTML = ""
     $.each(availableItems, function (index, item) {
         //let selectedItem = JSON.parse(decodeURIComponent(item))
         let selectedItem = item
@@ -110,49 +122,92 @@ function SaveProductSelected() {
         var newRow = document.createElement('tr');
         newRow.innerHTML = `
                             <td class="pe-auto">${selectedItem.name ?? ""}</td>
-                            <td><img class="pe-auto" style="max-height: 100px;" src='${imagePath}'></img></td>
-                            <td>
-                                <input type='number' class="quantity form-control" data-id="${selectedItem.id}" value="${selectedItem.selectedQuantity}" />
+                            <td class="pe-auto"><img class="pe-auto" style="max-height: 100px;" src='${imagePath}'></img></td>
+                            <td class="pe-auto">
+                                <input type='number' class="quantity form-control" data-id="${selectedItem.id}" value="${selectedItem.selectedQuantity??0}" />
                                 <span class="validate-text text-danger"></span>
                             </td>
-                            <td>
-                                <input type='number' class="unit-price form-control" data-id="${selectedItem.id}" value="${selectedItem.selectedUnitPrice}" />
+                            <td class="pe-auto">
+                                <input type='number' class="unit-price form-control" data-id="${selectedItem.id}" value="${selectedItem.selectedUnitPrice??0}" />
                                 <span class="validate-text text-danger"></span>
                             </td>
-                            <td class="amount">${selectedItem.selectedAmount||''}</td>
+                            <td class="pe-auto amount">${selectedItem.selectedAmount??0}</td>
+                            <td class="pe-auto">
+                                <div onclick="handleDeleteOneSelectedProduct('${selectedItem.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
+                            </td>
                             `
         document.getElementById('productSelectedList').append(newRow)
-})
+    })
+    var totalRow = document.createElement('tr');
+    totalRow.innerHTML = `<tr>
+                            <td class="pe-auto"><b>Tổng</b></td>
+                            <td></td>
+                            <td class="pe-auto total-quantity"><b>0</b></td>
+                            <td class="pe-auto"></td>
+                            <td class="pe-auto total-amount"><b>0</b></td>
+                            <td class="pe-auto">
+                            </td>
+                        </tr>
+                        `
+    document.getElementById('productSelectedList').append(totalRow);
+    CalculateTotal()
 }
 
+function CalculateTotal() {
+    let totalQuan = 0,
+        totalCurrency = 0;
+
+    [...$('#productSelectedList tr')].forEach((item, index) => {
+        const quan = parseFloat($(item).find(".quantity").val() || '0');
+        const price = parseFloat($(item).find(".unit-price").val() || '0') * quan;
+        totalQuan += quan;
+        totalCurrency += price;
+    });
+
+    $('#productSelectedList').find(".total-quantity b").text(`${totalQuan}`);
+    $('#productSelectedList').find(".total-amount b").text(`${totalCurrency} đ`);
+}
+
+
+function SaveProductSelected() {
+    $(modalAddProduct).modal('hide')
+
+    createNewSelectedProduct()
+
+    renderSelectedProductTable()
+}
+
+function renderTableWarehouseExportProductModal(data = []) {
+    if (data) {
+        $("#productList").html("")
+        if (data?.length > 0) {
+            if (availableItems.length === data?.length) {
+                $('#selectAll').prop('checked', true);
+            } else {
+                $('#selectAll').prop('checked', false);
+
+            }
+            $.each(data, function (index, item) {
+                let imagePath = null;
+                if (item.image) {
+                    imagePath = `${item.image}`;
+                }
+
+                var newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                                        <td><input type="checkbox" class="checkbox-item" data-id="${item.id}" data-item="${encodeURIComponent(JSON.stringify(item))}" ${availableItems.some(e => e.id === item.id) ? "checked" : ""}/></td>
+                                        <td class="pe-auto">${item.name ?? ""}</td>
+                                        <img class="pe-auto" style="max-height: 100px;" src='${imagePath}'></img>
+                                       `
+                document.getElementById('productList').append(newRow)
+            })
+        }
+    }
+}
 function OpenModalAddProduct() {
     $('#modalAddProduct').modal('show');
 
     fetch("/Product/ListAllProduct").then(res => res.json()).then(data => {
-        if (data) {
-            $("#productList").html("")
-            if (data?.length > 0) {
-                if (availableItems.length === data?.length) {
-                    $('#selectAll').prop('checked', true);
-                } else {
-                    $('#selectAll').prop('checked', false);
-
-                }
-                $.each(data, function (index, item) {
-                    let imagePath = null;
-                    if (item.image) {
-                        imagePath = `${item.image}`;
-                    }
-
-                    var newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                                        <td><input type="checkbox" class="checkbox-item" data-id="${item.id}" data-item="${encodeURIComponent(JSON.stringify(item))}" ${availableItems.some(e=>e.id === item.id)?"checked":""}/></td>
-                                        <td class="pe-auto">${item.name ?? ""}</td>
-                                        <img class="pe-auto" style="max-height: 100px;" src='${imagePath}'></img>
-                                       `
-                    document.getElementById('productList').append(newRow)
-                })
-            }
-        }
+        renderTableWarehouseExportProductModal(data)
     })
 }
