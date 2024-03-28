@@ -15,6 +15,8 @@ using LaptopStore.Core.Enums;
 using LaptopStore.Services.Services.BaseService;
 using LaptopStore.Services.Services.ProductService;
 using Microsoft.AspNetCore.Http;
+using LaptopStore.Data.ModelDTO.Receipt;
+using LaptopStore.Data.ModelDTO.WarehouseExport;
 
 namespace LaptopStore.Services.Services.ReceiptService
 {
@@ -34,10 +36,37 @@ namespace LaptopStore.Services.Services.ReceiptService
             return await GetEntityByIDAsync(id);
         }
 
-        public async Task<int> SaveReceipt(Receipt receipt)
+        public async Task<int> SaveReceipt(ReceiptSaveDTO receipt)
         {
-            var success = await AddEntityAsync(receipt);
-            return success != null ? 1 : 0;
+            int result = 1;
+            using var transaction = context.Database.BeginTransaction();
+            try
+            {
+                transaction.CreateSavepoint("CreateReceipt");
+                var importReceipt = Mapper.MapInit<ReceiptSaveDTO, Receipt>(receipt);
+                importReceipt.Username = "admin";
+                importReceipt.ReceiptDetails = receipt.Products.Select(f => new ReceiptDetail
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ReceiptId = importReceipt.Id,
+                    ProductId = f.Id,
+                    UnitPrice = f.UnitPrice,
+                    Quantity = f.Quantity
+                }).ToList();
+
+                var success = await AddEntityAsync(importReceipt);
+                if (success != null)
+                {
+                    result = 1;
+                }
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                transaction.RollbackToSavepoint("CreateReceipt");
+            }
+            return result;
         }
 
         public async Task<bool> UpdateReceipt(string id, Receipt receipt)

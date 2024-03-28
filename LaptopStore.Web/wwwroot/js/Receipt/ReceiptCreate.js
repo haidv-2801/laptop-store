@@ -39,10 +39,14 @@ $(document).ready(function () {
     // Xử lý tính thành tiền khi nhập đơn giá và số lượng
     $(document).on('input', '.quantity, .unit-price', function () {
         debugger
+        var id = $(this).closest("tr").attr("id");
         var unitPrice = parseFloat($(this).closest('tr').find('.unit-price').val()) || 0;
         var quantity = parseInt($(this).closest('tr').find('.quantity').val()) || 0;
         var amount = unitPrice * quantity;
         $(this).closest('tr').find('.amount').text(amount);
+        if (id) {
+            receiptProducts = receiptProducts.map(f => ({ ...f, quantity: quantity, unitPrice: unitPrice  }))
+        }
         Calculate();
     });
 });
@@ -53,7 +57,7 @@ function CloseAddProductModal() {
 }
 
 function Calculate() {
-    debugger
+    
     let totalQuan = 0,
         totalCurrency = 0;
 
@@ -175,4 +179,28 @@ function OpenModalAddProduct() {
             }
         }
     })
+}
+
+
+function CreateReceipt() {
+    event.preventDefault();
+    if ($('#create-receipt-form').valid()) {
+        const customerData = {
+            ImportTime: $('#importTime').val(),
+            Status: $('#status').val(),
+            CustomerId: $('#customer').val(),
+            Products: receiptProducts.map(e => {
+                return {
+                    Id: e.id,
+                    UnitPrice: e.unitPrice,
+                    Quantity: e.quantity
+                }
+            })
+        }
+        baseCreate('/Receipt/SaveReceipt', customerData).then(res => {
+            if (res.code === ResponseCode.Success) {
+                window.location.href = '/Receipt';
+            }
+        })
+    }
 }

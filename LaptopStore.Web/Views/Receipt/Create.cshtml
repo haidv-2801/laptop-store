@@ -15,65 +15,67 @@
 
 <div class="row w-full" id="createReceipt">
     <div class="col-md-12">
-        <div class="form-group flex-fill mb-2 d-none">
-            <label asp-for="Id" class="control-label"></label>
-            <input asp-for="Id" class="form-control" />
-            <span asp-validation-for="Id" class="text-danger"></span>
-        </div>
-        <div class="d-flex gap-3">
-            <div class="form-group flex-fill mb-2">
-                <label asp-for="ImportTime" class="control-label"></label>
-                <input asp-for="ImportTime" class="form-control" />
-                <span asp-validation-for="ImportTime" class="text-danger"></span>
+        <form id="create-receipt-form">
+            <div class="form-group flex-fill mb-2 d-none">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
             </div>
-            <div class="form-group flex-fill mb-2">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-select">
-                    <option value="0">Mới</option>
-                    <option value="1">Hoàn thành</option>
-                </select>
-                <span asp-validation-for="Status" class="text-danger"></span>
+            <div class="d-flex gap-3">
+                <div class="form-group flex-fill mb-2">
+                    <label asp-for="ImportTime" class="control-label"></label>
+                    <input id="importTime" asp-for="ImportTime" class="form-control" />
+                    <span asp-validation-for="ImportTime" class="text-danger"></span>
+                </div>
+                <div class="form-group flex-fill mb-2">
+                    <label asp-for="Status" class="control-label"></label>
+                    <select id="status" asp-for="Status" class="form-select">
+                        <option value="0">Mới</option>
+                        <option value="1">Hoàn thành</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
             </div>
-        </div>
-        <div class="d-flex gap-3">
-           
-            <div class="form-group flex-fill mb-2">
-                <label  class="control-label">Nhân viên</label>
-                @*<input asp-for="Customer" class="form-control" />*@
-                <select class="form-select">
-                    @for (var i = 0; i < @ViewBag.Customer.Count; i++)
-                    {
-                        <option value="@ViewBag.Customer[i].Id">@ViewBag.Customer[i].LastName  @ViewBag.Customer[i].FirstName</option>
-                    }
-                </select>
-                <span class="text-danger"></span>
+            <div class="d-flex gap-3">
+
+                <div class="form-group flex-fill mb-2">
+                    <label class="control-label">Nhân viên</label>
+                    @*<input asp-for="Customer" class="form-control" />*@
+                    <select id="customer" class="form-select">
+                        @for (var i = 0; i < @ViewBag.Customer.Count; i++)
+                        {
+                            <option value="@ViewBag.Customer[i].Id">@ViewBag.Customer[i].LastName  @ViewBag.Customer[i].FirstName</option>
+                        }
+                    </select>
+                    <span class="text-danger"></span>
+                </div>
+
+                <div class="form-group d-none flex-fill mb-2">
+                    <label asp-for="CreatedDate" class="control-label"></label>
+                    <input asp-for="CreatedDate" class="form-control" />
+                    <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex d-none gap-3">
+                <div class="form-group flex-fill mb-2">
+                    <label asp-for="CreatedBy" class="control-label"></label>
+                    <input asp-for="CreatedBy" class="form-control" />
+                    <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                </div>
+                <div class="form-group flex-fill mb-2">
+                    <label asp-for="ModifiedDate" class="control-label"></label>
+                    <input asp-for="ModifiedDate" class="form-control" />
+                    <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+                </div>
             </div>
 
             <div class="form-group d-none flex-fill mb-2">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                <label asp-for="ModifiedBy" class="control-label"></label>
+                <input asp-for="ModifiedBy" class="form-control" />
+                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
             </div>
-        </div>
-
-        <div class="d-flex d-none gap-3">
-            <div class="form-group flex-fill mb-2">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group flex-fill mb-2">
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>
-        </div>
-
-        <div class="form-group d-none flex-fill mb-2">
-            <label asp-for="ModifiedBy" class="control-label"></label>
-            <input asp-for="ModifiedBy" class="form-control" />
-            <span asp-validation-for="ModifiedBy" class="text-danger"></span>
-        </div>
+        </form>
         <div class="form-group flex-fill mb-2 btn btn-danger" onclick="OpenModalAddProduct()"><a>+ Thêm sản phẩm</a></div>
         <hr />
         <div class="d-flex gap-3 mt-2 d-none" id="receiptProductsWrapper">

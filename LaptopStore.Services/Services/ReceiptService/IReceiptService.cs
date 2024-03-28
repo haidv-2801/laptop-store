@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LaptopStore.Core;
 using LaptopStore.Services.Services.BaseService;
+using LaptopStore.Data.ModelDTO.Receipt;
 
 namespace LaptopStore.Services.Services.ProductService
 {
@@ -15,7 +16,7 @@ namespace LaptopStore.Services.Services.ProductService
         Task<List<Receipt>> GetAll();
         Task<Receipt> GetById(string id);
 
-        Task<int> SaveReceipt(Receipt saveDTO);
+        Task<int> SaveReceipt(ReceiptSaveDTO saveDTO);
 
         Task<PagingResponse> GetReceiptPaging(PagingRequest paging);
 

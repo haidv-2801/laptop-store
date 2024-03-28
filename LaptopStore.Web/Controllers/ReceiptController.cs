@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using LaptopStore.Data.Models;
 using LaptopStore.Data.Context;
 using System.Net.NetworkInformation;
+using LaptopStore.Data.ModelDTO.Receipt;
 
 namespace LaptopStore.Web.Controllers
 {
@@ -61,7 +62,7 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ServiceResponse> SaveReceipt([FromBody] Receipt saveDTO)
+        public async Task<ServiceResponse> SaveReceipt([FromBody] ReceiptSaveDTO saveDTO)
         {
             var res = new ServiceResponse();
             try
