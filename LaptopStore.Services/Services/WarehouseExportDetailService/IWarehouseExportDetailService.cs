@@ -1,4 +1,4 @@
-﻿/*using LaptopStore.Data.Models;
+﻿using LaptopStore.Data.Models;
 using LaptopStore.Data.ModelDTO;
 using System;
 using System.Collections.Generic;
@@ -7,22 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using LaptopStore.Core;
 using LaptopStore.Services.Services.BaseService;
-using LaptopStore.Data.ModelDTO.WarehouseExportDetail;
+using LaptopStore.Data.ModelDTO.WarehouseExport;
 
-namespace LaptopStore.Services.Services.WarehouseExportService
+namespace LaptopStore.Services.Services.WarehouseExportDetailService
 {
-    public interface IWarehouseExportService : IBaseService<WarehouseExportDetail>
+    public interface IWarehouseExportDetailService : IBaseService<WarehouseExportDetail>
     {
         Task<List<WarehouseExportDetail>> GetAll();
         Task<WarehouseExportDetail> GetById(string id);
 
-        Task<int> SaveWarehouseExport(WarehouseExportSaveDTO saveDTO);
+        Task<int> SaveWarehouseExportDetail(WarehouseExportDetailSaveDTO saveDTO);
 
-        Task<PagingResponse> GetWarehouseExportPaging(PagingRequest paging);
+        Task<PagingResponse> GetWarehouseExportDetailPaging(PagingRequest paging);
 
-        Task<bool> UpdateWarehouseExport(string id, WarehouseExportDetail saveDTO);
+        Task<bool> UpdateWarehouseExportDetail(string id, WarehouseExportDetail saveDTO);
 
-        Task<int> DeleteWarehouseExport(string id);
+        Task<int> DeleteWarehouseExportDetail(string id);
     }
 }
-*/

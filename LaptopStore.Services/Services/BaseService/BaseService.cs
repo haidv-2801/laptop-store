@@ -54,6 +54,34 @@ namespace LaptopStore.Services.Services.BaseService
             await context.SaveChangesAsync();
             return entity;
         }
+        public async Task<IEnumerable<T>> AddMultipleEntityAsync(IEnumerable<T> entities)
+        {
+            List<T> entityList = entities.ToList();
+            var hasCreatedDateProperty = typeof(T).GetProperty("CreatedDate") != null;
+            if (hasCreatedDateProperty)
+            {   
+                for(int i=0;i< entityList.Count(); i++)
+                {
+                    typeof(T).GetProperty("CreatedDate").SetValue(entityList[i], DateTime.Now);
+                }
+            }
+            var hasCreatedByProperty = typeof(T).GetProperty("CreatedBy") != null;
+            if (hasCreatedByProperty)
+            {
+                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                if(value != null)
+                {
+                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    for (int i = 0; i < entityList.Count(); i++)
+                    {
+                        typeof(T).GetProperty("CreatedBy").SetValue(entityList[i], account.FullName);
+                    }
+                }
+            }
+            await dbSet.AddRangeAsync(entityList);
+            await context.SaveChangesAsync();
+            return entities;
+        }
 
         public async Task<int> UpdateEntityAsync(T entity)
         {

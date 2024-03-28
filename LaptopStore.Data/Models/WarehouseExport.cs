@@ -30,7 +30,7 @@ namespace LaptopStore.Data.Models
         [DisplayName("Người sửa")]
         public string? ModifiedBy { get; set; }
 
-        public virtual Customer Customer { get; set; }
+        public virtual Customer Customer { get; set; } = null!;
         public virtual Account UsernameNavigation { get; set; } = null!;
         public virtual ICollection<WarehouseExportDetail> WarehouseExportDetails { get; set; }
     }

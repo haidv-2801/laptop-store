@@ -1,0 +1,75 @@
+﻿@using LaptopStore.Data.ModelDTO.WarehouseExport
+@model LaptopStore.Data.Models.WarehouseExport;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=
+*@
+
+@{
+    string statusText = @Model.Status == 0 ? "Mới" : "Hoàn thành";
+    var warehouseExportDetails = ViewBag.WarehouseExportDetails;
+}
+<style type="text/css">
+    .detail-info {
+        grid-template-columns: 30% 70%;
+    }
+
+    .detail-info .label-text {
+        font-weight: 600;
+    }
+</style>
+<div class="detail-info d-grid">
+    <div class="label-text">Thời gian nhập:</div>
+    <div class="value-text">@Model.ExportTime</div>
+    <div class="label-text">Trạng thái:</div>
+    <div class="value-text">@statusText</div>
+    <div class="label-text">Nhân viên:</div>
+    <div class="value-text">@Model.Username</div>
+</div>
+<div class="row mt-3">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover table-bordered table-striped table">
+                <thead>
+                    <tr>
+                        <th>Tên sản phẩm</th>
+                        <th>Ảnh</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody id='table-body'>
+                    @foreach (var item in (List<WarehouseExportProductViewDTO>)warehouseExportDetails)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>
+                                <img style="max-width: 100px;" src="@item.Image"></img>
+                            </td>
+                            <td>@item.Quantity</td>
+                            <td> @item.UnitPrice</td>
+                            @{
+                                var amount = @item.Quantity * @item.UnitPrice;
+                                <th>@amount</th>
+                            }
+                        </tr>
+                    }
+                    <tr>
+                        <td><b>Tổng tiền</b></td>
+                        <td></td>
+                        <td> </td>
+                        <td> </td>
+                        @{
+                            var total = ((List<WarehouseExportProductViewDTO>)warehouseExportDetails).Sum(f => f.Quantity * f.UnitPrice);
+                            <th>@total</th>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul id='pagination' class="pagination justify-content-end align-items-center mt-2">
+            </ul>
+        </nav>
+    </div>
+</div>

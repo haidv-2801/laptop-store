@@ -1,4 +1,4 @@
-﻿/*using LaptopStore.Core.Utilities;
+﻿using LaptopStore.Core.Utilities;
 using LaptopStore.Data.Context;
 using LaptopStore.Data.Models;
 using LaptopStore.Data.ModelDTO;
@@ -13,16 +13,14 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using LaptopStore.Core.Enums;
 using LaptopStore.Services.Services.BaseService;
-using LaptopStore.Services.Services.ProductService;
 using Microsoft.AspNetCore.Http;
-using LaptopStore.Data.ModelDTO.WarehouseExportDetail;
-using LaptopStore.Data.ModelDTO.ProductCategory;
+using LaptopStore.Data.ModelDTO.WarehouseExport;
 
-namespace LaptopStore.Services.Services.WarehouseExportService
+namespace LaptopStore.Services.Services.WarehouseExportDetailService
 {
-    public class WarehouseExportService : BaseService<WarehouseExportDetail>, IWarehouseExportService
+    public class WarehouseExportDetailService : BaseService<WarehouseExportDetail>, IWarehouseExportDetailService
     {
-        public WarehouseExportService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
+        public WarehouseExportDetailService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
         }
 
@@ -36,32 +34,32 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             return await GetEntityByIDAsync(id);
         }
 
-        public async Task<int> SaveWarehouseExport(WarehouseExportSaveDTO warehouseExportSaveDTO)
+        public async Task<int> SaveWarehouseExportDetail(WarehouseExportDetailSaveDTO WarehouseExportDetailSaveDTO)
         {
             int result = 1;
             using var transaction = context.Database.BeginTransaction();
             try
             {
 
-                transaction.CreateSavepoint("CreateWarehouseExport");
+                transaction.CreateSavepoint("CreateWarehouseExportDetail");
 
-                var warehouseExport = Mapper.MapInit<WarehouseExportSaveDTO, WarehouseExportDetail>(warehouseExportSaveDTO);
-                var success = await AddEntityAsync(warehouseExport);
-                if(success != null)
+                var warehouseExportDetail = Mapper.MapInit<WarehouseExportDetailSaveDTO, WarehouseExportDetail>(WarehouseExportDetailSaveDTO);
+                var success = await AddEntityAsync(warehouseExportDetail);
+                if (success != null)
                 {
                     result = 1;
                 }
                 transaction.Commit();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result = 0;
-                transaction.RollbackToSavepoint("CreateWarehouseExport");
+                transaction.RollbackToSavepoint("CreateWarehouseExportDetail");
             }
             return result;
         }
 
-        public async Task<bool> UpdateWarehouseExport(string id, WarehouseExportDetail receipt)
+        public async Task<bool> UpdateWarehouseExportDetail(string id, WarehouseExportDetail receipt)
         {
             var rec = await GetEntityByIDAsync(id);
             if (rec == null)
@@ -72,7 +70,7 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             return true;
         }
 
-        public async Task<int> DeleteWarehouseExport(string id)
+        public async Task<int> DeleteWarehouseExportDetail(string id)
         {
             var product = await GetEntityByIDAsync(id);
             if (product == null)
@@ -81,7 +79,7 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             return await DeleteEntityAsync(product);
         }
 
-        public async Task<PagingResponse> GetWarehouseExportPaging(PagingRequest paging)
+        public async Task<PagingResponse> GetWarehouseExportDetailPaging(PagingRequest paging)
         {
             var pagingResponse = new PagingResponse();
             pagingResponse.Page = paging.Page;
@@ -97,4 +95,3 @@ namespace LaptopStore.Services.Services.WarehouseExportService
         }
     }
 }
-*/

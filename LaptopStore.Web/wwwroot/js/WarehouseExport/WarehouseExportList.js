@@ -23,7 +23,7 @@ function getDataByPaging() {
         Page: currentPage,
         PageSize: size,
         Search: search,
-        SearchField: 'Username'
+        SearchField: ''
     }
     // Gọi hàm JavaScript của bạn ở đây
     baseGetDataFilterPaging('/WarehouseExport/GetWarehouseExportPaging', paging).then(res => {
@@ -70,16 +70,29 @@ function renderDataList(data) {
 
             let updateUrl = 'WarehouseExport/Update?id=' + item.id;
             let detailUrl = 'WarehouseExport/Detail?id=' + item.id;
+            let statusText = 'Mới';
+            if (item.status == '0') {
+                statusText = 'Mới';
+            }
+            else if (item.status == '1') {
+                statusText = 'Hoàn thành';
+            }
+            else {
+                statusText = 'Không xác định';
+            }
+            let edit = item.status == '0' ? `<a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>` : ``;
+            let del = item.status == '0' ? `<div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>` : ``;
+
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
                                         <td>${item.exportTime}</td>
-                                        <td>${item.status}</td>
+                                        <td>${statusText}</td>
                                         <td>${item.username}</td>
-                                        <td>${ e.usernameNavigation.fullName}</td>
+                                        <td>${item.customerId}</td>
                                         <td>
-                                            <a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>
+                                            ${edit}
                                             <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>
-                                            <div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
+                                             ${del}
                                         </td>`
             document.getElementById('table-body').append(newRow)
         })
@@ -94,9 +107,9 @@ function handleDelete(id) {
 }
 
 function handleViewDetail(id) {
-    baseGetPartialView('WarehouseExport/GetDetail/' + id).then(res => {
-        $('#customerDetailBody').html(res);
-        $('#customerDetail').modal('show');
+    baseGetPartialView('WarehouseExport/Detail/' + id).then(res => {
+        $('#warehouseExportDetailBody').html(res);
+        $('#warehouseExportDetail').modal('show');
     })
 }
 

@@ -44,8 +44,22 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             {
 
                 transaction.CreateSavepoint("CreateWarehouseExport");
-
+                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
                 var warehouseExport = Mapper.MapInit<WarehouseExportSaveDTO, WarehouseExport>(warehouseExportSaveDTO);
+                if (value != null)
+                {
+                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    warehouseExport.Username = account.Username;
+                }
+                warehouseExport.WarehouseExportDetails = warehouseExportSaveDTO.Products.Select(f => new WarehouseExportDetail
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    WarehouseExportId = warehouseExport.Id,
+                    ProductId = f.Id,
+                    UnitPrice = f.UnitPrice,
+                    Quantity = f.Quantity
+                }).ToList();
+
                 var success = await AddEntityAsync(warehouseExport);
                 if(success != null)
                 {
@@ -74,11 +88,25 @@ namespace LaptopStore.Services.Services.WarehouseExportService
 
         public async Task<int> DeleteWarehouseExport(string id)
         {
-            var product = await GetEntityByIDAsync(id);
-            if (product == null)
+            var warehouseExport = await GetEntityByIDAsync(id);
+            if (warehouseExport == null)
                 return 0;
 
-            return await DeleteEntityAsync(product);
+            using var transaction = context.Database.BeginTransaction();
+            try
+            {
+                var warehouseExportDetails = context.Set<ReceiptDetail>().Where(f => f.ReceiptId == warehouseExport.Id);
+                context.Set<ReceiptDetail>().RemoveRange(warehouseExportDetails);
+                await context.SaveChangesAsync();
+                var res = await DeleteEntityAsync(warehouseExport);
+                transaction.Commit();
+                return res;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                return 0;
+            }
         }
 
         public async Task<PagingResponse> GetWarehouseExportPaging(PagingRequest paging)
