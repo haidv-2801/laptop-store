@@ -51,7 +51,7 @@ namespace LaptopStore.Services.Services.ReceiptService
                 var productReceipt = rDetails.First(f => f.ProductId == product.Id);
                 if (productReceipt != null)
                 {
-                    product.UnitPrice = productReceipt.UnitPrice;
+                    //product.UnitPrice = productReceipt.UnitPrice;
                     product.Quantity = (product.Quantity ?? 0) + (productReceipt.Quantity ?? 0);
                 }
             }

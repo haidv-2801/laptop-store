@@ -11,4 +11,9 @@ namespace LaptopStore.Core.Enums
         New = 0,
         Completed = 1
     }
+    public enum WarehouseExportStatus
+    {
+        New = 0,
+        Completed = 1
+    }
 }

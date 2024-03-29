@@ -63,8 +63,8 @@ function CreateWarehouseExport() {
             Products: availableItems.map(e => {
                 return {
                     Id: e.id,
-                    UnitPrice: e.unitPrice,
-                    Quantity: e.quantity
+                    UnitPrice: e.selectedUnitPrice,
+                    Quantity: e.selectedQuantity
                 }
             })
         }

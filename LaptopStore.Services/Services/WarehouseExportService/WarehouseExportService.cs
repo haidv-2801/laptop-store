@@ -17,13 +17,22 @@ using LaptopStore.Services.Services.ProductService;
 using Microsoft.AspNetCore.Http;
 using LaptopStore.Data.ModelDTO.WarehouseExport;
 using LaptopStore.Data.ModelDTO.ProductCategory;
+using LaptopStore.Services.Services.PositionService;
 
 namespace LaptopStore.Services.Services.WarehouseExportService
 {
     public class WarehouseExportService : BaseService<WarehouseExport>, IWarehouseExportService
     {
-        public WarehouseExportService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
+        protected readonly DbSet<Product> dbProductSet;
+        protected readonly DbSet<Position> dbPositionSet;
+        protected readonly IProductService _productService;
+        protected readonly IPositionService _positionService;
+        public WarehouseExportService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor, IProductService productService, IPositionService positionService) : base(dbContext, httpContextAccessor)
         {
+            dbProductSet = context.Set<Product>();
+            dbPositionSet = context.Set<Position>();
+            _productService = productService;
+            _positionService = positionService;
         }
 
         public async Task<List<WarehouseExport>> GetAll()
@@ -61,13 +70,42 @@ namespace LaptopStore.Services.Services.WarehouseExportService
                 }).ToList();
 
                 var success = await AddEntityAsync(warehouseExport);
-                if(success != null)
+                if (success != null)
                 {
-                    result = 1;
+                    List<Product> products = new List<Product>();
+                    List<Position> positions = new List<Position>();
+                    //Nếu trạng thái đơn là hoàn thành thì update số lượng cho product và position
+                    if (warehouseExport.Status == (int)WarehouseExportStatus.Completed)
+                    {
+                        List<WarehouseExportDetail> details = warehouseExport.WarehouseExportDetails.ToList();
+                        for (int i = 0; i < details.Count(); i++)
+                        {
+                            var product = await _productService.GetById(details[i].ProductId);
+                            product.Quantity -= details[i].Quantity;
+
+                            products.Add(product);
+
+                            var position = await dbPositionSet.FindAsync(product.PositionId);
+
+                            position.Quantity -= details[i].Quantity;
+                            positions.Add(position);
+                        }
+                        dbProductSet.UpdateRange(products);
+                        result = await context.SaveChangesAsync() != 0 ? 1 : 0;
+                    }
+                    if (result == 1)
+                    {
+                        dbPositionSet.UpdateRange(positions);
+                        result = await context.SaveChangesAsync() != 0 ? 1 : 0;
+                    }
                 }
-                transaction.Commit();
+                else
+                {
+                    result = 0;
+                }
+                if (result == 1) transaction.Commit();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result = 0;
                 transaction.RollbackToSavepoint("CreateWarehouseExport");
@@ -122,6 +160,25 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             pagingResponse.Total = result.TotalRecords;
 
             return pagingResponse;
+        }
+
+        private async Task<bool> SaveToProductAndPositionTable(ICollection<ReceiptDetail> rDetails)
+        {
+            var listIds = rDetails.Select(f => f.ProductId);
+            // Lưu vào hàng hóa
+            var products = context.Set<Product>().Where(p => listIds.Contains(p.Id)).ToList();
+
+            foreach (var product in products)
+            {
+                var productReceipt = rDetails.First(f => f.ProductId == product.Id);
+                if (productReceipt != null)
+                {
+                    //product.UnitPrice = productReceipt.UnitPrice;
+                    product.Quantity = (product.Quantity ?? 0) + (productReceipt.Quantity ?? 0);
+                }
+            }
+            context.Set<Product>().UpdateRange(products);
+            return await context.SaveChangesAsync() != 0;
         }
     }
 }
