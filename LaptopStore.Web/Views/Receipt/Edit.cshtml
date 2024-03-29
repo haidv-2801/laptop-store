@@ -1,8 +1,12 @@
-﻿@model LaptopStore.Data.Models.Receipt
+﻿@using LaptopStore.Data.ModelDTO.Receipt
+@model LaptopStore.Data.Models.Receipt
 
 @{
     ViewData["Title"] = "Sửa nhập kho";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var receiptDetails = ViewBag.ReceiptDetails as List<ReceiptProductViewDTO>;
+    var totalPrice = ViewBag.TotalPrice;
 }
 
 
@@ -16,7 +20,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="Edit">
+        <form asp-action="Edit" id="update-receipt-form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group mb-2 flex-fill d-none">
                 <label asp-for="Id" class="control-label"></label>
@@ -26,7 +30,7 @@
             <div class="d-flex gap-3">
                 <div class="form-group mb-2 flex-fill">
                     <label asp-for="ImportTime" class="control-label"></label>
-                    <input asp-for="ImportTime" class="form-control" />
+                    <input asp-for="ImportTime" id="importTime" class="form-control" />
                     <span asp-validation-for="ImportTime" class="text-danger"></span>
                 </div>
                 <div class="form-group mb-2 flex-fill">
@@ -40,7 +44,7 @@
             </div>
             <div class="form-group mb-2 d-none flex-fill">
                 <label class="control-label">Nhân viên</label>
-                <input asp-for="Username" class="form-control" />
+                <input asp-for="Username" id="customer" class="form-control" />
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="form-group mb-2 flex-fill d-none">
@@ -64,33 +68,9 @@
                 <span asp-validation-for="ModifiedBy" class="text-danger"></span>
             </div>
         </form>
-        <div class="d-flex gap-3 mt-2 d-none" id="receiptProductsWrapper">
-            <div id="receiptProducts">
-                <div class="row">
-                    <div class="col">
-                        <h4 class="text-info">Danh sách sản phẩm</h4>
-                        <div class="table-responsive">
-                            <table class="table table-condensed table-hover table-bordered table-striped table">
-                                <thead>
-                                    <tr>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Ảnh</th>
-                                        <th>Số lượng nhập</th>
-                                        <th>Đơn giá nhập</th>
-                                        <th>Thành tiền</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @Html.Partial("_ReceiptEditPartial", receiptDetails)
         <div class="col-md-12 d-flex justify-content-lg-end mt-2">
-            <button class="btn btn-success btn-lg col-2" onclick="CreateReceipt()">Lưu</button>
+            <button class="btn btn-success btn-lg col-2" onclick="UpdateReceipt()">Lưu</button>
         </div>
     </div>
 </div>

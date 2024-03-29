@@ -183,7 +183,6 @@ function OpenModalAddProduct() {
 
 
 function CreateReceipt() {
-    debugger
     event.preventDefault();
     if ($('#create-receipt-form').valid()) {
         const customerData = {
