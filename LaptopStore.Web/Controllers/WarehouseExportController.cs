@@ -10,9 +10,12 @@ using LaptopStore.Data.Models;
 using LaptopStore.Data.Context;
 using System.Net.NetworkInformation;
 using LaptopStore.Data.ModelDTO.WarehouseExport;
+using LaptopStore.Data.ModelDTO.Receipt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopStore.Web.Controllers
 {
+    [Authorize]
     public class WarehouseExportController : Controller
     {
         private readonly ILogger<WarehouseExportController> _logger;
@@ -55,10 +58,31 @@ namespace LaptopStore.Web.Controllers
 
         public async Task<IActionResult> Update(string id)
         {
-            ViewBag.Categories = await _dbContext.Set<ProductCategory>().AsNoTracking().ToListAsync();
-            ViewBag.Positions = await _dbContext.Set<Position>().AsNoTracking().ToListAsync();
-            var data = await _warehouseExportService.GetById(id);
+            ViewBag.Customer = await _dbContext.Set<Customer>().AsNoTracking().ToListAsync();
+            ViewBag.Account = await _dbContext.Set<Account>().AsNoTracking().ToListAsync();
+            var data = await _warehouseExportService.GetByIDIncludesDetail(id);
+            /*var warehouseExportDetails = from rcd in _dbContext.Set<WarehouseExportDetail>()
+                                         join prod in _dbContext.Set<Product>() on rcd.ProductId equals prod.Id
+                                         where rcd.WarehouseExportId == data.Id
+                                         select new WarehouseExportProductViewDTO { Id = prod.Id, Name = prod.Name, Image = prod.Image, Quantity = rcd.Quantity, UnitPrice = rcd.UnitPrice };*/
             return View(data);
+        }
+
+        public ServiceResponse GetProductsExport(string id)
+        {
+            var response = new ServiceResponse();
+            var warehouseExportDetails = from rcd in _dbContext.Set<WarehouseExportDetail>()
+                                 join prod in _dbContext.Set<Product>() on rcd.ProductId equals prod.Id
+                                 where rcd.WarehouseExportId == id
+                                 select new WarehouseExportProductViewDTO { Id = prod.Id, Name = prod.Name, Image = prod.Image ?? string.Empty, Quantity = rcd.Quantity, UnitPrice = rcd.UnitPrice };
+
+            response.Data = new
+            {
+                WarehouseExportDetails = warehouseExportDetails.ToList(),
+                TotalPrice = (warehouseExportDetails.ToList().Sum(x => x.Total)).ToString()
+            };
+
+            return response;
         }
 
         [HttpPost]
@@ -90,7 +114,7 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPut]
-        public async Task<ServiceResponse> UpdateWarehouseExport([FromRoute] string id, [FromBody] WarehouseExport saveDTO)
+        public async Task<ServiceResponse> UpdateWarehouseExport([FromRoute] string id, [FromBody] WarehouseExportSaveDTO saveDTO)
         {
             var res = new ServiceResponse();
             try

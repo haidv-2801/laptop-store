@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using LaptopStore.Data.ModelDTO.WarehouseExport;
 using LaptopStore.Data.ModelDTO.ProductCategory;
 using LaptopStore.Services.Services.PositionService;
+using System.Reflection;
 
 namespace LaptopStore.Services.Services.WarehouseExportService
 {
@@ -43,6 +44,11 @@ namespace LaptopStore.Services.Services.WarehouseExportService
         public async Task<WarehouseExport> GetById(string id)
         {
             return await GetEntityByIDAsync(id);
+        }
+
+        public async Task<WarehouseExport> GetByIDIncludesDetail(string id)
+        {
+            return await dbSet.Include(e => e.WarehouseExportDetails).FirstOrDefaultAsync(e=>e.Id==id);
         }
 
         public async Task<int> SaveWarehouseExport(WarehouseExportSaveDTO warehouseExportSaveDTO)
@@ -92,11 +98,12 @@ namespace LaptopStore.Services.Services.WarehouseExportService
                         }
                         dbProductSet.UpdateRange(products);
                         result = await context.SaveChangesAsync() != 0 ? 1 : 0;
-                    }
-                    if (result == 1)
-                    {
-                        dbPositionSet.UpdateRange(positions);
-                        result = await context.SaveChangesAsync() != 0 ? 1 : 0;
+
+                        if (result == 1)
+                        {
+                            dbPositionSet.UpdateRange(positions);
+                            result = await context.SaveChangesAsync() != 0 ? 1 : 0;
+                        }
                     }
                 }
                 else
@@ -113,16 +120,117 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             return result;
         }
 
-        public async Task<bool> UpdateWarehouseExport(string id, WarehouseExport receipt)
+        public async Task<bool> UpdateWarehouseExport(string id, WarehouseExportSaveDTO warehouseExportSaveDTO)
         {
-            var rec = await GetEntityByIDAsync(id);
-            if (rec == null)
+            var warehouseExport = await GetEntityByIDAsync(id);
+            if (warehouseExport == null)
                 return false;
 
+            var warehouseExportDetailSet = context.Set<WarehouseExportDetail>();
+            var warehouseExportDetails = warehouseExportDetailSet.Where(f => f.WarehouseExportId == warehouseExport.Id).ToList();
 
-            await UpdateEntityAsync(rec);
-            return true;
+            const string SAVE_POINT = "UpdateWarehouseExport";
+            using var trans = context.Database.BeginTransaction();
+
+            try
+            {
+                trans.CreateSavepoint(SAVE_POINT);
+
+                //mapping data lưu sang
+                Mapper.MapUpdate(warehouseExportSaveDTO, warehouseExport);
+
+                //update và delete
+                var deletes = new List<WarehouseExportDetail>();
+                foreach (var item in warehouseExportDetails)
+                {
+                    var product = warehouseExportSaveDTO.Products.Find(f => f.Id == item.ProductId);
+
+                    //cập nhật vào cũ
+                    if (product != null)
+                    {
+                        item.Quantity = product.Quantity;
+                        item.UnitPrice = product.UnitPrice;
+                    }
+                    //Xóa
+                    else
+                    {
+                        deletes.Add(item);
+                    }
+                }
+                warehouseExportDetailSet.UpdateRange(warehouseExportDetails);
+                warehouseExportDetailSet.RemoveRange(deletes);
+                context.SaveChanges();
+
+                //add
+                foreach (var prodAdd in warehouseExportSaveDTO.Products)
+                {
+                    var founded = warehouseExportDetails.FirstOrDefault(f => f.ProductId == prodAdd.Id);
+                    if (founded == null)
+                    {
+                        warehouseExportDetailSet.Add(new WarehouseExportDetail
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            WarehouseExportId = warehouseExport.Id,
+                            ProductId = prodAdd.Id,
+                            UnitPrice = prodAdd.UnitPrice,
+                            Quantity = prodAdd.Quantity,
+                        });
+                        context.SaveChanges();
+                    }
+                }
+
+                var result = await UpdateEntityAsync(warehouseExport);
+
+                //nếu comlete thì lưu vào hàng hóa
+                if (result != 0)
+                {
+                    List<Product> products = new List<Product>();
+                    List<Position> positions = new List<Position>();
+                    //Nếu trạng thái đơn là hoàn thành thì update số lượng cho product và position
+                    if (warehouseExportSaveDTO.Status == (int)WarehouseExportStatus.Completed)
+                    {
+                        List<WarehouseExportDetail> details = warehouseExport.WarehouseExportDetails.ToList();
+                        for (int i = 0; i < details.Count(); i++)
+                        {
+                            var product = await _productService.GetById(details[i].ProductId);
+                            product.Quantity -= details[i].Quantity;
+
+                            products.Add(product);
+
+                            var position = await dbPositionSet.FindAsync(product.PositionId);
+
+                            position.Quantity -= details[i].Quantity;
+                            positions.Add(position);
+                        }
+                        dbProductSet.UpdateRange(products);
+                        result = await context.SaveChangesAsync() != 0 ? 1 : 0;
+
+                        if (result == 1)
+                        {
+                            dbPositionSet.UpdateRange(positions);
+                            result = await context.SaveChangesAsync() != 0 ? 1 : 0;
+                        }
+                    }
+                }
+                else
+                {
+                    result = 0;
+                }
+
+                if (result != 0)
+                {
+                    trans.Commit();
+                }
+                else { trans.RollbackToSavepoint(SAVE_POINT); }
+                return result != 0;
+            }
+            catch (Exception)
+            {
+                trans.RollbackToSavepoint(SAVE_POINT);
+                throw;
+            }
         }
+
 
         public async Task<int> DeleteWarehouseExport(string id)
         {

@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using AuthenticationProperties = Microsoft.AspNetCore.Authentication.AuthenticationProperties;
 using Newtonsoft.Json;
+using System.Security.Principal;
 
 namespace LaptopStore.Services.Services.AuthService
 {
@@ -52,6 +53,7 @@ namespace LaptopStore.Services.Services.AuthService
             var res = new ServiceResponse();
             await _httpContextAccessor.HttpContext.SignOutAsync(
             scheme: CookieAuthenticationDefaults.AuthenticationScheme);
+            _httpContextAccessor.HttpContext.Session.Remove("UserLogin");
             return res.OnSuccess(true);
         }
 

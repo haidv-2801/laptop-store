@@ -11,9 +11,11 @@ using LaptopStore.Data.Context;
 using System.Net.NetworkInformation;
 using LaptopStore.Data.ModelDTO.Receipt;
 using System.Net.WebSockets;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopStore.Web.Controllers
 {
+    [Authorize]
     public class ReceiptController : Controller
     {
         private readonly ILogger<ReceiptController> _logger;

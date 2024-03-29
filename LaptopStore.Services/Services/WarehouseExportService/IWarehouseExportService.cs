@@ -16,11 +16,13 @@ namespace LaptopStore.Services.Services.WarehouseExportService
         Task<List<WarehouseExport>> GetAll();
         Task<WarehouseExport> GetById(string id);
 
+        Task<WarehouseExport> GetByIDIncludesDetail(string id);
+
         Task<int> SaveWarehouseExport(WarehouseExportSaveDTO saveDTO);
 
         Task<PagingResponse> GetWarehouseExportPaging(PagingRequest paging);
 
-        Task<bool> UpdateWarehouseExport(string id, WarehouseExport saveDTO);
+        Task<bool> UpdateWarehouseExport(string id, WarehouseExportSaveDTO saveDTO);
 
         Task<int> DeleteWarehouseExport(string id);
     }

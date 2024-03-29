@@ -1,13 +1,14 @@
 ﻿@model LaptopStore.Data.Models.WarehouseExport
 
 @{
-    ViewData["Title"] = "Thêm mới đơn xuất kho";
+    ViewData["Title"] = "Sửa đơn xuất kho";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-@section WarehouseExportCreateJS {
-    <script src='~/js/WarehouseExport/WarehouseExportCreate.js'></script>
+@section WarehouseExportUpdateJS {
+    @* <script src='~/js/WarehouseExport/WarehouseExportCreate.js'></script> *@
+    <script src='~/js/WarehouseExport/WarehouseExportUpdate.js'></script>
 }
 <style type="text/css">
     #modalAddProduct .modal-dialog {
@@ -25,9 +26,9 @@
 
 <h2 class="text-info">@ViewData["Title"]</h2>
 <hr />
-<div class="row w-full" id="createWarehouseExport">
+<div class="row w-full" id="updateWarehouseExport">
     <div class="col-md-12">
-        <form id="create-warehouse-export-form">
+        <form id="update-warehouse-export-form">
             <div class="form-group flex-fill mb-2 d-none">
                 <label asp-for="Id" class="control-label"></label>
                 <input asp-for="Id" class="form-control" />
@@ -119,7 +120,7 @@
                 </div>
             </div>
             <div class="col-md-12 d-flex justify-content-lg-end mt-2">
-                <button class="btn btn-success btn-lg col-2" onclick="CreateWarehouseExport()">Lưu</button>
+                <button class="btn btn-success btn-lg col-2" onclick="UpdateWarehouseExport()">Lưu</button>
             </div>
         </form>
 
