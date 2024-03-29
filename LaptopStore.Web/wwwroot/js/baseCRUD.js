@@ -19,7 +19,6 @@ function baseGetDataFilterPaging(url, paging) {
 
 }
 function baseDelete(url) {
-    console.log(1)
     return new Promise(function (resolve, reject) {
         $.ajax({
             url: url, // Thay 'TenController' bằng tên controller của bạn

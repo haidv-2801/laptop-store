@@ -183,12 +183,13 @@ function OpenModalAddProduct() {
 
 
 function CreateReceipt() {
+    debugger
     event.preventDefault();
     if ($('#create-receipt-form').valid()) {
         const customerData = {
             ImportTime: $('#importTime').val(),
             Status: $('#status').val(),
-            CustomerId: $('#customer').val(),
+            Username: $('#customer option:selected').text(),
             Products: receiptProducts.map(e => {
                 return {
                     Id: e.id,

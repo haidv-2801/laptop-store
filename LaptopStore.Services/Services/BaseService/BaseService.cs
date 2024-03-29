@@ -31,16 +31,29 @@ namespace LaptopStore.Services.Services.BaseService
 
         public async Task<T> AddEntityAsync(T entity)
         {
+            SetTrackingAddProperties(entity);
+            await dbSet.AddAsync(entity);
+            await context.SaveChangesAsync();
+            return entity;
+        }
+
+        private void SetTrackingAddProperties(T entity)
+        {
             var hasCreatedDateProperty = typeof(T).GetProperty("CreatedDate") != null;
             if (hasCreatedDateProperty)
             {
                 typeof(T).GetProperty("CreatedDate").SetValue(entity, DateTime.Now);
             }
+            var hasModifiedDateProperty = typeof(T).GetProperty("ModifiedDate") != null;
+            if (hasModifiedDateProperty)
+            {
+                typeof(T).GetProperty("ModifiedDate").SetValue(entity, DateTime.Now);
+            }
             var hasCreatedByProperty = typeof(T).GetProperty("CreatedBy") != null;
             if (hasCreatedByProperty)
             {
                 _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
-                if(value != null)
+                if (value != null)
                 {
                     var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
                     typeof(T).GetProperty("CreatedBy").SetValue(entity, account.FullName);
@@ -50,17 +63,29 @@ namespace LaptopStore.Services.Services.BaseService
                     typeof(T).GetProperty("CreatedBy").SetValue(entity, "admin");
                 }
             }
-            await dbSet.AddAsync(entity);
-            await context.SaveChangesAsync();
-            return entity;
+            var hasModifiedBy = typeof(T).GetProperty("ModifiedBy") != null;
+            if (hasModifiedBy)
+            {
+                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                if (value != null)
+                {
+                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    typeof(T).GetProperty("ModifiedBy").SetValue(entity, account.FullName);
+                }
+                else
+                {
+                    typeof(T).GetProperty("ModifiedBy").SetValue(entity, "admin");
+                }
+            }
         }
+
         public async Task<IEnumerable<T>> AddMultipleEntityAsync(IEnumerable<T> entities)
         {
             List<T> entityList = entities.ToList();
             var hasCreatedDateProperty = typeof(T).GetProperty("CreatedDate") != null;
             if (hasCreatedDateProperty)
-            {   
-                for(int i=0;i< entityList.Count(); i++)
+            {
+                for (int i = 0; i < entityList.Count(); i++)
                 {
                     typeof(T).GetProperty("CreatedDate").SetValue(entityList[i], DateTime.Now);
                 }
@@ -69,7 +94,7 @@ namespace LaptopStore.Services.Services.BaseService
             if (hasCreatedByProperty)
             {
                 _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
-                if(value != null)
+                if (value != null)
                 {
                     var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
                     for (int i = 0; i < entityList.Count(); i++)
@@ -94,7 +119,7 @@ namespace LaptopStore.Services.Services.BaseService
             if (hasCreatedByProperty)
             {
                 _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
-                if(value != null)
+                if (value != null)
                 {
                     var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
                     typeof(T).GetProperty("ModifiedBy").SetValue(entity, account.FullName);

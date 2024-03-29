@@ -1,0 +1,107 @@
+﻿@model LaptopStore.Data.Models.Receipt
+
+@{
+    ViewData["Title"] = "Sửa nhập kho";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section ReceiptCreateJS {
+    <script src='~/js/Receipt/ReceiptCreate.js'></script>
+    <script src='~/js/Receipt/ReceiptEdit.js'></script>
+}
+
+<h2 class="text-info">@ViewData["Title"]</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-2 flex-fill d-none">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="d-flex gap-3">
+                <div class="form-group mb-2 flex-fill">
+                    <label asp-for="ImportTime" class="control-label"></label>
+                    <input asp-for="ImportTime" class="form-control" />
+                    <span asp-validation-for="ImportTime" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-2 flex-fill">
+                    <label asp-for="Status" class="control-label"></label>
+                    <select id="status" asp-for="Status" class="form-select">
+                        <option value="0">Mới</option>
+                        <option value="1">Hoàn thành</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group mb-2 d-none flex-fill">
+                <label class="control-label">Nhân viên</label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2 flex-fill d-none">
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2 flex-fill d-none">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2 flex-fill d-none">
+                <label asp-for="ModifiedDate" class="control-label"></label>
+                <input asp-for="ModifiedDate" class="form-control" />
+                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-2 flex-fill d-none">
+                <label asp-for="ModifiedBy" class="control-label"></label>
+                <input asp-for="ModifiedBy" class="form-control" />
+                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+            </div>
+        </form>
+        <div class="d-flex gap-3 mt-2 d-none" id="receiptProductsWrapper">
+            <div id="receiptProducts">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="text-info">Danh sách sản phẩm</h4>
+                        <div class="table-responsive">
+                            <table class="table table-condensed table-hover table-bordered table-striped table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Ảnh</th>
+                                        <th>Số lượng nhập</th>
+                                        <th>Đơn giá nhập</th>
+                                        <th>Thành tiền</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 d-flex justify-content-lg-end mt-2">
+            <button class="btn btn-success btn-lg col-2" onclick="CreateReceipt()">Lưu</button>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 d-flex justify-content-lg-start mt-2">
+    <a href="@Url.Action("Index", "Receipt")" class="btn btn-danger btn-sm fs-4"><i class="fa-regular fa-hand-back-point-left"></i><< Trở về danh sách</a>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

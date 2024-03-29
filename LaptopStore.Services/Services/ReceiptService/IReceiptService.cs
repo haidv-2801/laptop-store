@@ -20,7 +20,7 @@ namespace LaptopStore.Services.Services.ProductService
 
         Task<PagingResponse> GetReceiptPaging(PagingRequest paging);
 
-        Task<bool> UpdateReceipt(string id, Receipt saveDTO);
+        Task<bool> UpdateReceipt(string id, ReceiptSaveDTO saveDTO);
 
         Task<int> DeleteReceipt(string id);
     }

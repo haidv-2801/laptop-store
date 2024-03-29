@@ -39,11 +39,37 @@ namespace LaptopStore.Web.Controllers
             var receiptDetails = from rcd in _dbContext.Set<ReceiptDetail>()
                                  join prod in _dbContext.Set<Product>() on rcd.ProductId equals prod.Id
                                  where rcd.ReceiptId == model.Id
-                                 select new ReceiptProductViewDTO { Id = prod.Id, Name = prod.Name, Image = prod.Image, Quantity = rcd.Quantity, UnitPrice = rcd.UnitPrice };
+                                 select new ReceiptProductViewDTO { Id = prod.Id, Name = prod.Name, Image = prod.Image ?? string.Empty, Quantity = rcd.Quantity, UnitPrice = rcd.UnitPrice };
 
             ViewBag.ReceiptDetails = receiptDetails.ToList();
+            ViewBag.TotalPrice = (receiptDetails.ToList().Sum(x => x.Total)).ToString();
 
             return PartialView("_ReceiptDetailPartial", model);
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var model = await _receiptService.GetById(id);// Lấy dữ liệu từ cơ sở dữ liệu hoặc từ các nguồn khác
+            
+
+            return View(model);
+        }
+
+        public ServiceResponse GetProductsReceipt(string id)
+        {
+            var response = new ServiceResponse();
+            var receiptDetails = from rcd in _dbContext.Set<ReceiptDetail>()
+                                 join prod in _dbContext.Set<Product>() on rcd.ProductId equals prod.Id
+                                 where rcd.ReceiptId == id
+                                 select new ReceiptProductViewDTO { Id = prod.Id, Name = prod.Name, Image = prod.Image ?? string.Empty, Quantity = rcd.Quantity, UnitPrice = rcd.UnitPrice };
+
+            response.Data = new
+            {
+                ReceiptDetails = receiptDetails.ToList(),
+                TotalPrice = (receiptDetails.ToList().Sum(x => x.Total)).ToString()
+            };
+
+            return response;
         }
 
         public async Task<IActionResult> Create()
@@ -90,7 +116,7 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPut]
-        public async Task<ServiceResponse> UpdateReceipt([FromRoute] string id, [FromBody] Receipt saveDTO)
+        public async Task<ServiceResponse> UpdateReceipt([FromRoute] string id, [FromBody] ReceiptSaveDTO saveDTO)
         {
             var res = new ServiceResponse();
             try

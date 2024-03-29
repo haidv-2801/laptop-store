@@ -5,6 +5,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section ReceiptListCSS {
+    <style type="text/css">
+        #modalAddProduct .modal-content {
+            width: 700px !important;
+        }
+
+        #modalAddProduct thead tr th:first-child {
+            width: 40px;
+        }
+
+        #modalAddProduct tbody tr td:first-child {
+            width: 40px;
+        }
+       
+    </style>
+}
+
+
 
 @section ReceiptCreateJS {
     <script src='~/js/Receipt/ReceiptCreate.js'></script>
@@ -24,7 +42,7 @@
             <div class="d-flex gap-3">
                 <div class="form-group flex-fill mb-2">
                     <label asp-for="ImportTime" class="control-label"></label>
-                    <input id="importTime" asp-for="ImportTime" class="form-control" />
+                    <input id="importTime" asp-for="ImportTime" class="form-control" value="new Date()" />
                     <span asp-validation-for="ImportTime" class="text-danger"></span>
                 </div>
                 <div class="form-group flex-fill mb-2">

@@ -18,6 +18,9 @@ using Microsoft.AspNetCore.Http;
 using LaptopStore.Data.ModelDTO.Receipt;
 using LaptopStore.Data.ModelDTO.WarehouseExport;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Design.Internal;
+using System.Diagnostics;
+using System.Data.SqlClient;
 
 namespace LaptopStore.Services.Services.ReceiptService
 {
@@ -37,6 +40,25 @@ namespace LaptopStore.Services.Services.ReceiptService
             return await GetEntityByIDAsync(id);
         }
 
+        private async Task<bool> SaveToProductTable(ICollection<ReceiptDetail> rDetails)
+        {
+            var listIds = rDetails.Select(f => f.ProductId);
+            // Lưu vào hàng hóa
+            var products = context.Set<Product>().Where(p => listIds.Contains(p.Id)).ToList();
+
+            foreach (var product in products)
+            {
+                var productReceipt = rDetails.First(f => f.ProductId == product.Id);
+                if (productReceipt != null)
+                {
+                    product.UnitPrice = productReceipt.UnitPrice;
+                    product.Quantity = (product.Quantity ?? 0) + (productReceipt.Quantity ?? 0);
+                }
+            }
+            context.Set<Product>().UpdateRange(products);
+            return await context.SaveChangesAsync() != 0;
+        }
+
         public async Task<int> SaveReceipt(ReceiptSaveDTO receipt)
         {
             int result = 1;
@@ -44,8 +66,9 @@ namespace LaptopStore.Services.Services.ReceiptService
             try
             {
                 transaction.CreateSavepoint("CreateReceipt");
+
                 var importReceipt = Mapper.MapInit<ReceiptSaveDTO, Receipt>(receipt);
-                importReceipt.Username = "admin";
+                importReceipt.Id = Guid.NewGuid().ToString();
                 importReceipt.ReceiptDetails = receipt.Products.Select(f => new ReceiptDetail
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -60,7 +83,15 @@ namespace LaptopStore.Services.Services.ReceiptService
                 {
                     result = 1;
                 }
-                transaction.Commit();
+
+                //Nếu status là hoàn thành ms lưu vào bảng hàng hóa
+                if(result == 1 && receipt.Status == (int)ReceiptStatus.Completed)
+                {
+                    result = await SaveToProductTable(importReceipt.ReceiptDetails) ? 1 : 0;
+                }
+
+                if(result == 1) transaction.Commit();
+                else transaction.RollbackToSavepoint("CreateReceipt");
             }
             catch (Exception ex)
             {
@@ -70,15 +101,87 @@ namespace LaptopStore.Services.Services.ReceiptService
             return result;
         }
 
-        public async Task<bool> UpdateReceipt(string id, Receipt receipt)
+        public async Task<bool> UpdateReceipt(string id, ReceiptSaveDTO receipt)
         {
             var rec = await GetEntityByIDAsync(id);
             if (rec == null)
+            {
                 return false;
+            }
+                
+            var receiptDetailSet = context.Set<ReceiptDetail>();
+            var receiptDetails = receiptDetailSet.Where(f => f.ReceiptId == rec.Id).ToList();
 
+            const string SAVE_POINT = "UpdateReceipt";
+            using var trans = context.Database.BeginTransaction();
 
-            await UpdateEntityAsync(rec);
-            return true;
+            try
+            {
+                trans.CreateSavepoint(SAVE_POINT);
+
+                //mapping data lưu sang
+                Mapper.MapUpdate(receipt, rec);
+
+                //update và delete
+                var deletes = new List<ReceiptDetail>();
+                foreach (var item in receiptDetails)
+                {
+                    var product = receipt.Products.Find(f => f.Id == item.ProductId);
+
+                    //cập nhật vào cũ
+                    if (product != null)
+                    {
+                        item.Quantity = product.Quantity;
+                        item.UnitPrice = product.UnitPrice;
+                    }
+                    //Xóa
+                    else
+                    {
+                        deletes.Add(item);
+                    }
+                }
+                receiptDetailSet.UpdateRange(receiptDetails);
+                receiptDetailSet.RemoveRange(deletes);
+                context.SaveChanges();
+
+                //add
+                foreach (var prodAdd in receipt.Products)
+                {
+                    var founded = receiptDetails.FirstOrDefault(f => f.ProductId == prodAdd.Id);
+                    if (founded == null)
+                    {
+                        receiptDetailSet.Add(new ReceiptDetail
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            ReceiptId = rec.Id,
+                            ProductId = prodAdd.Id,
+                            UnitPrice = prodAdd.UnitPrice,
+                            Quantity = prodAdd.Quantity,
+                        });
+                        context.SaveChanges();
+                    }
+                }
+                
+                var result = await UpdateEntityAsync(rec);
+
+                //nếu comlete thì lưu vào hàng hóa
+                if(receipt.Status == (int)ReceiptStatus.Completed)
+                {
+                    result = await SaveToProductTable(receiptDetailSet.Where(f => f.ReceiptId == rec.Id).ToList()) ? 1 : 0;
+                }
+
+                if (result != 0)
+                {
+                    trans.Commit();
+                }
+                else { trans.RollbackToSavepoint(SAVE_POINT); }
+                return result != 0;
+            }
+            catch (Exception)
+            {
+                trans.RollbackToSavepoint(SAVE_POINT);
+                throw;
+            }
         }
 
         public async Task<int> DeleteReceipt(string id)

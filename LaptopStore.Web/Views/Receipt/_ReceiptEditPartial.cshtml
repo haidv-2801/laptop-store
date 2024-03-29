@@ -1,12 +1,6 @@
-﻿@using LaptopStore.Data.ModelDTO.Receipt
-@model LaptopStore.Data.Models.Receipt;
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=
-*@
-
+﻿@using System;
+@model List<LaptopStore.Data.ModelDTO.Receipt.ReceiptProductViewDTO>;
 @{
-    string statusText = @Model.Status == 0 ? "Mới" : "Hoàn thành";
-    var receiptDetails = ViewBag.ReceiptDetails;
     var totalPrice = ViewBag.TotalPrice;
 }
 <style type="text/css">
@@ -34,14 +28,6 @@
         width: 200px !important;
     }
 </style>
-<div class="detail-info d-grid">
-    <div class="label-text">Thời gian nhập:</div>
-    <div class="value-text">@Model.ImportTime</div>
-    <div class="label-text">Trạng thái:</div>
-    <div class="value-text">@statusText</div>
-    <div class="label-text">Nhân viên:</div>
-    <div class="value-text">@Model.Username</div>
-</div>
 <div class="row">
     <div class="col">
         <div class="table-responsive">
@@ -56,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody id='table-body'>
-                    @foreach (var item in (List<ReceiptProductViewDTO>)receiptDetails)
+                    @foreach (var item in @Model)
                     {
                         <tr>
                             <td>@item.Name</td>

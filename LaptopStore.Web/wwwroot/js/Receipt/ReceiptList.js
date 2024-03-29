@@ -23,7 +23,8 @@ function getDataByPaging() {
         Page: currentPage,
         PageSize: size,
         Search: search,
-        SearchField: 'Username'
+        SearchField: 'Username',
+        Sort: 'ModifiedDate:DESC'
     }
     // Gọi hàm JavaScript của bạn ở đây
     baseGetDataFilterPaging('/Receipt/GetReceiptPaging', paging).then(res => {
@@ -68,7 +69,7 @@ function renderDataList(data) {
     if (data?.length > 0) {
         $.each(data, function (index, item) {
 
-            let updateUrl = 'Receipt/Update?id=' + item.id;
+            let updateUrl = 'Receipt/Edit?id=' + item.id;
             let detailUrl = 'Receipt/Detail?id=' + item.id;
             let statusText = 'Mới';
             if (item.status == '0') {
@@ -89,6 +90,7 @@ function renderDataList(data) {
                                         <td>${statusText}</td>
                                         <td>${item.username}</td>
                                         <td>
+                                             ${edit}
                                             <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>
                                              ${del}
                                         </td>`
