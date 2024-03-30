@@ -29,6 +29,8 @@ namespace LaptopStore.Data.Models
         [DisplayName("Người sửa")]
         public string? ModifiedBy { get; set; }
 
+        public string SupplierId { get; set; }
+
         public virtual Account UsernameNavigation { get; set; } = null!;
         public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
     }

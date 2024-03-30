@@ -2,12 +2,12 @@
 
 function UpdateReceipt() {
     event.preventDefault();
-    debugger
     if ($('#update-receipt-form').valid()) {
         const customerData = {
             ImportTime: $('#importTime').val(),
             Status: $('#status').val(),
             Username: $('#customer').val(),
+            SupplierId: $('#supplier').val(),
             Products: BuildProducts()
         }
         let id = $('#update-receipt-form [name="Id"]').val();

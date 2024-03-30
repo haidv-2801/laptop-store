@@ -20,7 +20,9 @@ namespace LaptopStore.Data.ModelDTO.Receipt
         public string Username { get; set; } = null!;
 
         public string AccountId { get; set; } = null!;
-     
+
+        public string SupplierId { get; set; } = null!;
+
         public List<ProductExportDTO> Products { get; set; } = null!;
     }
 }

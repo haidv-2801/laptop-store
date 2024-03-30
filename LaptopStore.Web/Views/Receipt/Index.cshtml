@@ -11,6 +11,9 @@
             max-height: calc(100vh - 71px - 300px);
         }
 
+        #receiptDetailModalContent {
+            max-width: 1920px !important;
+        }
         
     </style>
 }
@@ -70,7 +73,7 @@
 <!-- Modal View Detail-->
 <div class="modal fade" id="receiptDetail" tabindex="-1" aria-labelledby="receiptDetailLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" id="receiptDetailModalContent">
             <div class="modal-header">
                 <h1 class="modal-title" id="receiptDetailLabel">Thông tin chi tiết</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

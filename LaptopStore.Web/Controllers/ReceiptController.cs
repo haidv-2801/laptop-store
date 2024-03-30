@@ -60,6 +60,7 @@ namespace LaptopStore.Web.Controllers
 
             ViewBag.ReceiptDetails = receiptDetails.ToList();
             ViewBag.TotalPrice = (receiptDetails.ToList().Sum(x => x.Total)).ToString();
+            ViewBag.Supplier = _dbContext.Set<Supplier>().AsNoTracking().ToList();
 
             return View(model);
         }
@@ -85,6 +86,7 @@ namespace LaptopStore.Web.Controllers
         {
             ViewBag.Customer = await _dbContext.Set<Customer>().AsNoTracking().ToListAsync();
             ViewBag.Account = await _dbContext.Set<Account>().AsNoTracking().ToListAsync();
+            ViewBag.Supplier = await _dbContext.Set<Supplier>().AsNoTracking().ToListAsync();
             return View();
         }
 

@@ -26,12 +26,14 @@ namespace LaptopStore.Services.Services.WarehouseExportService
     {
         protected readonly DbSet<Product> dbProductSet;
         protected readonly DbSet<Position> dbPositionSet;
+        protected readonly DbSet<Customer> dbCustomerSet;
         protected readonly IProductService _productService;
         protected readonly IPositionService _positionService;
         public WarehouseExportService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor, IProductService productService, IPositionService positionService) : base(dbContext, httpContextAccessor)
         {
             dbProductSet = context.Set<Product>();
             dbPositionSet = context.Set<Position>();
+            dbCustomerSet = context.Set<Customer>();
             _productService = productService;
             _positionService = positionService;
         }
@@ -263,8 +265,8 @@ namespace LaptopStore.Services.Services.WarehouseExportService
 
             //f => true có thể sửa theo nghiệp vụ ví dụ như f.Status = true;
             var result = await FilterEntitiesPagingAsync(f => true, paging.Search, paging.SearchField, paging.Sort, paging.Page, paging.PageSize);
-
-            pagingResponse.Data = result.Data;
+            var customers = dbCustomerSet.AsNoTracking().ToList();
+            pagingResponse.Data = new { Data = result.Data , Customers = customers };
             pagingResponse.Total = result.TotalRecords;
 
             return pagingResponse;

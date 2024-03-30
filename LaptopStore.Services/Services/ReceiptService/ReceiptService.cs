@@ -69,6 +69,7 @@ namespace LaptopStore.Services.Services.ReceiptService
 
                 var importReceipt = Mapper.MapInit<ReceiptSaveDTO, Receipt>(receipt);
                 importReceipt.Id = Guid.NewGuid().ToString();
+                
                 importReceipt.ReceiptDetails = receipt.Products.Select(f => new ReceiptDetail
                 {
                     Id = Guid.NewGuid().ToString(),

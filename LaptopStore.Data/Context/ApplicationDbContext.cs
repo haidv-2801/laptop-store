@@ -222,6 +222,8 @@ namespace LaptopStore.Data.Context
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.SupplierId).HasMaxLength(36).IsUnicode(false);
+
                 entity.Property(e => e.Username)
                     .HasMaxLength(50)
                     .IsUnicode(false);
