@@ -83,7 +83,8 @@ namespace LaptopStore.Services.Services.ReceiptService
 
                 var importReceipt = Mapper.MapInit<ReceiptSaveDTO, Receipt>(receipt);
                 importReceipt.Id = Guid.NewGuid().ToString();
-                
+                AsyncLocalLogger.Log("Id đơn nhập", importReceipt.Id);
+
                 importReceipt.ReceiptDetails = receipt.Products.Select(f => new ReceiptDetail
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -94,6 +95,8 @@ namespace LaptopStore.Services.Services.ReceiptService
                 }).ToList();
 
                 var success = await AddEntityAsync(importReceipt);
+                AsyncLocalLogger.Log("Thêm đơn nhập thành công không?", success);
+
                 if (success != null)
                 {
                     result = 1;
@@ -102,6 +105,8 @@ namespace LaptopStore.Services.Services.ReceiptService
                 //Nếu status là hoàn thành ms lưu vào bảng hàng hóa
                 if(result == 1 && receipt.Status == (int)ReceiptStatus.Completed)
                 {
+                    AsyncLocalLogger.Log("Có lưu vào table product không ?", success);
+                    AsyncLocalLogger.Log("Data lưu vào table product", importReceipt.ReceiptDetails);
                     result = await SaveToProductTable(importReceipt.ReceiptDetails) ? 1 : 0;
                 }
 

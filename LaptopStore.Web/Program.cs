@@ -41,6 +41,9 @@ namespace LaptopStore.Web
                 return new StorageService(env.WebRootPath);
             });
 
+            //Config newton soft
+
+
             ServiceInjectionExtension.InjectService(builder.Services);
             var app = builder.Build();
 

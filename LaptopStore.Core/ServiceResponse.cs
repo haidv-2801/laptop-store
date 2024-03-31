@@ -1,4 +1,6 @@
 ﻿using LaptopStore.Core.Enums;
+using LaptopStore.Core.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ namespace LaptopStore.Core
 {
     public class ServiceResponse
     {
+
         public ResponseCode Code { get; set; } = ResponseCode.Success;
 
         public string Message { get; set; } = string.Empty;
@@ -19,11 +22,14 @@ namespace LaptopStore.Core
 
         public bool Success { get; set; }
 
+        public string Logs { get; set; }
+
         public ServiceResponse OnError(Exception ex, ResponseCode code = ResponseCode.BusinessError)
         {
             this.Message = ex.Message;
             this.Code = code;
             this.Success = false;
+            this.Logs = AsyncLocalLogger.EndRequestLogAndSerialize();
             return this;
         }
 
@@ -33,6 +39,7 @@ namespace LaptopStore.Core
             this.Code = code;
             this.Data = data;
             this.Success = success;
+            this.Logs = AsyncLocalLogger.EndRequestLogAndSerialize();
             return this;
         }
 
@@ -42,6 +49,7 @@ namespace LaptopStore.Core
             this.Message = "Thành công";
             this.Data = data;
             this.Success = true;
+            this.Logs = AsyncLocalLogger.EndRequestLogAndSerialize();
             return this;
         }
     }

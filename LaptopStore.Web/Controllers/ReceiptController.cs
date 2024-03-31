@@ -12,6 +12,7 @@ using System.Net.NetworkInformation;
 using LaptopStore.Data.ModelDTO.Receipt;
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Authorization;
+using LaptopStore.Core.Utilities;
 
 namespace LaptopStore.Web.Controllers
 {
@@ -118,7 +119,9 @@ namespace LaptopStore.Web.Controllers
             var res = new ServiceResponse();
             try
             {
-                return res.OnSuccess(await _receiptService.SaveReceipt(saveDTO));
+                AsyncLocalLogger.Log("Bắt đầu lưu đơn nhập");
+                var resAdd = await _receiptService.SaveReceipt(saveDTO);
+                return res.OnSuccess(resAdd);
             }
             catch (Exception ex)
             {
