@@ -7,6 +7,7 @@
 @{
     string statusText = @Model.Status == 0 ? "Mới" : "Hoàn thành";
     var warehouseExportDetails = ViewBag.WarehouseExportDetails;
+    var customer = ViewBag.Customer;
 }
 <style type="text/css">
     .detail-info {
@@ -17,13 +18,15 @@
         font-weight: 600;
     }
 </style>
-<div class="detail-info d-grid">
+<div class="detail-info d-grid mb-3">
     <div class="label-text">Thời gian nhập:</div>
     <div class="value-text">@Model.ExportTime</div>
     <div class="label-text">Trạng thái:</div>
     <div class="value-text">@statusText</div>
     <div class="label-text">Nhân viên:</div>
     <div class="value-text">@Model.Username</div>
+    <div class="label-text">Khách hàng:</div>
+    <div class="value-text">@customer.LastName @customer.FirstName</div>
 </div>
 <div class="row mt-3">
     <div class="col">

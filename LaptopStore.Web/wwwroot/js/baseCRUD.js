@@ -1,17 +1,29 @@
-﻿let notifyStyle=null
+﻿let notifyStyle = null
+// Tạo spinner element
+var spinner = $('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+var listLoading = $(`<div id="listOverlay">
+    <div class= "spinner-border" role = "status">
+    <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>`);
 function baseGetDataFilterPaging(url, paging) {
     return new Promise(function (resolve, reject) {
+        $("#listArea").append(listLoading);
         $.ajax({
             url: url, // Thay 'TenController' bằng tên controller của bạn
             type: 'POST', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
             contentType: 'application/json',
             data: JSON.stringify(paging),
             success: function (result) {
+                // Ẩn spinner sau khi dữ liệu đã được tải xong
+                $(listLoading).remove();
                 resolve(result);
             },
             error: function (xhr, status, error) {
                 // Xử lý lỗi nếu có
                 console.error(error);
+                // Ẩn spinner sau khi dữ liệu đã được tải xong (nếu có lỗi)
+                $(listLoading).remove();
                 reject(error);
             }
         });
@@ -53,6 +65,10 @@ function baseDelete(url) {
 }
 function baseCreate(url, data) {
     return new Promise(function (resolve, reject) {
+        // Lấy thẻ button có thuộc tính button-save bằng JavaScript
+        var buttonSave = document.querySelector("[btn-save]");
+        showSpinnerButonSave(buttonSave)
+
         $.ajax({
             url: url, // Thay 'TenController' bằng tên controller của bạn
             type: 'POST', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
@@ -72,6 +88,7 @@ function baseCreate(url, data) {
                     $('#notifyToast').toast('show');
 
                 }
+                hideSpinnerButonSave(buttonSave)
                 resolve(result);
             },
             error: function (xhr, status, error) {
@@ -80,6 +97,7 @@ function baseCreate(url, data) {
                 $('#notifyToast').addClass(`bg-${notifyStyle}`)
                 $('#notifyToastBody').html(error.message);
                 $('#notifyToast').toast('show');
+                hideSpinnerButonSave(buttonSave)
                 reject(error);
             }
         });
@@ -87,6 +105,10 @@ function baseCreate(url, data) {
 }
 function baseUpdate(url, data) {
     return new Promise(function (resolve, reject) {
+        // Lấy thẻ button có thuộc tính button-save bằng JavaScript
+        var buttonSave = document.querySelector("[btn-save]");
+
+        showSpinnerButonSave(buttonSave)
         $.ajax({
             url: url, // Thay 'TenController' bằng tên controller của bạn
             type: 'PUT', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
@@ -106,6 +128,7 @@ function baseUpdate(url, data) {
                     $('#notifyToast').toast('show');
 
                 }
+                hideSpinnerButonSave(buttonSave)
                 resolve(result);
             },
             error: function (xhr, status, error) {
@@ -114,6 +137,7 @@ function baseUpdate(url, data) {
                 $('#notifyToast').addClass(`bg-${notifyStyle}`)
                 $('#notifyToastBody').html(error.message);
                 $('#notifyToast').toast('show');
+                hideSpinnerButonSave(buttonSave)
                 reject(error);
             }
         });
@@ -142,23 +166,41 @@ function uploadImage(formData) {
             method: 'POST',
             body: formData
         })
-        .then(response => {
-            if (!response.ok) {
-                reject(response)
-            }
-            return response.json();
-        })
-        .then(data => {
-            resolve(data);
-        })
-        .catch(error => {
-            reject(error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    reject(response)
+                }
+                return response.json();
+            })
+            .then(data => {
+                resolve(data);
+            })
+            .catch(error => {
+                reject(error);
+            });
     });
 }
 
+function showSpinnerButonSave(buttonSave) {
+    // Kiểm tra xem thẻ button có tồn tại không
+    if (buttonSave) {
+        // Thêm spinner vào đầu của button
+        $(buttonSave).prepend(spinner);
+        // Đặt thuộc tính disabled cho thẻ button
+        $(buttonSave).prop("disabled", true);
+    }
+}
+
+function hideSpinnerButonSave(buttonSave) {
+    if (buttonSave) {
+        spinner.remove();
+        // Đặt thuộc tính disabled cho thẻ button
+        $(buttonSave).prop("disabled", false);
+    }
+}
 /*Bắt sự kiến đóng toast thông báo*/
 $('#notifyToast').on('hidden.bs.toast', function () {
     // Xử lý logic sau khi toast đóng ở đây
     $('#notifyToast').removeClass(`bg-${notifyStyle}`)
 });
+

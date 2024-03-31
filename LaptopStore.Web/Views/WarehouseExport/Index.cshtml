@@ -21,7 +21,7 @@
 }
 
 <div class="row">
-    <div class="col">
+    <div id="listArea" class="col position-relative">
         <h2 class="text-info">Danh sách xuất kho</h2>
         <hr />
         <div class="d-flex justify-content-between mb-2">
@@ -38,7 +38,7 @@
                         <th>@Html.DisplayNameFor(e => e.ExportTime)</th>
                         <th>@Html.DisplayNameFor(e => e.Status)</th>
                         <th>@Html.DisplayNameFor(e => e.Username)</th>
-                        <th>@Html.DisplayNameFor(e => e.UsernameNavigation.FullName)</th>
+                        <th>@Html.DisplayNameFor(e => e.CustomerId)</th>
                         <th>Action</th>
                     </tr>
                 </thead>

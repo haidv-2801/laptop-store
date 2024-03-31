@@ -39,12 +39,19 @@ namespace LaptopStore.Web.Controllers
         public async Task<IActionResult> Detail(string id)
         {
             var model = await _receiptService.GetById(id);// Lấy dữ liệu từ cơ sở dữ liệu hoặc từ các nguồn khác
+            Supplier supplier = null;
+            if (!String.IsNullOrEmpty(model.SupplierId))
+            {
+
+                supplier = await _dbContext.Set<Supplier>().FindAsync(model.SupplierId);// Lấy dữ liệu từ cơ sở dữ liệu hoặc từ các nguồn khác
+            }
             var receiptDetails = from rcd in _dbContext.Set<ReceiptDetail>()
                                  join prod in _dbContext.Set<Product>() on rcd.ProductId equals prod.Id
                                  where rcd.ReceiptId == model.Id
                                  select new ReceiptProductViewDTO { Id = prod.Id, Name = prod.Name, Image = prod.Image ?? string.Empty, Quantity = rcd.Quantity, UnitPrice = rcd.UnitPrice };
 
             ViewBag.ReceiptDetails = receiptDetails.ToList();
+            ViewBag.Supplier = supplier;
             ViewBag.TotalPrice = (receiptDetails.ToList().Sum(x => x.Total)).ToString();
 
             return PartialView("_ReceiptDetailPartial", model);

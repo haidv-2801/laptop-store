@@ -26,8 +26,10 @@ namespace LaptopStore.Services.Services.ReceiptService
 {
     public class ReceiptService : BaseService<Receipt>, IReceiptService
     {
+        protected readonly DbSet<Supplier> dbSupplierSet;
         public ReceiptService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
+            dbSupplierSet = context.Set<Supplier>();
         }
 
         public async Task<List<Receipt>> GetAll()
@@ -236,7 +238,13 @@ namespace LaptopStore.Services.Services.ReceiptService
             //f => true có thể sửa theo nghiệp vụ ví dụ như f.Status = true;
             var result = await FilterEntitiesPagingAsync(f => true, paging.Search, paging.SearchField, paging.Sort, paging.Page, paging.PageSize);
 
-            pagingResponse.Data = result.Data;
+            var data = result.Data.ToList();
+            for (int i = 0; i < data.Count(); i++)
+            {
+                var supplier = await dbSupplierSet.AsNoTracking().FirstOrDefaultAsync(supplier => supplier.Id == data[i].SupplierId);
+                data[i].Supplier = supplier;
+            }
+            pagingResponse.Data = data;
             pagingResponse.Total = result.TotalRecords;
 
             return pagingResponse;

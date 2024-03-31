@@ -52,10 +52,12 @@ namespace LaptopStore.Services.Services.BaseService
             var hasCreatedByProperty = typeof(T).GetProperty("CreatedBy") != null;
             if (hasCreatedByProperty)
             {
-                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                //_httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                var value = _httpContextAccessor.HttpContext.Request.Cookies["UserLogin"];
                 if (value != null)
                 {
-                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    //var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    var account = JsonConvert.DeserializeObject<Account>(value);
                     typeof(T).GetProperty("CreatedBy").SetValue(entity, account.FullName);
                 }
                 else
@@ -93,10 +95,11 @@ namespace LaptopStore.Services.Services.BaseService
             var hasCreatedByProperty = typeof(T).GetProperty("CreatedBy") != null;
             if (hasCreatedByProperty)
             {
-                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                //_httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                var value = _httpContextAccessor.HttpContext.Request.Cookies["UserLogin"];
                 if (value != null)
                 {
-                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    var account = JsonConvert.DeserializeObject<Account>(value);
                     for (int i = 0; i < entityList.Count(); i++)
                     {
                         typeof(T).GetProperty("CreatedBy").SetValue(entityList[i], account.FullName);
@@ -118,10 +121,11 @@ namespace LaptopStore.Services.Services.BaseService
             var hasCreatedByProperty = typeof(T).GetProperty("ModifiedBy") != null;
             if (hasCreatedByProperty)
             {
-                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                //_httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
+                var value = _httpContextAccessor.HttpContext.Request.Cookies["UserLogin"];
                 if (value != null)
                 {
-                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    var account = JsonConvert.DeserializeObject<Account>(value);
                     typeof(T).GetProperty("ModifiedBy").SetValue(entity, account.FullName);
                 }
                 else

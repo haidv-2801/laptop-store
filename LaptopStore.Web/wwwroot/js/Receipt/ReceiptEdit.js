@@ -6,7 +6,6 @@ function UpdateReceipt() {
         const customerData = {
             ImportTime: $('#importTime').val(),
             Status: $('#status').val(),
-            Username: $('#customer').val(),
             SupplierId: $('#supplier').val(),
             Products: BuildProducts()
         }

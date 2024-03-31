@@ -40,6 +40,8 @@ namespace LaptopStore.Web
                 var env = serviceProvider.GetRequiredService<IWebHostEnvironment>();
                 return new StorageService(env.WebRootPath);
             });
+            
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //Config newton soft
 
@@ -133,7 +135,7 @@ namespace LaptopStore.Web
                         return Task.CompletedTask;
                     }
                 };
-                //options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
                 options.LoginPath = new PathString("/Auth/Login");
                 options.ReturnUrlParameter = "RequestPath";
                 options.SlidingExpiration = true;

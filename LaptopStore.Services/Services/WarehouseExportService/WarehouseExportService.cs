@@ -61,11 +61,11 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             {
 
                 transaction.CreateSavepoint("CreateWarehouseExport");
-                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
                 var warehouseExport = Mapper.MapInit<WarehouseExportSaveDTO, WarehouseExport>(warehouseExportSaveDTO);
+                var value = _httpContextAccessor.HttpContext.Request.Cookies["UserLogin"];
                 if (value != null)
                 {
-                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
+                    var account = JsonConvert.DeserializeObject<Account>(value);
                     warehouseExport.Username = account.Username;
                 }
                 warehouseExport.WarehouseExportDetails = warehouseExportSaveDTO.Products.Select(f => new WarehouseExportDetail
@@ -265,8 +265,13 @@ namespace LaptopStore.Services.Services.WarehouseExportService
 
             //f => true có thể sửa theo nghiệp vụ ví dụ như f.Status = true;
             var result = await FilterEntitiesPagingAsync(f => true, paging.Search, paging.SearchField, paging.Sort, paging.Page, paging.PageSize);
-            var customers = dbCustomerSet.AsNoTracking().ToList();
-            pagingResponse.Data = new { Data = result.Data , Customers = customers };
+            var data = result.Data.ToList();
+            for (int i=0; i< data.Count();i++)
+            {
+                var customer = await dbCustomerSet.AsNoTracking().FirstOrDefaultAsync(customer => customer.Id == data[i].CustomerId);
+                data[i].Customer = customer;
+            }
+            pagingResponse.Data = data;
             pagingResponse.Total = result.TotalRecords;
 
             return pagingResponse;

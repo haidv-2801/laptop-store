@@ -64,7 +64,6 @@ $(document).ready(function () {
 function GetProductsExport(id) {
     fetch("/WarehouseExport/GetProductsExport/" + id).then(res => {
         return res.json()
-        debugger
     }
     ).then(res => {
         if (res.code == 200) {

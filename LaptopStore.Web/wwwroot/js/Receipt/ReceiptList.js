@@ -89,6 +89,7 @@ function renderDataList(data) {
                                         <td>${item.importTime}</td>
                                         <td>${statusText}</td>
                                         <td>${item.username}</td>
+                                        <td>${item.supplier?.name||''}</td>
                                         <td>
                                              ${edit}
                                             <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>

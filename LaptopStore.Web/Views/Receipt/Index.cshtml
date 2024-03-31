@@ -11,8 +11,8 @@
             max-height: calc(100vh - 71px - 300px);
         }
 
-        #receiptDetailModalContent {
-            max-width: 1920px !important;
+        #receiptDetail .modal-dialog {
+            max-width: 800px !important;
         }
         
     </style>
@@ -23,7 +23,7 @@
 }
 
 <div class="row">
-    <div class="col">
+    <div id="listArea" class="col position-relative">
         <h2 class="text-info">Danh sách nhập kho</h2>
         <hr />
         <div class="d-flex justify-content-between mb-2">
@@ -40,6 +40,7 @@
                         <th>@Html.DisplayNameFor(e => e.ImportTime)</th>
                         <th>@Html.DisplayNameFor(e => e.Status)</th>
                         <th>@Html.DisplayNameFor(e => e.Username)</th>
+                        <th>@Html.DisplayNameFor(e => e.SupplierId)</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -73,7 +74,7 @@
 <!-- Modal View Detail-->
 <div class="modal fade" id="receiptDetail" tabindex="-1" aria-labelledby="receiptDetailLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content" id="receiptDetailModalContent">
+        <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title" id="receiptDetailLabel">Thông tin chi tiết</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

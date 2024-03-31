@@ -7,6 +7,7 @@
 @{
     string statusText = @Model.Status == 0 ? "Mới" : "Hoàn thành";
     var receiptDetails = ViewBag.ReceiptDetails;
+    var supplier = ViewBag.Supplier;
     var totalPrice = ViewBag.TotalPrice;
 }
 <style type="text/css">
@@ -18,29 +19,31 @@
         font-weight: 600;
     }
 
-    #receiptDetail .modal-content {
+    /*#receiptDetail .modal-content {
         width: 1024px !important;
-    }
+    }*/
 
     .detail-info .d-grid {
         margin-bottom: 24px;
     }
 
-    #receiptDetail thead tr th {
+    /*#receiptDetail thead tr th {
         width: 200px !important;
     }
 
     #receiptDetail tbody tr td {
         width: 200px !important;
-    }
+    }*/
 </style>
-<div class="detail-info d-grid">
+<div class="detail-info d-grid mb-3">
     <div class="label-text">Thời gian nhập:</div>
     <div class="value-text">@Model.ImportTime</div>
     <div class="label-text">Trạng thái:</div>
     <div class="value-text">@statusText</div>
     <div class="label-text">Nhân viên:</div>
     <div class="value-text">@Model.Username</div>
+    <div class="label-text">Nhà cung cấp:</div>
+    <div class="value-text">@supplier.Name</div>
 </div>
 <div class="row">
     <div class="col">

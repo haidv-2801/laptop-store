@@ -28,9 +28,10 @@ namespace LaptopStore.Data.Models
         public DateTime? ModifiedDate { get; set; }
         [DisplayName("Người sửa")]
         public string? ModifiedBy { get; set; }
-
+        [DisplayName("Nhà cung cấp")]
         public string SupplierId { get; set; }
 
+        public virtual Supplier Supplier { get; set; } = null!;
         public virtual Account UsernameNavigation { get; set; } = null!;
         public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
     }

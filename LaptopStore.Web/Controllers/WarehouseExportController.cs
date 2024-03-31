@@ -38,12 +38,19 @@ namespace LaptopStore.Web.Controllers
         public async Task<IActionResult> Detail(string id)
         {
             var model = await _warehouseExportService.GetById(id);// Lấy dữ liệu từ cơ sở dữ liệu hoặc từ các nguồn khác
+            Customer customer = null;
+            if (!String.IsNullOrEmpty(model.CustomerId))
+            {
+
+                customer = await _dbContext.Set<Customer>().FindAsync(model.CustomerId);// Lấy dữ liệu từ cơ sở dữ liệu hoặc từ các nguồn khác
+            }
             var warehouseExportDetails = from rcd in _dbContext.Set<WarehouseExportDetail>()
                                  join prod in _dbContext.Set<Product>() on rcd.ProductId equals prod.Id
                                  where rcd.WarehouseExportId == model.Id
                                  select new WarehouseExportProductViewDTO { Id = prod.Id, Name = prod.Name, Image = prod.Image, Quantity = rcd.Quantity, UnitPrice = rcd.UnitPrice };
 
             ViewBag.WarehouseExportDetails = warehouseExportDetails.ToList();
+            ViewBag.Customer = customer;
 
             return PartialView("_WarehouseExportDetailPartial", model);
         }

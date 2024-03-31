@@ -28,11 +28,9 @@ function getDataByPaging() {
     // Gọi hàm JavaScript của bạn ở đây
     baseGetDataFilterPaging('/WarehouseExport/GetWarehouseExportPaging', paging).then(res => {
         if (res.code === 200) {
-            debugger
-            const data = res.data?.data?.data || [],
-                customers = res.data?.data?.customers || [];
+            const data = res.data?.data || [];
 
-            renderDataList(data, customers);
+            renderDataList(data);
             renderPagination(res.data.total, size)
         }
     }).catch(e => {
@@ -66,8 +64,7 @@ function renderPagination(total, size) {
                     `
 }
 
-function renderDataList(data, customers = []) {
-    debugger
+function renderDataList(data) {
     document.getElementById('table-body').innerHTML = ""
     if (data?.length > 0) {
         $.each(data, function (index, item) {
@@ -85,8 +82,6 @@ function renderDataList(data, customers = []) {
                 statusText = 'Không xác định';
             }
 
-            let customer = customers.find(f => f.id == item.customerId) || {};
-
             let edit = item.status == '0' ? `<a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>` : ``;
             let del = item.status == '0' ? `<div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>` : ``;
 
@@ -95,7 +90,7 @@ function renderDataList(data, customers = []) {
                                         <td>${item.exportTime}</td>
                                         <td>${statusText}</td>
                                         <td>${item.username}</td>
-                                        <td>${customer.firstName + ' ' + customer.lastName}</td>
+                                        <td>${(item.customer?.lastName || '') + ' ' + (item.customer?.firstName||'')}</td>
                                         <td>
                                             ${edit}
                                             <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>

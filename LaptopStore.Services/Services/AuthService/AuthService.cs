@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using AuthenticationProperties = Microsoft.AspNetCore.Authentication.AuthenticationProperties;
 using Newtonsoft.Json;
 using System.Security.Principal;
+using System.Web;
 
 namespace LaptopStore.Services.Services.AuthService
 {
@@ -45,7 +46,19 @@ namespace LaptopStore.Services.Services.AuthService
             if(account == null)
                 throw new Exception($"Tài khoản hoặc mật khẩu không đúng.");
             await AddClaims(account);
-            _httpContextAccessor.HttpContext.Session.SetString("UserLogin", JsonConvert.SerializeObject(account));
+            //_httpContextAccessor.HttpContext.Session.SetString("UserLogin", JsonConvert.SerializeObject(account));
+            // Tạo một cookie
+            // Tạo đối tượng CookieOptions để cấu hình cookie
+            var cookieOptions = new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddDays(1), // Thời hạn của cookie
+                                                       // Nếu bạn muốn cookie chỉ được gửi qua kết nối bảo mật (HTTPS), hãy sử dụng
+                                                       //Secure = true,
+                                                       // Để chỉ cho phép truy cập cookie từ JavaScript nếu cùng nguồn (same-site),
+                                                       // bạn có thể sử dụng:
+                                                       //SameSite = SameSiteMode.Strict 
+            };
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("UserLogin", JsonConvert.SerializeObject(account), cookieOptions);
             return res.OnSuccess(account);
         }
         public async Task<ServiceResponse> SignOut()
@@ -53,7 +66,8 @@ namespace LaptopStore.Services.Services.AuthService
             var res = new ServiceResponse();
             await _httpContextAccessor.HttpContext.SignOutAsync(
             scheme: CookieAuthenticationDefaults.AuthenticationScheme);
-            _httpContextAccessor.HttpContext.Session.Remove("UserLogin");
+            //_httpContextAccessor.HttpContext.Session.Remove("UserLogin");
+            _httpContextAccessor.HttpContext.Response.Cookies.Delete("UserLogin");
             return res.OnSuccess(true);
         }
 
