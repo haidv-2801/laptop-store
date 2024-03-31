@@ -85,12 +85,12 @@ function renderDataList(data) {
             let detailUrl = 'Account/Detail?id=' + item.id;
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
-                                        <td>${item.username}</td>
-                                        <td>${item.password}</td>
-                                        <td>${item.fullName}</td>
-                                        <td>${gender}</td>
+                                        <td>${item.username ?? ``}</td>
+                                        <td>${item.password ?? ``}</td>
+                                        <td>${item.fullName ?? ``}</td>
+                                        <td>${gender ?? `- - -`}</td>
                                         <td>${role}</td>
-                                        <td>${item.address}</td>
+                                        <td>${item.address ?? `- - -`}</td>
                                         <td>
                                             <a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>
                                             <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>

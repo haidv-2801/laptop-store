@@ -12,6 +12,7 @@ namespace LaptopStore.Data.Models
         [StringLength(255, ErrorMessage = "Tên NCC không được vượt quá 255 ký tự")]
         [DisplayName("Tên nhà cung cấp")]
         public string? Name { get; set; }
+        [DisplayName("Tên liên hệ")]
         public string? ContactName { get; set; }
         [PhoneNumberFormat(ErrorMessage = "Số điện thoại không đúng định dạng")]
         [DisplayName("Số điện thoại")]

@@ -56,7 +56,21 @@ namespace LaptopStore.Services.Services.ReceiptService
                 }
             }
             context.Set<Product>().UpdateRange(products);
-            return await context.SaveChangesAsync() != 0;
+            await context.SaveChangesAsync();
+
+            //Lưu số lượng vào kho
+            var positions = (from pos in context.Set<Position>()
+                            join prod in context.Set<Product>() on pos.Id equals prod.PositionId
+                            where listIds.Contains(prod.Id) select pos);
+
+            var allProduct = context.Set<Product>().AsNoTracking().ToList();
+            foreach (var position in positions)
+            {
+                position.Quantity = allProduct.Where(p => p.PositionId == position.Id).Sum(p => p.Quantity);
+            }
+            context.Set<Position>().UpdateRange(positions);
+            await context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<int> SaveReceipt(ReceiptSaveDTO receipt)
