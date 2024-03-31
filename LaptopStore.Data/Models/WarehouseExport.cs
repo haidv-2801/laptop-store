@@ -18,7 +18,7 @@ namespace LaptopStore.Data.Models
         [DisplayName("Trạng thái")]
         public int Status { get; set; }
         [DisplayName("Nhân viên")]
-        public string Username { get; set; } = null!;
+        public string Username { get; set; }
         [DisplayName("Khách hàng")]
         public string CustomerId { get; set; } = null!;
         [DisplayName("Ngày tạo")]

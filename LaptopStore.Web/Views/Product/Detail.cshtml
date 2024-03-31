@@ -1,0 +1,137 @@
+﻿@using LaptopStore.Data.Models
+@model LaptopStore.Data.Models.Product
+
+@{
+    ViewData["Title"] = "Thông tin chi tiết sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var categories = (ViewBag.Categories as List<ProductCategory>) ?? new List<ProductCategory>();
+    var positions = (ViewBag.Positions as List<Position>) ?? new List<Position>();
+    var cateSelected = categories.FirstOrDefault(f => f.Id == Model.ProductCategoryId)?.Name ?? "- - -";
+    var posSelected = positions.FirstOrDefault(f => f.Id == Model.PositionId)?.Name ?? "- - -";
+}
+
+
+<div>
+    <h2 class="text-info">@ViewData["Title"]</h2>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2 d-none">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10 d-none">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UnitPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UnitPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Unit)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Unit)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ProductCategoryId)
+        </dt>
+        <dd class="col-sm-10">
+            @cateSelected
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ram)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ram)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Cpu)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Cpu)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Screen)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Screen)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Pin)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Pin)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Origin)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Origin)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.WarrantyTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.WarrantyTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LunchTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LunchTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PositionId)
+        </dt>
+        <dd class="col-sm-10">
+            @posSelected
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+        <dd class="col-sm-10">
+            <img style="max-width: 150px;" src="@Model.Image"></img>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatedDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </dt>
+        <dd class="col-sm-10 mb-2">
+            @Html.DisplayFor(model => model.ModifiedDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedBy)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ModifiedBy)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Sửa", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Trở về danh sách</a>
+</div>
