@@ -2,16 +2,25 @@
 var pageTotal = 1
 var size = 5
 var search = '';
+var deleteId = null;
 function DeleteProduct(itemId) {
-    baseDelete('/Product/DeleteProduct/' + itemId).then(res => {
+    if (!deleteId) return;
+    baseDelete('/Product/DeleteProduct/' + deleteId).then(res => {
         if (res.success) {
             window.location.href = '/Product';
         }
+        $('#deleteConfirm').modal('hide');
     });
 }
+
 $(document).ready(function () {
     getDataByPaging()
 });
+
+function handleDelete(id) {
+    deleteId = id
+    $('#deleteConfirm').modal('show');
+}
 
 function getDataByPaging() {
     const paging = {
@@ -83,7 +92,7 @@ function renderDataList(data) {
                                         <td>
                                             <a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>
                                             <a href="${detailUrl}" class="btn btn-outline-info btn-sm">Chi tiết</a>
-                                            <div onclick="DeleteProduct('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
+                                            <div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
                                         </td>`
             document.getElementById('table-body').append(newRow)
         })
@@ -150,4 +159,9 @@ $('#btn-search').on('click', function () {
     // Thực hiện tìm kiếm và phân trang
     //searchAndPaginate('', page);
     getDataByPaging()
+});
+
+// Xử lý sự kiện click xác nhận xóa
+$('#btn-delete-confirm').on('click', function () {
+    DeleteProduct()
 });

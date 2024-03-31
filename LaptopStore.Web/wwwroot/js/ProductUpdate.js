@@ -1,4 +1,5 @@
 ﻿function UpdateProduct(id) {
+    event.preventDefault();
     if ($('#update-product-form').valid()) {
         const productData = {
             Name: $("#updateProduct [Name='Name']").val(),

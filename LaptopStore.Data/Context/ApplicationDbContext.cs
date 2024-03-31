@@ -166,6 +166,8 @@ namespace LaptopStore.Data.Context
 
                 entity.Property(e => e.Unit).HasMaxLength(25);
 
+                entity.Property(e => e.IsDeleted);
+
                 entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.WarrantyTime)

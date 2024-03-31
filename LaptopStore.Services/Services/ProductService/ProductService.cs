@@ -37,6 +37,17 @@ namespace LaptopStore.Services.Services.ProductService
         {
             var product = Mapper.MapInit<ProductSaveDTO, Product>(productSaveDTO);
             var success = await AddEntityAsync(product);
+
+            //Thêm số lượng cho bên position
+            var position = context.Set<Position>().Find(product.PositionId);
+            if(position != null) 
+            {
+                position.Quantity = (position.Quantity ?? 0) + (product.Quantity ?? 0);
+                context.Set<Position>().Attach(position);
+                context.Entry(position).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
+
             return success != null ? 1 : 0;
         }
 
@@ -45,6 +56,9 @@ namespace LaptopStore.Services.Services.ProductService
             var product = await GetEntityByIDAsync(id);
             if (product == null)
                 return false;
+
+            //position
+            var quan = (productSaveDTO.Quantity ?? 0) - (product.Quantity ?? 0);
 
             product.Name = productSaveDTO.Name;
             product.UnitPrice = productSaveDTO.UnitPrice;
@@ -62,6 +76,16 @@ namespace LaptopStore.Services.Services.ProductService
             product.Image = productSaveDTO.Image;
 
             await UpdateEntityAsync(product);
+
+            //Thêm số lượng cho bên position
+            var position = context.Set<Position>().Find(product.PositionId);
+            if (position != null)
+            {
+                position.Quantity = Math.Max((position.Quantity ?? 0) + (quan), 0);
+                context.Set<Position>().Attach(position);
+                context.Entry(position).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
             return true;
         }
 
@@ -71,7 +95,19 @@ namespace LaptopStore.Services.Services.ProductService
             if (product == null)
                 return 0;
 
-            return await DeleteEntityAsync(product);
+            //Thêm số lượng cho bên position
+            var position = context.Set<Position>().Find(product.PositionId);
+            if (position != null)
+            {
+                position.Quantity = Math.Max((position.Quantity ?? 0) - (product.Quantity ?? 0), 0);
+                context.Set<Position>().Attach(position);
+                context.Entry(position).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
+
+            product.IsDeleted = true;
+
+            return await UpdateEntityAsync(product);
         }
 
         public async Task<PagingResponse> GetProductPaging(PagingRequest paging)
@@ -81,7 +117,7 @@ namespace LaptopStore.Services.Services.ProductService
             pagingResponse.PageSize = paging.PageSize;
 
             //f => true có thể sửa theo nghiệp vụ ví dụ như f.Status = true;
-            var result = await FilterEntitiesPagingAsync(f => true, paging.Search, paging.SearchField, paging.Sort, paging.Page, paging.PageSize);
+            var result = await FilterEntitiesPagingAsync(f => f.IsDeleted != true, paging.Search, paging.SearchField, paging.Sort, paging.Page, paging.PageSize);
             var categories = await context.Set<ProductCategory>().AsNoTracking().ToListAsync();
             var positions = await context.Set<Position>().AsNoTracking().ToListAsync();
 

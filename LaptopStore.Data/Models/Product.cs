@@ -62,6 +62,8 @@ namespace LaptopStore.Data.Models
         [DisplayName("Người sửa")]
         public string? ModifiedBy { get; set; }
 
+        public bool? IsDeleted { get; set; } = false;
+
         public virtual Position Position { get; set; } = null!;
         public virtual ProductCategory ProductCategory { get; set; } = null!;
         public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
