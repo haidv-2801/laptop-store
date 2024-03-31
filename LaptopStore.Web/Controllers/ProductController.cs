@@ -49,7 +49,7 @@ namespace LaptopStore.Web.Controllers
 
         public async Task<IActionResult> ListAllProduct()
         {
-            return Ok(await _dbContext.Set<Product>().AsNoTracking().ToListAsync());
+            return Ok(await _dbContext.Set<Product>().AsNoTracking().Where(p => p.IsDeleted != true).ToListAsync());
         }
 
         public async Task<IActionResult> Update(string id)

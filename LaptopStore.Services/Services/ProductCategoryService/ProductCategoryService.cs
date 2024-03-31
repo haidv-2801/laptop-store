@@ -68,7 +68,7 @@ namespace LaptopStore.Services.Services.ProductCategoryService
         
         public async Task<bool> CheckExistsProduct(string id)
         {
-            var product = context.Set<Product>().AsNoTracking().FirstOrDefault(e => e.ProductCategoryId == id);
+            var product = context.Set<Product>().AsNoTracking().FirstOrDefault(e => e.ProductCategoryId == id && e.IsDeleted != true);
             if (product == null)
                 return false;
 
@@ -88,7 +88,7 @@ namespace LaptopStore.Services.Services.ProductCategoryService
             var productCategories = result.Data.Select(async f =>
             {
                 List<Product> productList= new List<Product>();
-                var products = context.Set<Product>().AsNoTracking().Where(e=>e.ProductCategoryId == f.Id);
+                var products = context.Set<Product>().AsNoTracking().Where(e=>e.ProductCategoryId == f.Id && e.IsDeleted != true);
                 if (products.Count()>0)
                 {
                     productList = products.ToList();

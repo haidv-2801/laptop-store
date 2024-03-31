@@ -63,7 +63,7 @@ namespace LaptopStore.Services.Services.ReceiptService
                             join prod in context.Set<Product>() on pos.Id equals prod.PositionId
                             where listIds.Contains(prod.Id) select pos);
 
-            var allProduct = context.Set<Product>().AsNoTracking().ToList();
+            var allProduct = context.Set<Product>().AsNoTracking().Where(p => p.IsDeleted != true).ToList();
             foreach (var position in positions)
             {
                 position.Quantity = allProduct.Where(p => p.PositionId == position.Id).Sum(p => p.Quantity);

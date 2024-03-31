@@ -78,7 +78,7 @@ namespace LaptopStore.Services.Services.PositionService
 
         public async Task<bool> CheckExistsProduct(string id)
         {
-            var product = context.Set<Product>().AsNoTracking().FirstOrDefault(e => e.PositionId == id);
+            var product = context.Set<Product>().AsNoTracking().FirstOrDefault(e => e.PositionId == id && e.IsDeleted != true);
             if (product == null)
                 return false;
 
