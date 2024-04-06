@@ -49,7 +49,7 @@ function renderPagination(total, size) {
                     <li class="page-item">
                         <a class="btn-prev page-link" href="#" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
+                            <span class="sr-only">Trước</span>
                         </a>
                     </li>
                     `
@@ -62,7 +62,7 @@ function renderPagination(total, size) {
                     <li class="page-item">
                         <a class="btn-next page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
+                            <span class="sr-only">Sau</span>
                         </a>
                     </li>
                     `

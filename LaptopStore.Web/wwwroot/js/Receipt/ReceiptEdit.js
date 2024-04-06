@@ -25,7 +25,7 @@ $(document).ready(function () {
         var unitPrice = parseFloat($(this).closest('tr').find('.unit-price').val()) || 0;
         var quantity = parseInt($(this).closest('tr').find('.quantity').val()) || 0;
         var amount = unitPrice * quantity;
-        $(this).closest('tr').find('.amount').text(amount);
+        $(this).closest('tr').find('.amount').text(`${formatNumber(amount)} VNĐ`);
         Calculate();
     });
 });
@@ -43,7 +43,7 @@ function Calculate() {
     });
 
     $('#receiptProducts tbody').find(".total-quantity b").text(`${totalQuan}`);
-    $('#receiptProducts tbody').find(".total-amount b").text(`${totalCurrency} đ`);
+    $('#receiptProducts tbody').find(".total-amount b").text(`${formatNumber(totalCurrency)} VNĐ`);
 }
 
 function BuildProducts() {

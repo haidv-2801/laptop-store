@@ -30,6 +30,8 @@ namespace LaptopStore.Data.Models
         public string? ModifiedBy { get; set; }
         [DisplayName("Nhà cung cấp")]
         public string SupplierId { get; set; }
+        [DisplayName("Mã đơn")]
+        public string? Code { get; set; }
 
         public virtual Supplier Supplier { get; set; } = null!;
         public virtual Account UsernameNavigation { get; set; } = null!;

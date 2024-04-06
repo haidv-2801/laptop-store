@@ -2,6 +2,7 @@
 using LaptopStore.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,13 +21,46 @@ namespace LaptopStore.Services.Services.BaseService
         protected readonly DbContext context;
         protected readonly DbSet<T> dbSet;
         protected readonly IHttpContextAccessor _httpContextAccessor;
+        protected readonly Type _entityType;
+
+        /// <summary>
+        /// prefix code của phân hệ
+        /// </summary>
+        protected string _PrefixEntityCode = "Code";
 
         public BaseService(DbContext context, IHttpContextAccessor? httpContextAccessor)
         {
             this.context = context;
             dbSet = context.Set<T>();
+            _entityType = typeof(T);
             _httpContextAccessor = httpContextAccessor;
+        }
 
+        protected async Task<string> GetNextEntityCode()
+        {
+            long size = await dbSet.AsNoTracking().CountAsync();
+            string nextCode = $"{size + 1}".PadLeft((7 - $"{size + 1}".Length), '0');
+
+            return _PrefixEntityCode + nextCode;
+        }
+
+        protected string GetUserLoginName()
+        {
+            var value = _httpContextAccessor.HttpContext.Request.Cookies["UserLogin"];
+            if (value != null)
+            {
+                var account = JsonConvert.DeserializeObject<Account>(value);
+                if(account != null)
+                {
+                    return account.FullName;    
+                }
+            }
+            return string.Empty;
+        }
+
+        protected bool HasProperty(string name)
+        {
+            return typeof(T).GetProperty(name) != null;
         }
 
         public async Task<T> AddEntityAsync(T entity)
@@ -39,46 +73,14 @@ namespace LaptopStore.Services.Services.BaseService
 
         private void SetTrackingAddProperties(T entity)
         {
-            var hasCreatedDateProperty = typeof(T).GetProperty("CreatedDate") != null;
-            if (hasCreatedDateProperty)
-            {
-                typeof(T).GetProperty("CreatedDate").SetValue(entity, DateTime.Now);
-            }
-            var hasModifiedDateProperty = typeof(T).GetProperty("ModifiedDate") != null;
-            if (hasModifiedDateProperty)
-            {
-                typeof(T).GetProperty("ModifiedDate").SetValue(entity, DateTime.Now);
-            }
-            var hasCreatedByProperty = typeof(T).GetProperty("CreatedBy") != null;
-            if (hasCreatedByProperty)
-            {
-                //_httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
-                var value = _httpContextAccessor.HttpContext.Request.Cookies["UserLogin"];
-                if (value != null)
-                {
-                    //var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
-                    var account = JsonConvert.DeserializeObject<Account>(value);
-                    typeof(T).GetProperty("CreatedBy").SetValue(entity, account.FullName);
-                }
-                else
-                {
-                    typeof(T).GetProperty("CreatedBy").SetValue(entity, "admin");
-                }
-            }
-            var hasModifiedBy = typeof(T).GetProperty("ModifiedBy") != null;
-            if (hasModifiedBy)
-            {
-                _httpContextAccessor.HttpContext.Session.TryGetValue("UserLogin", out byte[] value);
-                if (value != null)
-                {
-                    var account = JsonConvert.DeserializeObject<Account>(Encoding.UTF8.GetString(value));
-                    typeof(T).GetProperty("ModifiedBy").SetValue(entity, account.FullName);
-                }
-                else
-                {
-                    typeof(T).GetProperty("ModifiedBy").SetValue(entity, "admin");
-                }
-            }
+            if (HasProperty("CreatedDate"))
+                _entityType.GetProperty("CreatedDate")?.SetValue(entity, DateTime.Now);
+            if (HasProperty("ModifiedDate"))
+                _entityType.GetProperty("ModifiedDate")?.SetValue(entity, DateTime.Now);
+            if (HasProperty("CreatedBy"))
+                _entityType.GetProperty("CreatedBy")?.SetValue(entity, GetUserLoginName());
+            if (HasProperty("ModifiedBy"))
+                _entityType.GetProperty("ModifiedBy")?.SetValue(entity, GetUserLoginName());
         }
 
         public async Task<IEnumerable<T>> AddMultipleEntityAsync(IEnumerable<T> entities)

@@ -124,9 +124,9 @@
                             <i class="align-middle" data-feather="settings"></i>
                         </a>
 
-                        <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                       @*  <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
                             &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file-chart-column fs-4" style="color: rgba(233,236,239,.5);"></i>&nbsp;&nbsp;&nbsp;<span class="fs-4" style="color: rgba(233,236,239,.5);">View Reports</span>
-                        </a>
+                        </a> *@
                         <div class="dropdown-menu dropdown-menu-end">
                             <a class="dropdown-item fs-4" href="@Url.Action("StocksReport", "Reports")"><i class="fa-solid fa-arrow-trend-up"></i> Stocks Report</a>
                             <a class="dropdown-item fs-4" href="@Url.Action("CustomersReport", "Reports")"><i class="fa-solid fa-chart-user"></i> Customers Report</a>
@@ -143,7 +143,7 @@
 
                     <li class="sidebar-item">
                         <div class="sidebar-link fs-4" onclick="Logout()">
-                            <i class="fa-regular fa-right-from-bracket"></i><span class="align-middle">LogOut</span>
+                            <i class="fa-regular fa-right-from-bracket"></i><span class="align-middle">Đăng xuất</span>
                         </div>
                     </li>
 
@@ -161,18 +161,18 @@
                         @*Top Navegation Start Here*@
                         <li class="nav-item dropdown">
                             <a class=" d-inline-block d-sm-none nav-link fs-4" href="#">
-                                <i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Hello!&nbsp;@Html.Raw(userFullName)</span>
+                                <i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Xin chào!&nbsp;@Html.Raw(userFullName)</span>
                                 @*<i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Hello!&nbsp;@Session["username"]</span>*@
                             </a>
 
                             <a class="nav-link d-none d-sm-inline-block fs-4" href="#" data-bs-toggle="dropdown">
-                                <i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Hello!&nbsp;@Html.Raw(userFullName)</span>
+                                <i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Xin chào!&nbsp;@Html.Raw(userFullName)</span>
                                 @*<i class="fa-duotone fa-hands-clapping"></i>&nbsp;<span>Hello!&nbsp;@Session["username"]</span>*@
                             </a>
                         </li>
                         <li class="nav-item">
                             <div class="nav-link d-none d-sm-inline-block fs-4" onclick="Logout()">
-                                <i class="fa-regular fa-right-from-bracket"></i>&nbsp;<span>Logout</span>
+                                <i class="fa-regular fa-right-from-bracket"></i>&nbsp;<span>Đăng xuất</span>
                             </div>
                         </li>
                     </ul>
@@ -243,6 +243,8 @@
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     @*<script src="~/js/bootstrap.min.js"></script>*@
     <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/DateTime.js"></script>
+    <script src="~/js/Number.js"></script>
     @*<script src="~/js/app.js" asp-append-version="true"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/enums.js"></script>

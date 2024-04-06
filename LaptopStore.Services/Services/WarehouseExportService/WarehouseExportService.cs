@@ -77,6 +77,7 @@ namespace LaptopStore.Services.Services.WarehouseExportService
                     Quantity = f.Quantity
                 }).ToList();
 
+                warehouseExport.Code = await GetNextEntityCode();
                 var success = await AddEntityAsync(warehouseExport);
                 if (success != null)
                 {

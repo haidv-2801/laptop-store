@@ -1,4 +1,5 @@
 ﻿@using System;
+@using LaptopStore.Core.Utilities
 @model List<LaptopStore.Data.ModelDTO.Receipt.ReceiptProductViewDTO>;
 @{
     var totalPrice = ViewBag.TotalPrice;
@@ -51,8 +52,8 @@
                                 <img style="max-width: 100px;" src="@item.Image"></img>
                             </td>
                             <td class="pe-auto"><input type="number" class="quantity" style="width: 100px;" value='@item.Quantity'></input></td>
-                            <td class="pe-auto"><input type="number" class="unit-price" style="width: 100px;" value='@item.UnitPrice'></input></td>
-                            <td class="amount">@item.Total</td>
+                            <td class="pe-auto"><input type="number" class="unit-price" style="width: 100px;" value='@item.UnitPrice'></input> VNĐ</td>
+                            <td class="amount">@Number.Format(@item.Total.ToString()) VNĐ</td>
                         </tr>
                     }
                     <tr>
@@ -60,7 +61,7 @@
                         <td></td>
                         <td> </td>
                         <td> </td>
-                        <td class="total-amount"><b>@totalPrice</b></td>
+                        <td class="total-amount"><b>@Number.Format(@totalPrice) VNĐ</b></td>
                     </tr>
                 </tbody>
             </table>

@@ -30,6 +30,7 @@ namespace LaptopStore.Services.Services.ReceiptService
         public ReceiptService(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor) : base(dbContext, httpContextAccessor)
         {
             dbSupplierSet = context.Set<Supplier>();
+            _PrefixEntityCode = "DN";
         }
 
         public async Task<List<Receipt>> GetAll()
@@ -85,6 +86,8 @@ namespace LaptopStore.Services.Services.ReceiptService
 
                 var importReceipt = Mapper.MapInit<ReceiptSaveDTO, Receipt>(receipt);
                 importReceipt.Id = Guid.NewGuid().ToString();
+                importReceipt.Code = await GetNextEntityCode();
+                importReceipt.Username = GetUserLoginName();
                 AsyncLocalLogger.Log("Id đơn nhập", importReceipt.Id);
 
                 importReceipt.ReceiptDetails = receipt.Products.Select(f => new ReceiptDetail
@@ -164,7 +167,7 @@ namespace LaptopStore.Services.Services.ReceiptService
                 }
                 receiptDetailSet.UpdateRange(receiptDetails);
                 receiptDetailSet.RemoveRange(deletes);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
 
                 //add
                 foreach (var prodAdd in receipt.Products)
@@ -184,6 +187,7 @@ namespace LaptopStore.Services.Services.ReceiptService
                     }
                 }
                 
+                rec.Username = GetUserLoginName();
                 var result = await UpdateEntityAsync(rec);
 
                 //nếu comlete thì lưu vào hàng hóa

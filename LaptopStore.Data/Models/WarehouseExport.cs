@@ -29,7 +29,9 @@ namespace LaptopStore.Data.Models
         public DateTime? ModifiedDate { get; set; }
         [DisplayName("Người sửa")]
         public string? ModifiedBy { get; set; }
+        public string? Code { get; set; }
 
+        [DisplayName("Khách hàng")]
         public virtual Customer Customer { get; set; } = null!;
         public virtual Account UsernameNavigation { get; set; } = null!;
         public virtual ICollection<WarehouseExportDetail> WarehouseExportDetails { get; set; }

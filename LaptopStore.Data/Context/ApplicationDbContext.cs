@@ -216,6 +216,8 @@ namespace LaptopStore.Data.Context
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(255);
 
+                entity.Property(e => e.Code).HasMaxLength(20);
+
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.ImportTime).HasColumnType("datetime");
@@ -311,6 +313,8 @@ namespace LaptopStore.Data.Context
                     .IsUnicode(false);
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(255);
+
+                entity.Property(e => e.Code).HasMaxLength(20);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
