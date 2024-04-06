@@ -1,4 +1,5 @@
 ﻿using LaptopStore.Core;
+using LaptopStore.Core.Utilities;
 using LaptopStore.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.NetworkInformation;
 using System.Net.WebSockets;
 using System.Reflection;
 using System.Security.Principal;
@@ -240,7 +242,7 @@ namespace LaptopStore.Services.Services.BaseService
 
             query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
             var data = await query.ToListAsync();
-
+            AsyncLocalLogger.Log("Tổng số record", totalRecords);
             return (Data: data, TotalRecords: totalRecords);
         }
     }

@@ -112,6 +112,7 @@ namespace LaptopStore.Web.Controllers
             var response = new ServiceResponse();
             try
             {
+                AsyncLocalLogger.Log("Lấy đơn nhập", paging);
                 return Ok(response.OnSuccess(await _receiptService.GetReceiptPaging(paging)));
             }
             catch (Exception ex)

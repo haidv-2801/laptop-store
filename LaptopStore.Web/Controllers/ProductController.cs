@@ -10,6 +10,7 @@ using LaptopStore.Data.Models;
 using LaptopStore.Data.Context;
 using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Authorization;
+using LaptopStore.Core.Utilities;
 
 namespace LaptopStore.Web.Controllers
 {
@@ -66,6 +67,7 @@ namespace LaptopStore.Web.Controllers
             var response = new ServiceResponse();
             try
             {
+                AsyncLocalLogger.Log("Bắt đầu lấy danh sách product", paging);
                 return Ok(response.OnSuccess(await _productService.GetProductPaging(paging)));
             }
             catch (Exception ex)

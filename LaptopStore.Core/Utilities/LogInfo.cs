@@ -102,6 +102,8 @@ namespace LaptopStore.Core.Utilities
         {
             public DateTime Timestamp { get; set; }
             public string Message { get; set; }
+
+            [JsonIgnore]
             public object Data { get; set; }
         }
     }
