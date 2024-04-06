@@ -2,16 +2,16 @@ NOTE chung: Cần chuyển hết về Tiếng Việt
 DONE - 1. Dashboard: Chưa hiển thị
 2. Đơn xuất kho:
    - Cần thêm mã hóa đơn xuất kho
-   - Thời gian xuất: Bỏ chữ "T" giữa ngày và giờ
+   DONE - Thời gian xuất: Bỏ chữ "T" giữa ngày và giờ
    - Thêm mới: Thêm đơn vị của mục "Đơn giá bán" và "Thành tiền" là VNĐ
    - Save: chưa hoạt động
    - Search: chưa hoạt động và search theo mã hóa đơn xuất kho
-   - Sắp xếp theo thời gian xuất giảm dần
+   DONE - Sắp xếp theo thời gian xuất giảm dần
 3. Đơn nhập kho: 
    DONE - Cần thêm mã đơn nhập kho
    DONE - Thời gian xuất: Bỏ chữ "T" giữa ngày và giờ
    DONE - Thêm mới: Thêm đơn vị của mục "Đơn giá nhập" và "Thành tiền" là VNĐ
-   - Tên người nhập đang bị lỗi Tiếng Việt
+   DONE - Tên người nhập đang bị lỗi Tiếng Việt
    DONE - Chi tiết đơn nhập popup lệch
    DONE - Sắp xếp theo thời gian nhập giảm dần
 4. Nhà cung cấp & Khách hàng: Phần "Chi tiết" chưa có gì đặc biệt!!

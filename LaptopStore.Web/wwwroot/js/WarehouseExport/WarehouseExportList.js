@@ -23,7 +23,8 @@ function getDataByPaging() {
         Page: currentPage,
         PageSize: size,
         Search: search,
-        SearchField: ''
+        SearchField: '',
+        Sort: 'ModifiedDate:DESC'
     }
     // Gọi hàm JavaScript của bạn ở đây
     baseGetDataFilterPaging('/WarehouseExport/GetWarehouseExportPaging', paging).then(res => {

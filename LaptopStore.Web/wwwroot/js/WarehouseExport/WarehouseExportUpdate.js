@@ -202,7 +202,7 @@ function CalculateTotal() {
     });
 
     $('#productSelectedList').find(".total-quantity b").text(`${totalQuan}`);
-    $('#productSelectedList').find(".total-amount b").text(`${totalCurrency} đ`);
+    $('#productSelectedList').find(".total-amount b").text(`${totalCurrency} VNĐ`);
 }
 
 
