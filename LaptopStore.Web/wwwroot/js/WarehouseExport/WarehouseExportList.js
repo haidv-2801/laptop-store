@@ -88,10 +88,11 @@ function renderDataList(data) {
 
             var newRow = document.createElement('tr');
             newRow.innerHTML = `
+                                        <td>${item.code ?? `- - -`}</td>
                                         <td>${formatDateTime(item.exportTime)}</td>
                                         <td>${statusText}</td>
                                         <td>${item.username}</td>
-                                        <td>${(item.customer?.lastName || '') + ' ' + (item.customer?.firstName||'')}</td>
+                                        <td>${(item.customer?.lastName || '') + ' ' + (item.customer?.firstName || '')}</td>
                                         <td>
                                             ${edit}
                                             <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>

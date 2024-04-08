@@ -42,7 +42,7 @@ $(document).ready(function () {
         var unitPrice = parseFloat($(this).closest('tr').find('.unit-price').val()) || 0;
         var quantity = parseInt($(this).closest('tr').find('.quantity').val()) || 0;
         var amount = `${unitPrice * quantity} VNĐ`;
-        $(this).closest('tr').find('.amount').text(formatNumber(amount));
+        $(this).closest('tr').find('.amount').text(formatNumber(amount) + ' VNĐ');
         if (id) {
             receiptProducts = receiptProducts.map(f => ({ ...f, quantity: quantity, unitPrice: unitPrice  }))
         }
@@ -108,8 +108,14 @@ function renderTableReceiptProduct(data = []) {
         newRow.innerHTML = `<td class="pe-auto">${item.name ?? ""}</td>
                                         <td><img class="pe-auto" style="max-height: 100px;" src='${imagePath}'></img></td>
                                         <td class="pe-auto"><input type="number" class="quantity" style="width: 100px;" value='0'></input></td>
-                                        <td class="pe-auto"><input type="number" class="unit-price" style="width: 100px;" value='0'></input> VNĐ</td>
-                                        <td class="pe-auto amount">0</td>
+                                        <td class="pe-auto">
+                                            <div class="d-flex align-items-center gap-1">
+                                                <input type="number" class="unit-price" style="width: 100px;" value='0'></input>
+                                                <span>VNĐ</span>
+                                            </div>
+
+                                        </td>
+                                        <td class="pe-auto amount">0 VNĐ</td>
                                         <td class="pe-auto">
                                             <div onclick="handleDeleteReceiptProduct('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
                                         </td>

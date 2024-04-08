@@ -1,9 +1,9 @@
 NOTE chung: Cần chuyển hết về Tiếng Việt 
 DONE - 1. Dashboard: Chưa hiển thị
 2. Đơn xuất kho:
-   - Cần thêm mã hóa đơn xuất kho
+   DONE - Cần thêm mã hóa đơn xuất kho
    DONE - Thời gian xuất: Bỏ chữ "T" giữa ngày và giờ
-   - Thêm mới: Thêm đơn vị của mục "Đơn giá bán" và "Thành tiền" là VNĐ
+   DONE - Thêm mới: Thêm đơn vị của mục "Đơn giá bán" và "Thành tiền" là VNĐ
    - Save: chưa hoạt động
    - Search: chưa hoạt động và search theo mã hóa đơn xuất kho
    DONE - Sắp xếp theo thời gian xuất giảm dần

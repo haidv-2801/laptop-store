@@ -14,11 +14,13 @@
         grid-template-columns: 30% 70%;
     }
 
-    .detail-info .label-text {
-        font-weight: 600;
-    }
+        .detail-info .label-text {
+            font-weight: 600;
+        }
 </style>
 <div class="detail-info d-grid mb-3">
+    <div class="label-text">Mã đơn:</div>
+    <div class="value-text">@Model.Code</div>
     <div class="label-text">Thời gian nhập:</div>
     <div class="value-text">@Model.ExportTime</div>
     <div class="label-text">Trạng thái:</div>
@@ -50,10 +52,10 @@
                                 <img style="max-width: 100px;" src="@item.Image"></img>
                             </td>
                             <td>@item.Quantity</td>
-                            <td> @item.UnitPrice</td>
+                            <td> @item.UnitPrice VNĐ</td>
                             @{
                                 var amount = @item.Quantity * @item.UnitPrice;
-                                <th>@amount</th>
+                                <td>@amount VNĐ</td>
                             }
                         </tr>
                     }
@@ -64,7 +66,7 @@
                         <td> </td>
                         @{
                             var total = ((List<WarehouseExportProductViewDTO>)warehouseExportDetails).Sum(f => f.Quantity * f.UnitPrice);
-                            <th>@total</th>
+                            <th>@total VNĐ</th>
                         }
                     </tr>
                 </tbody>

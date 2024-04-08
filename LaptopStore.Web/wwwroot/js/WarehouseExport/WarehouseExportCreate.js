@@ -43,7 +43,7 @@ $(document).ready(function () {
         var unitPrice = parseFloat($(this).closest('tr').find('.unit-price').val()) || 0;
         var quantity = parseInt($(this).closest('tr').find('.quantity').val()) || 0;
         var amount = unitPrice * quantity;
-        $(this).closest('tr').find('.amount').text(amount);
+        $(this).closest('tr').find('.amount').text(formatNumber(amount) + ' VNĐ');
         const thisId = $(this).data('id')
         let currentItem = selectedItems.find(e => e.id === thisId)
         currentItem.selectedUnitPrice = unitPrice
@@ -128,10 +128,13 @@ function renderSelectedProductTable() {
                                 <span class="validate-text text-danger"></span>
                             </td>
                             <td class="pe-auto">
-                                <input type='number' class="unit-price form-control" data-id="${selectedItem.id}" value="${selectedItem.selectedUnitPrice??0}" />
+                                <div class="d-flex align-items-center gap-1">
+                                    <input type='number' class="unit-price form-control" data-id="${selectedItem.id}" value="${selectedItem.selectedUnitPrice ?? 0}" />
+                                    <span>VNĐ</span>
+                                </div>
                                 <span class="validate-text text-danger"></span>
                             </td>
-                            <td class="pe-auto amount">${selectedItem.selectedAmount??0}</td>
+                            <td class="pe-auto amount">${formatNumber(selectedItem.selectedAmount ?? 0)}  VNĐ</td>
                             <td class="pe-auto">
                                 <div onclick="handleDeleteOneSelectedProduct('${selectedItem.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
                             </td>
@@ -164,8 +167,8 @@ function CalculateTotal() {
         totalCurrency += price;
     });
 
-    $('#productSelectedList').find(".total-quantity b").text(`${totalQuan}`);
-    $('#productSelectedList').find(".total-amount b").text(`${totalCurrency} đ`);
+    $('#productSelectedList').find(".total-quantity b").text(`${totalQuan} `);
+    $('#productSelectedList').find(".total-amount b").text(`${formatNumber(totalCurrency)}  VNĐ`);
 }
 
 

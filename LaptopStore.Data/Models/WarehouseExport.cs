@@ -29,6 +29,7 @@ namespace LaptopStore.Data.Models
         public DateTime? ModifiedDate { get; set; }
         [DisplayName("Người sửa")]
         public string? ModifiedBy { get; set; }
+        [DisplayName("Mã đơn")]
         public string? Code { get; set; }
 
         [DisplayName("Khách hàng")]

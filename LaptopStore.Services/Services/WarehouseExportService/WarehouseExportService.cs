@@ -36,6 +36,7 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             dbCustomerSet = context.Set<Customer>();
             _productService = productService;
             _positionService = positionService;
+            _PrefixEntityCode = "DX";
         }
 
         public async Task<List<WarehouseExport>> GetAll()
@@ -244,8 +245,8 @@ namespace LaptopStore.Services.Services.WarehouseExportService
             using var transaction = context.Database.BeginTransaction();
             try
             {
-                var warehouseExportDetails = context.Set<ReceiptDetail>().Where(f => f.ReceiptId == warehouseExport.Id);
-                context.Set<ReceiptDetail>().RemoveRange(warehouseExportDetails);
+                var warehouseExportDetails = context.Set<WarehouseExportDetail>().Where(f => f.WarehouseExportId == warehouseExport.Id);
+                context.Set<WarehouseExportDetail>().RemoveRange(warehouseExportDetails);
                 await context.SaveChangesAsync();
                 var res = await DeleteEntityAsync(warehouseExport);
                 transaction.Commit();
