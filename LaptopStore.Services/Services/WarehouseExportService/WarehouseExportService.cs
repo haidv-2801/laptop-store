@@ -64,6 +64,7 @@ namespace LaptopStore.Services.Services.WarehouseExportService
                 transaction.CreateSavepoint("CreateWarehouseExport");
                 var warehouseExport = Mapper.MapInit<WarehouseExportSaveDTO, WarehouseExport>(warehouseExportSaveDTO);
                 var value = _httpContextAccessor.HttpContext.Request.Cookies["UserLogin"];
+                warehouseExport.Username = GetUserLoginName();
                 if (value != null)
                 {
                     var account = JsonConvert.DeserializeObject<Account>(value);

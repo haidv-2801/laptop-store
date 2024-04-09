@@ -52,6 +52,8 @@ namespace LaptopStore.Data.Context
 
                 entity.Property(e => e.Address).HasMaxLength(500);
 
+                entity.Property(e => e.IsDeleted);
+
                 entity.Property(e => e.CreatedBy).HasMaxLength(255);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");

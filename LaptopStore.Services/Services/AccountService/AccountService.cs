@@ -82,7 +82,7 @@ namespace LaptopStore.Services.Services.AccountService
             pagingResponse.PageSize = paging.PageSize;
 
             //f => true có thể sửa theo nghiệp vụ ví dụ như f.Status = true;
-            var result = await FilterEntitiesPagingAsync(f => true, paging.Search, paging.SearchField, paging.Sort, paging.Page, paging.PageSize);
+            var result = await FilterEntitiesPagingAsync(f => f.IsDeleted != true, paging.Search, paging.SearchField, paging.Sort, paging.Page, paging.PageSize);
                 pagingResponse.Data = result.Data;
                 pagingResponse.Total = result.TotalRecords;
 
