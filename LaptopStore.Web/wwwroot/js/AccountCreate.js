@@ -9,9 +9,18 @@
             Gender: $('#gender').val() ? Number($('#gender').val()) : null,
             AccountType: $('#accountType').val() ? Number($('#accountType').val()) : null,
             Address: $('#address').val(),
+            IsDeleted: $('#isDeleted').val() && $('#isDeleted').val() == "true" ? true : false,
         }
         baseCreate('/Account/SaveAccount', accountData).then(res => {
-            window.location.href = '/Account';
+            console.log(res)
+            if (res.code === ResponseCode.Success) {
+                window.location.href = '/Account';
+            } else {
+                notifyStyle = 'danger'
+                $('#notifyToast').addClass(`bg-${notifyStyle}`)
+                $('#notifyToastBody').html(res.message);
+                $('#notifyToast').toast('show');
+            }
         })
     }
 }

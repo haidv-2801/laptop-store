@@ -23,7 +23,7 @@ function getDataByPaging() {
         Page: currentPage,
         PageSize: size,
         Search: search,
-        SearchField: '',
+        SearchField: 'Username,Code',
         Sort: 'ModifiedDate:DESC'
     }
     // Gọi hàm JavaScript của bạn ở đây

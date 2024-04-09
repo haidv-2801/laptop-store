@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using LaptopStore.Core;
 
 namespace LaptopStore.Data.Models
 {
-    public partial class Customer
+    public partial class Customer: BaseEntity
     {
         public string Id { get; set; } = null!;
         public string? FirstName { get; set; }
@@ -16,13 +17,5 @@ namespace LaptopStore.Data.Models
         public string? Phone { get; set; }
         [DisplayName("Địa chỉ")]
         public string? Address { get; set; }
-        [DisplayName("Ngày tạo")]
-        public DateTime? CreatedDate { get; set; }
-        [DisplayName("Người tạo")]
-        public string? CreatedBy { get; set; }
-        [DisplayName("Ngày sửa")]
-        public DateTime? ModifiedDate { get; set; }
-        [DisplayName("Người sửa")]
-        public string? ModifiedBy { get; set; }
     }
 }

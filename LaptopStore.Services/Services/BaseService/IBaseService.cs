@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LaptopStore.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LaptopStore.Services.Services.BaseService
 {
-    public interface IBaseService<T> where T : class
+    public interface IBaseService<T> where T : BaseEntity
     {
         Task<T> AddEntityAsync(T entity);
         Task<int> UpdateEntityAsync(T entity);

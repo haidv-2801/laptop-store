@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using LaptopStore.Core;
 
 namespace LaptopStore.Data.Models
 {
-    public partial class WarehouseExport
+    public partial class WarehouseExport : BaseEntity
     {
         public WarehouseExport()
         {
@@ -21,14 +22,6 @@ namespace LaptopStore.Data.Models
         public string Username { get; set; }
         [DisplayName("Khách hàng")]
         public string CustomerId { get; set; } = null!;
-        [DisplayName("Ngày tạo")]
-        public DateTime? CreatedDate { get; set; }
-        [DisplayName("Người tạo")]
-        public string? CreatedBy { get; set; }
-        [DisplayName("Ngày sửa")]
-        public DateTime? ModifiedDate { get; set; }
-        [DisplayName("Người sửa")]
-        public string? ModifiedBy { get; set; }
         [DisplayName("Mã đơn")]
         public string? Code { get; set; }
 

@@ -41,8 +41,8 @@ namespace LaptopStore.Services.Services.AuthService
 
             var res = new ServiceResponse();
             
-            string hashedPassword = Hasher.MD5(accountLoginDTO.Password);
-            var account = await dbSet.FirstOrDefaultAsync(f => f.Username == accountLoginDTO.UserName && f.Password == hashedPassword);
+            //string hashedPassword = Hasher.MD5(accountLoginDTO.Password);
+            var account = await dbSet.FirstOrDefaultAsync(f => f.Username == accountLoginDTO.UserName && f.Password == accountLoginDTO.Password && f.IsDeleted != true);
             if(account == null)
                 throw new Exception($"Tài khoản hoặc mật khẩu không đúng.");
             await AddClaims(account);

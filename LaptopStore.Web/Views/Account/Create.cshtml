@@ -60,6 +60,14 @@
                         @Html.TextAreaFor(x => x.Address, new { @class = "form-control fs-4", @id="address"})
                         @Html.ValidationMessageFor(x => x.Address, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(x => x.IsDeleted, new { @class = "form-label fs-4" })
+                        @Html.DropDownList("IsDeleted", new List<SelectListItem>() {
+                        new SelectListItem(){Text="Hoạt động",Value="0"},
+                        new SelectListItem(){Text="Ngừng hoạt động",Value="1"}
+                        }, "--Chọn trạng thái", new { @class = "form-control fs-4", @id = "isDeleted" })
+                        @Html.ValidationMessageFor(x => x.IsDeleted, "", new { @class = "text-danger" })
+                    </div>
                     @* <div class="col-md-6">
                         @Html.LabelFor(x => x.Picture, new { @class = "form-label fs-4" })
                         @Html.TextBoxFor(x => x.Picture, new { @class = "form-control fs-4", Type = "file" })

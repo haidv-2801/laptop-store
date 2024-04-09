@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using LaptopStore.Core;
 using Microsoft.AspNetCore.Authorization;
+using LaptopStore.Core.Enums;
 
 namespace LaptopStore.Web.Controllers
 {
@@ -64,12 +65,17 @@ namespace LaptopStore.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ServiceResponse> SaveAccount([FromBody]AccountSaveDTO accountSaveDTO)
+        public async Task<ServiceResponse> SaveAccount([FromBody] AccountSaveDTO accountSaveDTO)
         {
             try
             {
-                    var data = await _accountService.SaveAccount(accountSaveDTO);
-                    return _serviceResponse.OnSuccess(data);
+                var isExistsAccount = await _accountService.CheckDuplicateAccount(accountSaveDTO.Username);
+                if (isExistsAccount)
+                {
+                    return _serviceResponse.ResponseData("Đã tồn tại tài khoản này trong hệ thống", null, false);
+                }
+                var data = await _accountService.SaveAccount(accountSaveDTO);
+                return _serviceResponse.OnSuccess(data);
             }
             catch (Exception ex)
             {
@@ -102,6 +108,20 @@ namespace LaptopStore.Web.Controllers
             catch (Exception ex)
             {
                 return _serviceResponse.OnError(ex);
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> CheckDuplicateAccount([FromRoute] string username)
+        {
+            try
+            {
+                var data = await _accountService.CheckDuplicateAccount(username);
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.InnerException.Message);
             }
         }
 

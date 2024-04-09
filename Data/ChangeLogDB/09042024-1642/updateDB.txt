@@ -1,0 +1,4 @@
+ALTER TABLE Account
+Add IsDeleted bit DEFAULT 0;
+
+- Xóa index của bảng Account

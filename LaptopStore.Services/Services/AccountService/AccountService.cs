@@ -25,7 +25,7 @@ namespace LaptopStore.Services.Services.AccountService
 
         public async Task<List<Account>> GetAll()
         {
-            return await dbSet.OrderByDescending(e => e.Username).ToListAsync();
+            return await dbSet.Where(w=>w.IsDeleted != true).OrderByDescending(e => e.Username).ToListAsync();
         }
 
         public async Task<Account> GetById(string id)
@@ -34,7 +34,7 @@ namespace LaptopStore.Services.Services.AccountService
         }
         public async Task<int> SaveAccount(AccountSaveDTO accountSaveDTO)
         {
-            accountSaveDTO.Password = Hasher.MD5(accountSaveDTO.Password);
+            //accountSaveDTO.Password = Hasher.MD5(accountSaveDTO.Password);
             var account = Mapper.MapInit<AccountSaveDTO, Account>(accountSaveDTO);
             await AddEntityAsync(account);
             return 1;
@@ -46,10 +46,12 @@ namespace LaptopStore.Services.Services.AccountService
             if (account == null)
                 return false;
             account.FullName = accountSaveDTO.FullName;
-            account.Password = Hasher.MD5(accountSaveDTO.Password); ;
+            account.Password = accountSaveDTO.Password ;
+            //account.Password = Hasher.MD5(accountSaveDTO.Password) ;
             account.Gender = accountSaveDTO.Gender;
             account.Address = accountSaveDTO.Address;
             account.AccountType = accountSaveDTO.AccountType;
+            account.IsDeleted = accountSaveDTO.IsDeleted;
             account.Username = accountSaveDTO.Username;
             await UpdateEntityAsync(account);
             return true;
@@ -62,6 +64,15 @@ namespace LaptopStore.Services.Services.AccountService
                 return 0;
 
             return await DeleteEntityAsync(account);
+        }
+
+        public async Task<bool> CheckDuplicateAccount(string username)
+        {
+            var product = dbSet.FirstOrDefault(e => e.Username == username && e.IsDeleted != true);
+            if (product == null)
+                return false;
+
+            return true;
         }
 
         public async Task<PagingResponse> GetAccountPaging(PagingRequest paging)

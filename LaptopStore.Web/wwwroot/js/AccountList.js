@@ -81,6 +81,12 @@ function renderDataList(data) {
                 role = 'Nhân viên'
 
             }
+            let status = ''
+            if (item.isDeleted === true) {
+                status = `<span class="text-danger">Ngừng hoạt động</span>`
+            } else {
+                status = `<span class="text-success">Hoạt động</span>`
+            }
             let updateUrl = 'Account/Update?id=' + item.id;
             let detailUrl = 'Account/Detail?id=' + item.id;
             var newRow = document.createElement('tr');
@@ -90,12 +96,13 @@ function renderDataList(data) {
                                         <td>${item.fullName ?? ``}</td>
                                         <td>${gender ?? `- - -`}</td>
                                         <td>${role}</td>
+                                        <td>${status}</td>
                                         <td>${item.address ?? `- - -`}</td>
                                         <td>
                                             <a href="${updateUrl}" class="btn btn-outline-warning btn-sm">Sửa</a>
                                             <div onclick="handleViewDetail('${item.id}')" class="btn btn-outline-info btn-sm">Chi tiết</div>
-                                            <div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
                                         </td>`
+                                            //<div onclick="handleDelete('${item.id}')" class="btn btn-outline-danger btn-sm">Xóa</div>
             document.getElementById('table-body').append(newRow)
         })
     } else {
