@@ -10,7 +10,7 @@ using LaptopStore.Core.Enums;
 namespace LaptopStore.Web.Controllers
 {
     /*[Authorize(Roles = "0")]*/
-    /*[Authorize(Roles = "0")]*/
+    [Authorize(Roles = "0")]
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;

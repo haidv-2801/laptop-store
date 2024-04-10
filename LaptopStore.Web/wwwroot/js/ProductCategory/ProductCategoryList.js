@@ -27,7 +27,8 @@ function getDataByPaging() {
         Page: currentPage,
         PageSize: size,
         Search: search,
-        SearchField: 'Name'
+        SearchField: 'Name',
+        Sort:"ModifiedDate:DESC"
     }
     // Gọi hàm JavaScript của bạn ở đây
     baseGetDataFilterPaging('/ProductCategory/GetProductCategoryPaging', paging).then(res => {
