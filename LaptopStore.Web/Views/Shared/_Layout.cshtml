@@ -255,7 +255,7 @@
             // Xác định trang hiện tại dựa trên đường dẫn URL
             var currentPath = window.location.pathname;
             if(currentPath !== '/'){
-
+                
             $(".sidebar-item a").each(function() {
                 var menuPath = $(this).attr("href");
                 if (currentPath === menuPath) {
@@ -263,7 +263,7 @@
                 }
             });
             }else{
-                var element = document.querySelector('.sidebar-link[href="/Dashboard"]');
+                var element = document.querySelector('.sidebar-link[href="/"]');
                 $(element).closest(".sidebar-item").addClass("active");
             }
             $(".sidebar-item a").click(function(){

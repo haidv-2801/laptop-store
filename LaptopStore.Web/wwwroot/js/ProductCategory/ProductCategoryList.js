@@ -10,10 +10,9 @@ function DeleteProductCategory() {
             if (res.code === ResponseCode.Success) {
                 currentPage = 1
                 getDataByPaging()
-            }
+            } 
             $('#deleteConfirm').modal('hide');
         }).catch(e => {
-
         })
     }
 }

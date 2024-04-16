@@ -107,7 +107,7 @@ namespace LaptopStore.Web.Controllers
                 var existsProduct = await _positionService.CheckExistsProduct(id);
                 if (existsProduct)
                 {
-                    return _serviceResponse.ResponseData("Tồn tại sản phẩm. Không thể xóa", null);
+                    return _serviceResponse.ResponseData("Tồn tại sản phẩm trong danh mục. Không thể xóa", null);
                 }
                 var data = await _positionService.DeletePosition(id);
                 return _serviceResponse.OnSuccess(data);

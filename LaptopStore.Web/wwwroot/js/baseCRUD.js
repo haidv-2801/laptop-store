@@ -47,7 +47,6 @@ function baseDelete(url) {
                     $('#notifyToast').addClass(`bg-${notifyStyle}`)
                     $('#notifyToastBody').html(result.message);
                     $('#notifyToast').toast('show');
-
                 }
 
                 resolve(result);

@@ -1,4 +1,14 @@
-﻿function UpdateProduct(id) {
+﻿var productImage = null;
+
+function InitEvent() {
+    $("#updateProduct [Name='Image']").on("change", e => {
+        ChangeImage(e);
+    })
+}
+InitEvent();
+
+
+function UpdateProduct(id) {
     event.preventDefault();
     if ($('#update-product-form').valid()) {
         const productData = {
@@ -14,11 +24,38 @@
             LunchTime: $("#updateProduct [Name='LunchTime']").val(),
             PositionId: $("#updateProduct [Name='PositionId']").val(),
             Quantity: $("#updateProduct [Name='Quantity']").val(),
-            Image: $("#updateProduct [Name='Image']").val(),
+            Image: $('#productImage img').attr("src"),
             Origin: $("#updateProduct [Name='Origin']").val(),
         }
         baseUpdate('/Product/UpdateProduct/' + id, productData).then(res => {
             window.location.href = '/Product';
         })
     }
+}
+
+
+function ChangeImage(e) {
+    const formData = GetImageFormData(e);
+
+
+    uploadImage(formData).then(res => {
+        if (res.success) {
+            productImage = res.data;
+            $('#productImage img').attr("src", productImage);
+        }
+    }).catch(err => {
+    })
+}
+
+function GetImageFormData(e) {
+    const path = $("#updateProduct [Name='Image']").val();
+
+    if (!e || !e.target || !e.target.files || !e.target.files.length || !path) {
+        return null;
+    }
+
+    let file = e.target.files[0];
+    let formData = new FormData();
+    formData.append('file', file);
+    return formData;
 }
