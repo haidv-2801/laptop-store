@@ -6,8 +6,9 @@
 @{
     var userLoginCookie = httpContextaccessor.HttpContext.Request.Cookies["UserLogin"];
     var userFullName = "";
-    if(!String.IsNullOrEmpty(userLoginCookie)){
-        userFullName= JsonConvert.DeserializeObject<Account>(userLoginCookie)?.FullName;
+    if (!String.IsNullOrEmpty(userLoginCookie))
+    {
+        userFullName = JsonConvert.DeserializeObject<Account>(userLoginCookie)?.FullName;
     }
 }
 <!DOCTYPE html>
@@ -62,70 +63,70 @@
                 <ul class="sidebar-nav">
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Dashboard")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Dashboard")" active-menu="Dashboard">
                             <i class="fa-solid fa-gauge"></i><span class="align-middle">Tổng quan</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "WarehouseExport")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "WarehouseExport")" active-menu="WarehouseExport">
                             <i class="fa-regular fa-cart-shopping-fast"></i><span class="align-middle">Đơn xuất kho</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Receipt")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Receipt")" active-menu="Receipt">
                             <i class="fa-regular fa-cart-shopping-fast"></i><span class="align-middle">Đơn nhập kho</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Product")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Product")" active-menu="Product">
                             <i class="fa-solid fa-table"></i><span class="align-middle">Sản phẩm</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "ProductCategory")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "ProductCategory")" active-menu="ProductCategory">
                             <i class="fa-solid fa-table"></i><span class="align-middle">Danh mục sản phẩm</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Supplier")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Supplier")" active-menu="Supplier">
                             <i class="fa-regular fa-truck-field"></i><span class="align-middle">Nhà cung cấp</span>
                         </a>
                     </li>
 
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Customer")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Customer")" active-menu="Customer">
                             <i class="fa-light fa-person"></i><span class="align-middle">Khách hàng</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Account")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Account")" active-menu="Account">
                             <i class="fa-solid fa-person-chalkboard"></i><span class="align-middle">Tài khoản</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Position")">
+                        <a class="sidebar-link fs-4" href="@Url.Action("Index", "Position")" active-menu="Position">
                             <i class="fa-solid fa-diagram-subtask"></i><span class="align-middle">Vị trí</span>
                         </a>
                     </li>
 
                     @*<li class="sidebar-item">
-                        <a class="sidebar-link fs-4" href="@Url.Action("StocksReport", "Reports")">
-                        <i class="fa-solid fa-file-chart-column"></i><span class="align-middle">Reports</span>
-                        </a>
-                        </li>*@
+                    <a class="sidebar-link fs-4" href="@Url.Action("StocksReport", "Reports")">
+                    <i class="fa-solid fa-file-chart-column"></i><span class="align-middle">Reports</span>
+                    </a>
+                    </li>*@
 
                     <li class="nav-item dropdown">
                         <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
                             <i class="align-middle" data-feather="settings"></i>
                         </a>
 
-                       @*  <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                            &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file-chart-column fs-4" style="color: rgba(233,236,239,.5);"></i>&nbsp;&nbsp;&nbsp;<span class="fs-4" style="color: rgba(233,236,239,.5);">View Reports</span>
+                        @*  <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                        &nbsp;&nbsp;&nbsp;<i class="fa-solid fa-file-chart-column fs-4" style="color: rgba(233,236,239,.5);"></i>&nbsp;&nbsp;&nbsp;<span class="fs-4" style="color: rgba(233,236,239,.5);">View Reports</span>
                         </a> *@
                         <div class="dropdown-menu dropdown-menu-end">
                             <a class="dropdown-item fs-4" href="@Url.Action("StocksReport", "Reports")"><i class="fa-solid fa-arrow-trend-up"></i> Stocks Report</a>
@@ -186,16 +187,16 @@
             </div>
             @*Footer Section Start*@
             @* <footer class="footer">
-                <div class="container-fluid">
-                <div class="row text-muted">
-                <div class="col-6 text-start">
-                <p class="mb-0">
-                <a class="text-muted nav-link" href="@Url.Action("Index", "Dashboard")">&copy; @DateTime.Now.Year<strong>&nbsp;IsDB-BISEW</strong></a>
-                </p>
-                </div>
-                </div>
-                </div>
-                </footer>*@
+            <div class="container-fluid">
+            <div class="row text-muted">
+            <div class="col-6 text-start">
+            <p class="mb-0">
+            <a class="text-muted nav-link" href="@Url.Action("Index", "Dashboard")">&copy; @DateTime.Now.Year<strong>&nbsp;IsDB-BISEW</strong></a>
+            </p>
+            </div>
+            </div>
+            </div>
+            </footer>*@
         </div>
     </div>
     <div id="notifyToast" style="z-index:1100" class="toast align-items-center position-absolute top-0 end-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="3000">
@@ -206,37 +207,37 @@
         </div>
     </div>
     @*<header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LaptopStore.Web</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-        <ul class="navbar-nav flex-grow-1">
-        <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </li>
-        </ul>
-        </div>
-        </div>
-        </nav>
-        </header>
-        <div class="container">
-        <main role="main" class="pb-3">
-        @RenderBody()
-        </main>
-        </div>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container-fluid">
+    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LaptopStore.Web</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+    <ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </li>
+    </ul>
+    </div>
+    </div>
+    </nav>
+    </header>
+    <div class="container">
+    <main role="main" class="pb-3">
+    @RenderBody()
+    </main>
+    </div>
 
-        <footer class="border-top footer text-muted">
-        <div class="container">
-        &copy; 2024 - LaptopStore.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-        </footer>*@
+    <footer class="border-top footer text-muted">
+    <div class="container">
+    &copy; 2024 - LaptopStore.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+    </footer>*@
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
@@ -251,22 +252,23 @@
     <script src="~/js/baseCRUD.js"></script>
     <script>
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             // Xác định trang hiện tại dựa trên đường dẫn URL
             var currentPath = window.location.pathname;
-            if(currentPath !== '/'){
-                
-            $(".sidebar-item a").each(function() {
-                var menuPath = $(this).attr("href");
-                if (currentPath === menuPath) {
-                    $(this).closest(".sidebar-item").addClass("active");
-                }
-            });
-            }else{
+            if (currentPath !== '/') {
+
+                $(".sidebar-item a").each(function () {
+                    var menuPath = $(this).attr("active-menu");
+                    if (currentPath.startsWith('/'+menuPath)) {
+                        console.log(currentPath)
+                        $(this).closest(".sidebar-item").addClass("active");
+                    }
+                });
+            } else {
                 var element = document.querySelector('.sidebar-link[href="/"]');
                 $(element).closest(".sidebar-item").addClass("active");
             }
-            $(".sidebar-item a").click(function(){
+            $(".sidebar-item a").click(function () {
                 // Xóa lớp 'active' từ tất cả các menu
                 $(".sidebar-item").removeClass("active");
 
@@ -274,19 +276,19 @@
                 $(this).closest(".sidebar-item").addClass("active");
             });
         });
-        function Logout(){
+        function Logout() {
             $.ajax({
-            url: '/Auth/Logout', // Thay 'TenController' bằng tên controller của bạn
-            type: 'GET', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
-            success: function (result) {
-                // Xử lý kết quả sau khi xóa, nếu cần
-                if (result.code === ResponseCode.Success && result.data) {
-                    window.location.href='/Auth'
-                } else {}
-            },
-            error: function (xhr, status, error) {
-            }
-        });
+                url: '/Auth/Logout', // Thay 'TenController' bằng tên controller của bạn
+                type: 'GET', // Hoặc 'GET' tùy vào cách bạn đã cấu hình action Xoa trong controller
+                success: function (result) {
+                    // Xử lý kết quả sau khi xóa, nếu cần
+                    if (result.code === ResponseCode.Success && result.data) {
+                        window.location.href = '/Auth'
+                    } else { }
+                },
+                error: function (xhr, status, error) {
+                }
+            });
         }
     </script>
 
