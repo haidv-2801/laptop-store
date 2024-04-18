@@ -22,5 +22,6 @@ namespace LaptopStore.Services.Services.AccountService
         Task<bool> UpdateAccount(string id, AccountSaveDTO accountSaveDTO);
 
         Task<int> DeleteAccount(string id);
+        Task<bool> CheckDuplicateAccount(string username);
     }
 }

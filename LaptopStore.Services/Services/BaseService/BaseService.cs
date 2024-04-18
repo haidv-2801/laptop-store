@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.NetworkInformation;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace LaptopStore.Services.Services.BaseService
 {
-    public class BaseService<T> : IBaseService<T> where T : class
+    public class BaseService<T> : IBaseService<T> where T : BaseEntity
     {
         protected readonly DbContext context;
         protected readonly DbSet<T> dbSet;
@@ -38,10 +39,27 @@ namespace LaptopStore.Services.Services.BaseService
             _httpContextAccessor = httpContextAccessor;
         }
 
-        protected async Task<string> GetNextEntityCode()
+        protected async Task<string> GetNextEntityCode(string propertyName)
         {
-            long size = await dbSet.AsNoTracking().CountAsync();
-            string nextCode = $"{size + 1}".PadLeft((7 - $"{size + 1}".Length), '0');
+            int lastNumber = 0;
+            var lastRow = await dbSet.AsNoTracking().OrderByDescending(e => e.CreatedDate).FirstOrDefaultAsync();
+            if (lastRow != null)
+            {
+                PropertyInfo propertyInfo = lastRow.GetType().GetProperty(propertyName);
+                // Kiểm tra xem property có tồn tại không
+                if (propertyInfo != null)
+                {
+                    // Lấy giá trị của property
+                    string value = (string)propertyInfo.GetValue(lastRow);
+                    value = value.Substring(_PrefixEntityCode.Length);
+                    lastNumber = Convert.ToInt32(value) + 1;
+                }
+            }
+            else
+            {
+                lastNumber = 1;
+            }
+            string nextCode = $"{lastNumber}".PadLeft((7 - $"{lastNumber}".Length), '0');
 
             return _PrefixEntityCode + nextCode;
         }
@@ -52,9 +70,9 @@ namespace LaptopStore.Services.Services.BaseService
             if (value != null)
             {
                 var account = JsonConvert.DeserializeObject<Account>(value);
-                if(account != null)
+                if (account != null)
                 {
-                    return account.FullName;    
+                    return account.FullName;
                 }
             }
             return string.Empty;

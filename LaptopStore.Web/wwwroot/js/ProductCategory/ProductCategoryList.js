@@ -10,10 +10,9 @@ function DeleteProductCategory() {
             if (res.code === ResponseCode.Success) {
                 currentPage = 1
                 getDataByPaging()
-            }
+            } 
             $('#deleteConfirm').modal('hide');
         }).catch(e => {
-
         })
     }
 }
@@ -27,7 +26,8 @@ function getDataByPaging() {
         Page: currentPage,
         PageSize: size,
         Search: search,
-        SearchField: 'Name'
+        SearchField: 'Name',
+        Sort:"ModifiedDate:DESC"
     }
     // Gọi hàm JavaScript của bạn ở đây
     baseGetDataFilterPaging('/ProductCategory/GetProductCategoryPaging', paging).then(res => {

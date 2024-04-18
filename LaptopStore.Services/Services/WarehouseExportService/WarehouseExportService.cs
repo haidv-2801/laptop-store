@@ -64,6 +64,7 @@ namespace LaptopStore.Services.Services.WarehouseExportService
                 transaction.CreateSavepoint("CreateWarehouseExport");
                 var warehouseExport = Mapper.MapInit<WarehouseExportSaveDTO, WarehouseExport>(warehouseExportSaveDTO);
                 var value = _httpContextAccessor.HttpContext.Request.Cookies["UserLogin"];
+                warehouseExport.Username = GetUserLoginName();
                 if (value != null)
                 {
                     var account = JsonConvert.DeserializeObject<Account>(value);
@@ -78,7 +79,7 @@ namespace LaptopStore.Services.Services.WarehouseExportService
                     Quantity = f.Quantity
                 }).ToList();
 
-                warehouseExport.Code = await GetNextEntityCode();
+                warehouseExport.Code = await GetNextEntityCode("Code");
                 var success = await AddEntityAsync(warehouseExport);
                 if (success != null)
                 {

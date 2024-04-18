@@ -33,5 +33,7 @@ namespace LaptopStore.Data.ModelDTO
         [Required(ErrorMessage = "Vai trò không được để trống")]
         [DisplayName("Vai trò")]
         public int AccountType { get; set; }
+        [DisplayName("Trạng thái")]
+        public bool IsDeleted { get; set; } = false;
     }
 }

@@ -108,7 +108,7 @@ namespace LaptopStore.Web.Controllers
                 var existsProduct = await _productCategoryService.CheckExistsProduct(id);
                 if (existsProduct)
                 {
-                    return _serviceResponse.ResponseData("Tồn tại sản phẩm. Không thể xóa", null);
+                    return _serviceResponse.ResponseData("Tồn tại sản phẩm trong danh mục. Không thể xóa", null);
                 }
                 var data = await _productCategoryService.DeleteProductCategory(id);
                 return _serviceResponse.OnSuccess(data);

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using LaptopStore.Core;
 
 namespace LaptopStore.Data.Models
 {
-    public partial class Receipt
+    public partial class Receipt : BaseEntity
     {
         public Receipt()
         {
@@ -20,14 +21,6 @@ namespace LaptopStore.Data.Models
 
         [DisplayName("Người nhập")]
         public string Username { get; set; } = null!;
-        [DisplayName("Ngày tạo")]
-        public DateTime? CreatedDate { get; set; }
-        [DisplayName("Người tạo")]
-        public string? CreatedBy { get; set; }
-        [DisplayName("Ngày sửa")]
-        public DateTime? ModifiedDate { get; set; }
-        [DisplayName("Người sửa")]
-        public string? ModifiedBy { get; set; }
         [DisplayName("Nhà cung cấp")]
         public string SupplierId { get; set; }
         [DisplayName("Mã đơn")]

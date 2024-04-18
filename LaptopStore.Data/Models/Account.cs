@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using LaptopStore.Core;
 
 namespace LaptopStore.Data.Models
 {
-    public partial class Account
+    public partial class Account : BaseEntity
     {
         public Account()
         {
@@ -13,19 +14,19 @@ namespace LaptopStore.Data.Models
             WarehouseExports = new HashSet<WarehouseExport>();
         }
         
-        public string Id { get; set; } = null!;
+        public string Id { get; set; }
         [Required(ErrorMessage = "Họ và tên không được để trống")]
         [StringLength(50, ErrorMessage = "Họ và tên không được vượt quá 50 ký tự")]
         [DisplayName("Họ và tên")]
-        public string FullName { get; set; } = null!;
+        public string FullName { get; set; }
         [Required(ErrorMessage = "Tài khoản không được để trống")]
         [StringLength(50, ErrorMessage = "Tài khoản không được vượt quá 50 ký tự")]
         [DisplayName("Tài khoản")]
-        public string Username { get; set; } = null!;
+        public string Username { get; set; }
         [Required(ErrorMessage = "Mật khẩu không được để trống")]
         [StringLength(50, ErrorMessage = "Mật khẩu không được vượt quá 50 ký tự")]
         [DisplayName("Mật khẩu")]
-        public string Password { get; set; } = null!;
+        public string Password { get; set; }
         [DisplayName("Giới tính")]
         public int? Gender { get; set; }
         [DisplayName("Địa chỉ")]
@@ -33,10 +34,8 @@ namespace LaptopStore.Data.Models
         [Required(ErrorMessage = "Vai trò không được để trống")]
         [DisplayName("Vai trò")]
         public int AccountType { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string? CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string? ModifiedBy { get; set; }
+        [DisplayName("Trạng thái")]
+        public bool? IsDeleted { get; set; } = false;
 
         public virtual ICollection<Receipt> Receipts { get; set; }
         public virtual ICollection<WarehouseExport> WarehouseExports { get; set; }

@@ -53,6 +53,8 @@ namespace LaptopStore.Services.Services.ProductService
 
         public async Task<bool> UpdateProduct(string id, ProductSaveDTO productSaveDTO)
         {
+            if (productSaveDTO == null)
+                return false;
             var product = await GetEntityByIDAsync(id);
             if (product == null)
                 return false;

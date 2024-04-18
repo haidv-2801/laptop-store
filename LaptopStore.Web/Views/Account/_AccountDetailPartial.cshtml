@@ -40,6 +40,17 @@
             @Html.Raw("Nhân viên")
         }
     </div>
+    <div class="label-text">Trạng thái: </div>
+    <div class="value-text">
+        @if (@Model.IsDeleted == true)
+        {
+            <span class="text-danger">Ngừng hoạt động</span>
+        }
+        else
+        {
+            <span class="text-success">Hoạt động</span>
+        }
+    </div>
     <div class="label-text">Địa chỉ: </div>
     <div class="value-text">@Model.Address</div>
 </div>

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using LaptopStore.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace LaptopStore.Data.Models
 {
-    public partial class ProductCategory
+    public partial class ProductCategory : BaseEntity
     {
         public ProductCategory()
         {
@@ -14,14 +15,6 @@ namespace LaptopStore.Data.Models
         public string Id { get; set; } = null!;
         [DisplayName("Tên danh mục")]
         public string Name { get; set; } = null!;
-        [DisplayName("Ngày tạo")]
-        public DateTime? CreatedDate { get; set; }
-        [DisplayName("Người tạo")]
-        public string? CreatedBy { get; set; }
-        [DisplayName("Ngày sửa")]
-        public DateTime? ModifiedDate { get; set; }
-        [DisplayName("Người sửa")]
-        public string? ModifiedBy { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
     }

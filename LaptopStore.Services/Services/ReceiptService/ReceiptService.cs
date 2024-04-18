@@ -86,7 +86,7 @@ namespace LaptopStore.Services.Services.ReceiptService
 
                 var importReceipt = Mapper.MapInit<ReceiptSaveDTO, Receipt>(receipt);
                 importReceipt.Id = Guid.NewGuid().ToString();
-                importReceipt.Code = await GetNextEntityCode();
+                importReceipt.Code = await GetNextEntityCode("Code");
                 importReceipt.Username = GetUserLoginName();
                 AsyncLocalLogger.Log("Id đơn nhập", importReceipt.Id);
 
